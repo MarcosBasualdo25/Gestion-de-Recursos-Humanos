@@ -1,4 +1,4 @@
-// main.cpp
+
 #include <iostream>
 #include "GestionEmpleados.h"
 #include "EvaluacionEmpleado.h"
