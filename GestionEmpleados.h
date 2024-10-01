@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include "gotoxy.h"
+#include <limits> // Para std::numeric_limits
+#include <windows.h> // Para SetConsoleOutputCP
 
 using namespace std;
 
@@ -46,6 +48,18 @@ int obtenerAnchoConsola() {
     return columns;
 }
 
+// Función para validar la entrada de un entero
+bool obtenerEntero(int& numero) {
+    cin >> numero;
+    if (cin.fail()) {
+        cin.clear(); // Limpia el estado de error
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta el resto de la línea
+        return false;
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta el resto de la línea
+    return true;
+}
+
 // Implementación de funciones
 
 Empleado* crearEmpleado() {
@@ -61,12 +75,21 @@ Empleado* crearEmpleado() {
     int idEmpleado;
     string nombre, apellido, contrasena, puesto;
 
-    gotoxy(x, 4);
-    cout << "Ingrese el ID del empleado: ";
-    cin >> idEmpleado;
+    bool entradaValida = false;
+    do {
+        gotoxy(x, 4);
+        cout << "Ingrese el ID del empleado: ";
+        entradaValida = obtenerEntero(idEmpleado);
+        if (!entradaValida) {
+            gotoxy(x, 5);
+            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+            gotoxy(x, 4);
+            cout << string(50, ' '); // Limpia la línea
+        }
+    } while (!entradaValida);
+
     gotoxy(x, 5);
     cout << "Ingrese el nombre del empleado: ";
-    cin.ignore();
     getline(cin, nombre);
     gotoxy(x, 6);
     cout << "Ingrese el apellido del empleado: ";
@@ -154,11 +177,18 @@ void actualizarEmpleado(Empleado* head, int id) {
             gotoxy(x, 10);
             cout << "4. Puesto\n";
 
+            bool entradaValida = false;
             do {
                 gotoxy(x, 12);
                 cout << "Ingrese su opción: ";
-                cin >> opcion;
-            } while (opcion < 1 || opcion > 4);
+                entradaValida = obtenerEntero(opcion);
+                if (!entradaValida || opcion < 1 || opcion > 4) {
+                    gotoxy(x, 13);
+                    cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
+                    gotoxy(x, 12);
+                    cout << string(50, ' '); // Limpia la línea
+                }
+            } while (!entradaValida || opcion < 1 || opcion > 4);
 
             string nuevoValor;
 
@@ -276,9 +306,19 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
     cout << "4. Eliminar empleado\n";
     gotoxy(x, 8);
     cout << "5. Volver al menú principal\n";
-    gotoxy(x, 10);
-    cout << "Ingrese una opción: ";
-    cin >> opcion;
+
+    bool entradaValida = false;
+    do {
+        gotoxy(x, 10);
+        cout << "Ingrese una opción: ";
+        entradaValida = obtenerEntero(opcion);
+        if (!entradaValida || opcion < 1 || opcion > 5) {
+            gotoxy(x, 11);
+            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
+            gotoxy(x, 10);
+            cout << string(50, ' '); // Limpia la línea
+        }
+    } while (!entradaValida || opcion < 1 || opcion > 5);
 
     switch (opcion) {
         case 1: {
@@ -291,17 +331,35 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
             break;
         case 3: {
             int id;
-            gotoxy(x, 12);
-            cout << "Ingrese el ID del empleado a actualizar: ";
-            cin >> id;
+            bool entradaValida = false;
+            do {
+                gotoxy(x, 12);
+                cout << "Ingrese el ID del empleado a actualizar: ";
+                entradaValida = obtenerEntero(id);
+                if (!entradaValida) {
+                    gotoxy(x, 13);
+                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+                    gotoxy(x, 12);
+                    cout << string(50, ' '); // Limpia la línea
+                }
+            } while (!entradaValida);
             actualizarEmpleado(listaEmpleados, id);
             break;
         }
         case 4: {
             int id;
-            gotoxy(x, 12);
-            cout << "Ingrese el ID del empleado a eliminar: ";
-            cin >> id;
+            bool entradaValida = false;
+            do {
+                gotoxy(x, 12);
+                cout << "Ingrese el ID del empleado a eliminar: ";
+                entradaValida = obtenerEntero(id);
+                if (!entradaValida) {
+                    gotoxy(x, 13);
+                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+                    gotoxy(x, 12);
+                    cout << string(50, ' '); // Limpia la línea
+                }
+            } while (!entradaValida);
             eliminarEmpleado(listaEmpleados, id);
             break;
         }
