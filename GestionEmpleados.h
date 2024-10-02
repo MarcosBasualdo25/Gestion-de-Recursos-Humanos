@@ -19,6 +19,18 @@ struct PilaEvaluaciones {
     Evaluacion* cima;
 };
 
+struct RegistroAsistencia {
+    string fecha;
+    string horaEntrada;
+    string horaSalida;
+    string estado;
+    RegistroAsistencia* siguiente; // Puntero al siguiente nodo (para la pila)
+};
+
+struct PilaAsistencias {
+    RegistroAsistencia* cima;
+};
+
 struct Empleado {
     int idEmpleado;
     string nombre;
@@ -27,6 +39,7 @@ struct Empleado {
     string puesto;
     Empleado* siguiente;
     PilaEvaluaciones* pilaEvaluaciones; // Puntero a la pila de evaluaciones del empleado
+    PilaAsistencias* pilaAsistencias; // Puntero a la pila de evaluaciones del empleado
 };
 
 // Declaración de funciones
