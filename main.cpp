@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "GestionEmpleados.h"
+#include "Asistencia.h"
 #include "EvaluacionEmpleado.h"
 #include "InicioSesion.h"
 #include "gotoxy.h"
@@ -42,21 +43,23 @@ int main() {
         gotoxy(x, 5);
         cout << "2. Evaluación de empleados\n";
         gotoxy(x, 6);
-        cout << "3. Salir\n";
+        cout << "3. Asistencia de empleados\n";
+        gotoxy(x, 7);
+        cout << "4. Salir\n";
 
         bool entradaValida = false;
         do {
             gotoxy(x, 8);
             cout << "Ingrese una opción: ";
             entradaValida = obtenerEntero(opcionPrincipal);
-            if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 3) {
+            if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 4) {
                 gotoxy(x, 9);
                 cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
                 gotoxy(x, 8);
                 cout << string(50, ' '); // Limpia la línea
             }
-        } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 3);
-
+        } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 4);
+        Empleado* empleado;
         switch (opcionPrincipal) {
             case 1: {
                 int continuar;
@@ -86,7 +89,7 @@ int main() {
                     }
                 } while (!entradaValida);
 
-                Empleado* empleado = buscarEmpleado(listaEmpleados, id);
+                empleado = buscarEmpleado(listaEmpleados, id);
                 if (empleado == nullptr) {
                     gotoxy(x, 12);
                     cout << "Empleado con ID " << id << " no encontrado.\n";
@@ -139,7 +142,68 @@ int main() {
                 } while (opcionEvaluacion != 3);
                 break;
             }
-            case 3:
+            case 3: 
+                if (listaEmpleados == nullptr) {
+                    cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
+                    system("pause");
+                    break;
+                }
+                int id;
+                cout << "Ingrese el ID del empleado para registrar asistencia: ";
+                cin>>id;
+                empleado = buscarEmpleado(listaEmpleados, id);
+                if (empleado == nullptr) {
+                    cout << "Empleado con ID " << id << " no encontrado.\n";
+                    system("pause");
+                }
+
+                int opcionEvaluacion;
+                do {
+                    system("cls");
+                    gotoxy(x, 2);
+                    cout << "--- Asistencia ---\n";
+                    gotoxy(x, 4);
+                    cout << "Empleado: " << empleado->nombre << " " << empleado->apellido << "\n";
+                    gotoxy(x, 5);
+                    cout << "1. Agregar registro de asistencia\n";
+                    gotoxy(x, 6);
+                    cout << ". Mostrar registro de asistencias\n";
+                    gotoxy(x, 7);
+                    cout << "3. Volver al menú principal\n";
+
+                    bool entradaValida = false;
+                    do {
+                        gotoxy(x, 10);
+                        cout << "Ingrese una opción: ";
+                        entradaValida = obtenerEntero(opcionEvaluacion);
+                        if (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3) {
+                            gotoxy(x, 11);
+                            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
+                            gotoxy(x, 10);
+                            cout << string(50, ' '); // Limpia la línea
+                        }
+                    } while (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3);
+
+                    switch (opcionEvaluacion) {
+                        case 1:
+                            agregarRegistro(empleado->pilaAsistencias);
+                            system("pause");
+                            break;
+                        case 2:
+                            imprimirRegistros(empleado->pilaAsistencias);
+                            system("pause");
+                            break;
+                        case 3:
+                            break;
+                        default:
+                            gotoxy(x, 12);
+                            cout << "Opción inválida.\n";
+                            system("pause");
+                            break;
+                    }
+                } while (opcionEvaluacion != 3);
+                break;
+            case 4:
                 gotoxy(x, 10);
                 cout << "Saliendo del programa...\n";
                 system("pause");
@@ -150,7 +214,7 @@ int main() {
                 system("pause");
                 break;
         }
-    } while (opcionPrincipal != 3);
+    } while (opcionPrincipal != 4);
 
     // Liberar memoria
     Empleado* temp;
@@ -165,6 +229,15 @@ int main() {
                 evalTemp = temp->pilaEvaluaciones->cima;
                 temp->pilaEvaluaciones->cima = temp->pilaEvaluaciones->cima->siguiente;
                 delete evalTemp;
+            }
+            delete temp->pilaEvaluaciones;
+        }
+        if (temp->pilaAsistencias != nullptr) {
+            RegistroAsistencia* asisTemp;
+            while (temp->pilaAsistencias->cima != nullptr) {
+                asisTemp = temp->pilaAsistencias->cima;
+                temp->pilaAsistencias->cima = temp->pilaAsistencias->cima->siguiente;
+                delete asisTemp;
             }
             delete temp->pilaEvaluaciones;
         }

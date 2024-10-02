@@ -1,0 +1,59 @@
+#include <queue>
+#include <string>
+
+using namespace std;
+
+struct Solicitud {
+    int idEmpleado;
+    string descripcion;
+
+    Solicitud(int id, string desc) : idEmpleado(id), descripcion(desc) {}
+};
+
+queue<Solicitud> colaSolicitudes;
+
+void agregarSolicitud(int idEmpleado, const string& descripcion) {
+    Solicitud nuevaSolicitud(idEmpleado, descripcion);
+    colaSolicitudes.push(nuevaSolicitud);
+    cout << "Solicitud de empleado " << idEmpleado << " agregada a la cola." << endl;
+}
+
+void procesarSolicitud() {
+    if (!colaSolicitudes.empty()) {
+        Solicitud solicitudProcesada = colaSolicitudes.front();
+        colaSolicitudes.pop();
+        cout << "Procesando solicitud de empleado " << solicitudProcesada.idEmpleado 
+             << ": " << solicitudProcesada.descripcion << endl;
+    } else {
+        cout << "No hay solicitudes pendientes." << endl;
+    }
+}
+
+void mostrarSolicitudes() {
+    if (colaSolicitudes.empty()) {
+        cout << "No hay solicitudes en la cola." << endl;
+    } else {
+        queue<Solicitud> copiaCola = colaSolicitudes;
+        while (!copiaCola.empty()) {
+            Solicitud solicitudActual = copiaCola.front();
+            copiaCola.pop();
+            cout << "Empleado " << solicitudActual.idEmpleado 
+                 << ": " << solicitudActual.descripcion << endl;
+        }
+    }
+}
+
+int main() {
+    int opcion;
+    do {
+        cout << "\n1. Agregar solicitud\n2. Procesar solicitud\n3. Mostrar solicitudes\n4. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1: {
+                int idEmpleado;
+                string descripcion;
+                cout << "Ingrese el ID del empleado: ";
+                cin >> idEmpleado;
+                cin.ignore(); 
