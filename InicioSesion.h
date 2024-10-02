@@ -91,12 +91,10 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
 
         gotoxy(x, 10);
         cout << "Ingrese su nombre de usuario: ";
-        gotoxy(x + 28, 10);
         cin >> usuario;
 
         gotoxy(x, 12);
         cout << "Ingrese su clave: ";
-        gotoxy(x + 28, 12);
         cin >> clave;
 
         Nodo *aux = ListaUsers;

@@ -167,7 +167,7 @@ int main() {
                     gotoxy(x, 5);
                     cout << "1. Agregar registro de asistencia\n";
                     gotoxy(x, 6);
-                    cout << ". Mostrar registro de asistencias\n";
+                    cout << "2. Mostrar registro de asistencias\n";
                     gotoxy(x, 7);
                     cout << "3. Volver al menú principal\n";
 
