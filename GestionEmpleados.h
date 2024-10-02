@@ -1,11 +1,11 @@
-// GestionEmpleados.h
+
 #pragma once
 
 #include <iostream>
 #include <string>
 #include "gotoxy.h"
-#include <limits> // Para std::numeric_limits
-#include <windows.h> // Para SetConsoleOutputCP
+#include <limits> 
+#include <windows.h> 
 
 using namespace std;
 
@@ -25,7 +25,7 @@ struct RegistroAsistencia {
     string horaEntrada;
     string horaSalida;
     string estado;
-    RegistroAsistencia* siguiente; // Puntero al siguiente nodo (para la pila)
+    RegistroAsistencia* siguiente; 
 };
 
 struct PilaAsistencias {
@@ -39,11 +39,11 @@ struct Empleado {
     string contrasena;
     string puesto;
     Empleado* siguiente;
-    PilaEvaluaciones* pilaEvaluaciones; // Puntero a la pila de evaluaciones del empleado
-    PilaAsistencias* pilaAsistencias; // Puntero a la pila de asistencias del empleado
+    PilaEvaluaciones* pilaEvaluaciones; 
+    PilaAsistencias* pilaAsistencias; 
 };
 
-// Variable global para manejar IDs autogenerados
+
 inline int lastID = 0;
 
 // Declaración de funciones
@@ -54,9 +54,9 @@ void actualizarEmpleado(Empleado* head, int id);
 void eliminarEmpleado(Empleado*& head, int id);
 int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados);
 
-Empleado* buscarEmpleado(Empleado* head, int id); // Función para buscar empleado por ID
+Empleado* buscarEmpleado(Empleado* head, int id); 
 
-// Función para obtener el ancho de la consola
+
 inline int obtenerAnchoConsola() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     int columns;
@@ -65,15 +65,15 @@ inline int obtenerAnchoConsola() {
     return columns;
 }
 
-// Función para validar la entrada de un entero
+
 inline bool obtenerEntero(int& numero) {
     cin >> numero;
     if (cin.fail()) {
-        cin.clear(); // Limpia el estado de error
-        cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta el resto de la línea
+        cin.clear(); 
+        cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
         return false;
     }
-    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Descarta el resto de la línea
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
     return true;
 }
 
@@ -82,7 +82,7 @@ inline bool obtenerEntero(int& numero) {
 Empleado* crearEmpleado() {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada ajustada
+    int x = anchoConsola / 2 - 30; 
 
     gotoxy(x, 2);
     cout << "--- Agregar Nuevo Empleado ---\n";
@@ -111,8 +111,8 @@ Empleado* crearEmpleado() {
     nuevoEmpleado->contrasena = contrasena;
     nuevoEmpleado->puesto = puesto;
     nuevoEmpleado->siguiente = nullptr;
-    nuevoEmpleado->pilaEvaluaciones = nullptr; // Inicializamos la pila de evaluaciones
-    nuevoEmpleado->pilaAsistencias = nullptr; // Inicializamos la pila de asistencias
+    nuevoEmpleado->pilaEvaluaciones = nullptr; 
+    nuevoEmpleado->pilaAsistencias = nullptr;
 
     gotoxy(x, 9);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
@@ -135,7 +135,7 @@ void agregarEmpleado(Empleado*& head, Empleado* nuevoEmpleado) {
 void mostrarEmpleados(Empleado* head) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada ajustada
+    int x = anchoConsola / 2 - 30; 
 
     gotoxy(x, 2);
     cout << "--- Lista de Empleados ---\n";
@@ -160,7 +160,7 @@ void mostrarEmpleados(Empleado* head) {
 void actualizarEmpleado(Empleado* head, int id) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada ajustada
+    int x = anchoConsola / 2 - 30;
 
     Empleado* temp = head;
     while (temp != nullptr) {
@@ -248,7 +248,7 @@ void actualizarEmpleado(Empleado* head, int id) {
 void eliminarEmpleado(Empleado*& head, int id) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada ajustada
+    int x = anchoConsola / 2 - 30; 
 
     if (head == nullptr) {
         gotoxy(x, 2);
@@ -256,11 +256,11 @@ void eliminarEmpleado(Empleado*& head, int id) {
         system("pause");
         return;
     }
-
+//Inicio
     if (head->idEmpleado == id) {
         Empleado* temp = head;
         head = head->siguiente;
-        // Liberar memoria de las pilas asociadas
+
         if (temp->pilaEvaluaciones != nullptr) {
             Evaluacion* evalTemp;
             while (temp->pilaEvaluaciones->cima != nullptr) {
@@ -285,7 +285,7 @@ void eliminarEmpleado(Empleado*& head, int id) {
         system("pause");
         return;
     }
-
+//Medio o final
     Empleado* actual = head;
     Empleado* anterior = nullptr;
 
@@ -302,7 +302,7 @@ void eliminarEmpleado(Empleado*& head, int id) {
     }
 
     anterior->siguiente = actual->siguiente;
-    // Liberar memoria de las pilas asociadas
+    // Liberar memoria de las pilas 
     if (actual->pilaEvaluaciones != nullptr) {
         Evaluacion* evalTemp;
         while (actual->pilaEvaluaciones->cima != nullptr) {
@@ -330,7 +330,7 @@ void eliminarEmpleado(Empleado*& head, int id) {
 int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada ajustada
+    int x = anchoConsola / 2 - 30; 
     int opcion;
 
     gotoxy(x, 2);
@@ -355,7 +355,7 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
             gotoxy(x, 11);
             cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
             gotoxy(x, 10);
-            cout << string(50, ' '); // Limpia la línea
+            cout << string(50, ' '); 
         }
     } while (!entradaValida || opcion < 1 || opcion > 5);
 
@@ -379,7 +379,7 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
                     gotoxy(x, 13);
                     cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                     gotoxy(x, 12);
-                    cout << string(50, ' '); // Limpia la línea
+                    cout << string(50, ' '); 
                 }
             } while (!entradaValida);
             actualizarEmpleado(listaEmpleados, id);
@@ -396,21 +396,21 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
                     gotoxy(x, 13);
                     cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                     gotoxy(x, 12);
-                    cout << string(50, ' '); // Limpia la línea
+                    cout << string(50, ' '); 
                 }
             } while (!entradaValida);
             eliminarEmpleado(listaEmpleados, id);
             break;
         }
         case 5:
-            return 0; // Volver al menú principal
+            return 0; 
         default:
             gotoxy(x, 12);
             cout << "Opción inválida. Intente de nuevo.\n";
             system("pause");
             break;
     }
-    return 1; // Continuar en el menú de gestión de empleados
+    return 1; 
 }
 
 Empleado* buscarEmpleado(Empleado* head, int id) {

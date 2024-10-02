@@ -9,20 +9,17 @@
 
 using namespace std;
 
-// Declaración de obtenerAnchoConsola si no está en los headers
 int obtenerAnchoConsola();
-// Declaración de obtenerEntero si no está en los headers
 bool obtenerEntero(int& numero);
 
 int main() {
 
-    // Configuración para soportar caracteres acentuados
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
     Nodo *ListaUsers = NULL;
 
-    //Usuarios de prueba (van en una lista Usuarios)
+    //Usuarios de prueba 
     Usuarios(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
     Usuarios(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
 
@@ -34,7 +31,7 @@ int main() {
     do {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
-        int x = anchoConsola / 2 - 20; // Posición X centrada
+        int x = anchoConsola / 2 - 20; 
 
         gotoxy(x, 2);
         cout << "--- Menú Principal ---\n";
@@ -56,7 +53,7 @@ int main() {
                 gotoxy(x, 9);
                 cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
                 gotoxy(x, 8);
-                cout << string(50, ' '); // Limpia la línea
+                cout << string(50, ' '); 
             }
         } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 4);
         Empleado* empleado;
@@ -85,7 +82,7 @@ int main() {
                         gotoxy(x, 11);
                         cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                         gotoxy(x, 10);
-                        cout << string(50, ' '); // Limpia la línea
+                        cout << string(50, ' ');
                     }
                 } while (!entradaValida);
 
@@ -120,7 +117,7 @@ int main() {
                             gotoxy(x, 11);
                             cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
                             gotoxy(x, 10);
-                            cout << string(50, ' '); // Limpia la línea
+                            cout << string(50, ' '); 
                         }
                     } while (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3);
 
@@ -180,7 +177,7 @@ int main() {
                             gotoxy(x, 11);
                             cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
                             gotoxy(x, 10);
-                            cout << string(50, ' '); // Limpia la línea
+                            cout << string(50, ' '); 
                         }
                     } while (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3);
 
@@ -216,13 +213,13 @@ int main() {
         }
     } while (opcionPrincipal != 4);
 
-    // Liberar memoria
+
     Empleado* temp;
     while (listaEmpleados != nullptr) {
         temp = listaEmpleados;
         listaEmpleados = listaEmpleados->siguiente;
 
-        // Liberar la pila de evaluaciones
+
         if (temp->pilaEvaluaciones != nullptr) {
             Evaluacion* evalTemp;
             while (temp->pilaEvaluaciones->cima != nullptr) {
