@@ -2,6 +2,7 @@
 #include <iostream>
 #include "GestionEmpleados.h"
 #include "EvaluacionEmpleado.h"
+#include "InicioSesion.h"
 #include "gotoxy.h"
 #include <windows.h>
 
@@ -13,8 +14,18 @@ int obtenerAnchoConsola();
 bool obtenerEntero(int& numero);
 
 int main() {
+
     // Configuración para soportar caracteres acentuados
     SetConsoleOutputCP(CP_UTF8);
+
+    //Inicio de sesion
+    Nodo *ListaUsers = NULL;
+
+    //Usuarios de prueba (van en una lista Usuarios)
+    Usuarios(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
+    Usuarios(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
+
+    pantallaInicioSesion(ListaUsers);
 
     Empleado* listaEmpleados = nullptr;
     int opcionPrincipal;
