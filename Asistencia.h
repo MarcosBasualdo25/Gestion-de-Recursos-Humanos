@@ -1,5 +1,5 @@
 #include <iostream>
-#include <iomanip>  // Para manejar el ancho de columnas
+#include <iomanip> 
 #include <ctime>
 #include <windows.h>
 #include "GestionEmpleados.h"
@@ -25,10 +25,8 @@ string obtenerFechaActual() {
 
 // Función para agregar un registro de asistencia en la pila
 void agregarRegistro(PilaAsistencias*& pila) {
-    // Crear un nuevo nodo
     RegistroAsistencia* nuevoRegistro = new RegistroAsistencia;
     
-    // Inicializar los campos del nuevo registro
     nuevoRegistro->fecha = obtenerFechaActual();
 
     if (pila == nullptr) {
@@ -37,21 +35,18 @@ void agregarRegistro(PilaAsistencias*& pila) {
     }
 
     if (pila->cima == NULL || (!pila->cima->horaEntrada.empty() && !pila->cima->horaSalida.empty())) {
-        // Si no hay ningún registro en la pila o el registro anterior está completo, agregamos uno nuevo
         nuevoRegistro->horaEntrada = obtenerHoraActual();
         nuevoRegistro->estado = "Presente";
-        nuevoRegistro->horaSalida = "";  // Aún no se ha registrado la salida
+        nuevoRegistro->horaSalida = "";  
         nuevoRegistro->siguiente = pila->cima;
         pila->cima = nuevoRegistro;
         cout << "Hora de entrada registrada correctamente.\n";
     } else if (pila->cima->horaSalida.empty()) {
-        // Si ya hay un registro con hora de entrada pero sin hora de salida, registramos la salida
         pila->cima->horaSalida = obtenerHoraActual();
         cout << "Hora de salida registrada correctamente.\n";
     }
 }
 
-// Función para imprimir todos los registros de la pila en formato de filas y columnas
 void imprimirRegistros(PilaAsistencias*& pila) {
     RegistroAsistencia* actual = pila->cima;
     int i = 1;
@@ -71,7 +66,7 @@ void imprimirRegistros(PilaAsistencias*& pila) {
 
     // Recorrer la pila e imprimir cada registro en formato de tabla
     while (actual != NULL) {
-        cout << left << setw(5) << i++  // Número de registro
+        cout << left << setw(5) << i++  
             << setw(15) << actual->fecha
             << setw(20) << actual->horaEntrada
             << setw(20) << actual->horaSalida

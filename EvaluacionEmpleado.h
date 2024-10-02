@@ -1,11 +1,11 @@
-// EvaluacionEmpleado.h
+
 #pragma once
 
 #include <iostream>
 #include <string>
 #include "GestionEmpleados.h"
 #include "gotoxy.h"
-#include <limits> // Para std::numeric_limits
+#include <limits> 
 
 using namespace std;
 
@@ -18,7 +18,7 @@ void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila);
 inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 20; // Posición X centrada
+    int x = anchoConsola / 2 - 20; 
 
     gotoxy(x, 2);
     cout << "--- Agregar Evaluación ---\n";
@@ -39,7 +39,7 @@ inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
             gotoxy(x, 6);
             cout << "Entrada no aceptada. Por favor, ingrese un número entre 0 y 10.";
             gotoxy(x, 5);
-            cout << string(50, ' '); // Limpia la línea
+            cout << string(50, ' '); 
         }
     } while (!entradaValida || calificacion < 0 || calificacion > 10);
 
@@ -65,7 +65,7 @@ inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
 inline void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; // Posición X centrada
+    int x = anchoConsola / 2 - 30; 
 
     gotoxy(x, 2);
     cout << "--- Evaluaciones del Empleado ---\n";
@@ -97,7 +97,7 @@ inline void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
             totalEvaluaciones++;
             actual = actual->siguiente;
             numeroEvaluacion++;
-            y++; // Añadimos una línea extra entre evaluaciones
+            y++; 
         }
 
         // Calcular y mostrar el promedio
