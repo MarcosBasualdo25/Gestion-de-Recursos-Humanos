@@ -1,4 +1,4 @@
-
+// EvaluacionEmpleado.h
 #pragma once
 
 #include <iostream>
@@ -13,12 +13,9 @@ using namespace std;
 void agregarEvaluacion(PilaEvaluaciones*& pila);
 void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila);
 
-int obtenerAnchoConsola(); // Declaración anticipada
-bool obtenerEntero(int& numero); // Declaración anticipada
-
 // Implementación de funciones
 
-void agregarEvaluacion(PilaEvaluaciones*& pila) {
+inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 20; // Posición X centrada
@@ -31,7 +28,6 @@ void agregarEvaluacion(PilaEvaluaciones*& pila) {
 
     gotoxy(x, 4);
     cout << "Ingrese el comentario de la evaluación: ";
-    cin.ignore();
     getline(cin, comentario);
 
     bool entradaValida = false;
@@ -66,7 +62,7 @@ void agregarEvaluacion(PilaEvaluaciones*& pila) {
     system("pause");
 }
 
-void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
+inline void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30; // Posición X centrada
