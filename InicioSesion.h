@@ -5,6 +5,7 @@
 #include "GestionEmpleados.h"
 #include "gotoxy.h"
 #include <limits>
+#include <conio.h>
 
 using namespace std;
 
@@ -51,6 +52,7 @@ bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&ListaUsers) {
     while (!LoginUser) {
+        system("cls");
         int anchoConsola = obtenerAnchoConsola();
         int x = anchoConsola / 2 - 20;
         int mensajeY = 16;
@@ -58,15 +60,17 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
         string rol;
         string usuario;
         string clave;
-
-        gotoxy(x, 2);
-        cout << "----- Inicio de Sesion -----";
-
+        gotoxy(x, 1);
+        cout<<"--------------------------";
+        gotoxy(x+5, 2);
+        cout <<"Inicio de Sesion";
+        gotoxy(x, 3);
+        cout<<"--------------------------"; 
         gotoxy(x, 4);
-        cout << "[1] Administrador.";
+        cout << "[1] Administrador";
 
         gotoxy(x, 5);
-        cout << "[2] Empleado.";
+        cout << "[2] Empleado";
 
         int opcionRol = 0;
         bool entradaValida = false;
@@ -89,12 +93,14 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             }
         } while (!entradaValida);
 
-        gotoxy(x, 10);
+        gotoxy(x, 9);
         cout << "Ingrese su nombre de usuario: ";
+        gotoxy(x, 11);
         cin >> usuario;
 
-        gotoxy(x, 12);
+        gotoxy(x, 13);
         cout << "Ingrese su clave: ";
+        gotoxy(x, 15);
         cin >> clave;
 
         Nodo *aux = ListaUsers;
@@ -105,14 +111,16 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             aux = aux->siguiente;
         }
 
-        gotoxy(x, mensajeY);
+        gotoxy(x, 17);
         if (LoginUser) {
+            color(2);
             cout << "Ingreso al sistema con exito!" << endl;
+            color(7);
         } else {
+            color(4);
             cout << "Ingreso denegado, datos no validos" << endl;
+            color(7);
         }
-        gotoxy(x, mensajeY + 2);
-        system("Pause");
-        system("cls");
+        getch();
     }
 }
