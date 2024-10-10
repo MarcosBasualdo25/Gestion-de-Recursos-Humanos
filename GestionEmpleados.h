@@ -6,6 +6,7 @@
 #include "gotoxy.h"
 #include <limits> 
 #include <windows.h> 
+#include "InicioSesion.h"
 
 using namespace std;
 
@@ -114,9 +115,18 @@ Empleado* crearEmpleado() {
     nuevoEmpleado->pilaEvaluaciones = nullptr; 
     nuevoEmpleado->pilaAsistencias = nullptr;
 
+    // Creacion de la cuenta del usuario
+    string user;
+    lower(nombre);
+    lower(apellido);
+    user = nombre + "." + apellido;
+    crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
+
     gotoxy(x, 9);
+    color(2);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
-    system("pause");
+    color(7);
+    getch();
     return nuevoEmpleado;
 }
 
@@ -146,11 +156,26 @@ void mostrarEmpleados(Empleado* head) {
     } else {
         Empleado* temp = head;
         int y = 4;
+            //Cabecera
+            gotoxy(50, y);
+            cout<<"ID";
+            gotoxy(55, y);
+            cout<<"Nombre";
+            gotoxy(75, y);
+            cout<<"Puesto";
+            gotoxy(50, y+1);
+            cout<<"-----------------------------------";
         while (temp != nullptr) {
-            gotoxy(x, y++);
-            cout << "ID: " << temp->idEmpleado << ", Nombre: " << temp->nombre << " " << temp->apellido
-                 << ", Puesto: " << temp->puesto;
+            y +=2;
+            //Empleados
+            gotoxy(50, y);
+            cout<<temp->idEmpleado;
+            gotoxy(55, y);
+            cout<<temp->nombre<<" "<<temp->apellido;
+            gotoxy(75, y);
+            cout<<temp->puesto;            
             temp = temp->siguiente;
+            
         }
     }
     cout << "\n";

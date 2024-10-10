@@ -17,13 +17,11 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
-    Nodo *ListaUsers = NULL;
+    crearUsuario(PilaUsers, "david.aldana", "1234", "ADMINISTRADOR");
+    crearUsuario(PilaUsers, "gabriel.poma", "4321", "EMPLEADO");
 
-    //Usuarios de prueba 
-    Usuarios(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
-    Usuarios(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
-
-    pantallaInicioSesion(ListaUsers);
+    //Mostramos la pantalla para iniciar sesion
+    pantallaInicioSesion(PilaUsers);
 
     Empleado* listaEmpleados = nullptr;
     int opcionPrincipal;
@@ -42,20 +40,22 @@ int main() {
         gotoxy(x, 6);
         cout << "3. Asistencia de empleados\n";
         gotoxy(x, 7);
-        cout << "4. Salir\n";
+        cout << "4. Volver a iniciar sesion\n";
+        gotoxy(x, 8);
+        cout << "5. Salir\n";
 
         bool entradaValida = false;
         do {
-            gotoxy(x, 8);
+            gotoxy(x, 10);
             cout << "Ingrese una opción: ";
             entradaValida = obtenerEntero(opcionPrincipal);
-            if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 4) {
-                gotoxy(x, 9);
+            if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 5) {
+                gotoxy(x, 12);
                 cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                gotoxy(x, 8);
+                gotoxy(x, 12);
                 cout << string(50, ' '); 
             }
-        } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 4);
+        } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 5);
         Empleado* empleado;
         switch (opcionPrincipal) {
             case 1: {
@@ -200,18 +200,22 @@ int main() {
                     }
                 } while (opcionEvaluacion != 3);
                 break;
-            case 4:
-                gotoxy(x, 10);
+            case 4: 
+                LoginUser = false;
+                pantallaInicioSesion(PilaUsers);
+                break;
+            case 5:
+                gotoxy(x, 12);
                 cout << "Saliendo del programa...\n";
                 system("pause");
                 break;
             default:
-                gotoxy(x, 10);
+                gotoxy(x, 12);
                 cout << "Opción inválida. Intente de nuevo.\n";
                 system("pause");
                 break;
         }
-    } while (opcionPrincipal != 4);
+    } while (opcionPrincipal != 5);
 
 
     Empleado* temp;

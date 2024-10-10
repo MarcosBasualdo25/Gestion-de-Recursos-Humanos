@@ -2,12 +2,25 @@
 
 #include <iostream>
 #include <string>
-#include "GestionEmpleados.h"
 #include "gotoxy.h"
 #include <limits>
 #include <conio.h>
 
 using namespace std;
+//Funcion para convertir una frase a minuscula o mayuscula
+void lower(string &frase){
+	for (char &c : frase) {
+        c = tolower(c); 
+    }
+}
+
+void upper(string &frase){
+    for (char &c : frase) {
+        c = toupper(c);  
+    }
+}
+
+extern int obtenerAnchoConsola();
 
 struct Usuario {
     string user;
@@ -20,16 +33,18 @@ struct Nodo {
     Nodo *siguiente;
 };
 
-void Usuarios(Nodo *&listaUsers, string u, string c, string r) {
+Nodo *PilaUsers = NULL;
+
+void crearUsuario(Nodo *&PilaUsers, string u, string c, string r) {
     Nodo *nuevo_nodo = new Nodo();
     nuevo_nodo->dato.user = u;
     nuevo_nodo->dato.clave = c;
     nuevo_nodo->dato.rol = r;
     nuevo_nodo->siguiente = NULL;
-    if (listaUsers == NULL) {
-        listaUsers = nuevo_nodo;
+    if (PilaUsers == NULL) {
+        PilaUsers = nuevo_nodo;
     } else {
-        Nodo *aux = listaUsers;
+        Nodo *aux = PilaUsers;
         while (aux->siguiente != NULL) {
             aux = aux->siguiente;
         }
@@ -37,8 +52,8 @@ void Usuarios(Nodo *&listaUsers, string u, string c, string r) {
     }
 }
 
-void mostrarUsuarios(Nodo *&listaUsers) {
-    Nodo *aux = listaUsers;
+void mostrarUsuarios(Nodo *&PilaUsers) {
+    Nodo *aux = PilaUsers;
     while (aux != NULL) {
         cout << aux->dato.user << endl;
         cout << aux->dato.clave << endl;
@@ -50,7 +65,7 @@ void mostrarUsuarios(Nodo *&listaUsers) {
 
 bool LoginUser = false;
 
-void pantallaInicioSesion(Nodo *&ListaUsers) {
+void pantallaInicioSesion(Nodo *&PilaUsers) {
     while (!LoginUser) {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
@@ -103,7 +118,7 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
         gotoxy(x, 15);
         cin >> clave;
 
-        Nodo *aux = ListaUsers;
+        Nodo *aux = PilaUsers;
         while (aux != NULL) {
             if ((aux->dato.user == usuario) && (aux->dato.clave == clave) && (aux->dato.rol == rol)) {
                 LoginUser = true;
