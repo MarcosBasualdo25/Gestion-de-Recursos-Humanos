@@ -141,17 +141,20 @@ int main() {
             }
             case 3: 
                 if (listaEmpleados == nullptr) {
+                    gotoxy(x, 12);
                     cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
                     system("pause");
                     break;
                 }
                 int id;
+                gotoxy(x, 12);
                 cout << "Ingrese el ID del empleado para registrar asistencia: ";
                 cin>>id;
                 empleado = buscarEmpleado(listaEmpleados, id);
                 if (empleado == nullptr) {
                     cout << "Empleado con ID " << id << " no encontrado.\n";
-                    system("pause");
+                    getch();
+                    break;
                 }
 
                 int opcionEvaluacion;
@@ -184,11 +187,11 @@ int main() {
                     switch (opcionEvaluacion) {
                         case 1:
                             agregarRegistro(empleado->pilaAsistencias);
-                            system("pause");
+                            getch();
                             break;
                         case 2:
                             imprimirRegistros(empleado->pilaAsistencias);
-                            system("pause");
+                            getch();
                             break;
                         case 3:
                             break;
