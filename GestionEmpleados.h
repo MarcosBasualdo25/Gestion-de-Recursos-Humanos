@@ -7,6 +7,8 @@
 #include <limits> 
 #include <windows.h> 
 #include "InicioSesion.h"
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -33,19 +35,36 @@ struct PilaAsistencias {
     RegistroAsistencia* cima;
 };
 
+// Estructura de una solicitud
+struct Solicitud {
+    int IDsolicitud;           
+    string Razon;               
+    string FechaSolicitud;     
+    string Descripcion;         
+    string Estado;              
+    string FechaResolucion;     
+    string ComentarioAdmin;      
+    Solicitud* siguiente;     
+};
+
+struct ColaSolicitudes {
+    Solicitud* cabeza;  
+    Solicitud* cola;    
+
+};
+
 struct Empleado {
     int idEmpleado;
     string nombre;
     string apellido;
     string contrasena;
     string puesto;
+    Empleado* anterior;
     Empleado* siguiente;
     PilaEvaluaciones* pilaEvaluaciones; 
     PilaAsistencias* pilaAsistencias; 
+    ColaSolicitudes* colaSolicitudes;
 };
-
-
-inline int lastID = 0;
 
 // Declaración de funciones
 Empleado* crearEmpleado();
@@ -80,7 +99,7 @@ inline bool obtenerEntero(int& numero) {
 
 // Implementación de funciones
 
-Empleado* crearEmpleado() {
+Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30; 
@@ -88,8 +107,8 @@ Empleado* crearEmpleado() {
     gotoxy(x, 2);
     cout << "--- Agregar Nuevo Empleado ---\n";
 
+    // Creación de un nuevo empleado
     Empleado* nuevoEmpleado = new Empleado();
-
     string nombre, apellido, contrasena, puesto;
 
     gotoxy(x, 4);
@@ -105,84 +124,142 @@ Empleado* crearEmpleado() {
     cout << "Ingrese el puesto del empleado: ";
     getline(cin, puesto);
 
-    // Asignación automática del ID
-    nuevoEmpleado->idEmpleado = ++lastID;
+    // Asignar valores al nuevo empleado
     nuevoEmpleado->nombre = nombre;
     nuevoEmpleado->apellido = apellido;
     nuevoEmpleado->contrasena = contrasena;
     nuevoEmpleado->puesto = puesto;
-    nuevoEmpleado->siguiente = nullptr;
-    nuevoEmpleado->pilaEvaluaciones = nullptr; 
+    nuevoEmpleado->siguiente = nullptr;  // Será el último
+    nuevoEmpleado->anterior = nullptr;
+    nuevoEmpleado->pilaEvaluaciones = nullptr;
     nuevoEmpleado->pilaAsistencias = nullptr;
 
-    // Creacion de la cuenta del usuario
+    // Creación de la cuenta del usuario
     string user;
     lower(nombre);
     lower(apellido);
     user = nombre + "." + apellido;
     crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
 
+    // Asignación del ID y enlace a la lista
+    if (head == nullptr) {
+        // Si la lista está vacía, el nuevo empleado es tanto el head como el tail
+        nuevoEmpleado->idEmpleado = 1;
+        head = nuevoEmpleado;
+        tail = nuevoEmpleado;
+    } else {
+        // Si ya hay empleados, agregar al final
+        nuevoEmpleado->idEmpleado = tail->idEmpleado + 1;  // El ID será uno más que el último empleado
+        nuevoEmpleado->anterior = tail;  // El anterior del nuevo empleado es el tail actual
+        tail->siguiente = nuevoEmpleado;  // El siguiente del tail actual es el nuevo empleado
+        tail = nuevoEmpleado;  // Actualizar el tail para que apunte al nuevo empleado
+    }
+
+    // Mensaje de confirmación
     gotoxy(x, 9);
     color(2);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
     color(7);
     getch();
+
     return nuevoEmpleado;
 }
 
-void agregarEmpleado(Empleado*& head, Empleado* nuevoEmpleado) {
-    if (head == nullptr) {
-        head = nuevoEmpleado;
-    } else {
-        Empleado* temp = head;
-        while (temp->siguiente != nullptr) {
-            temp = temp->siguiente;
-        }
-        temp->siguiente = nuevoEmpleado;
-    }
-}
 
-void mostrarEmpleados(Empleado* head) {
-    system("cls");
-    int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; 
+void mostrarEmpleados(Empleado* head, Empleado* tail) {
+    system("cls");  // Limpia la consola
+    int anchoConsola = obtenerAnchoConsola();  // Obtiene el ancho de la consola
+    int x = anchoConsola / 2 - 30;  // Centra el título en la consola
 
     gotoxy(x, 2);
-    cout << "--- Lista de Empleados ---\n";
+    cout << "--- Lista de Empleados ---\n";  // Título
 
     if (head == nullptr) {
         gotoxy(x, 4);
-        cout << "No hay empleados en la lista.\n";
+        cout << "No hay empleados en la lista.\n";  // Mensaje si no hay empleados
     } else {
         Empleado* temp = head;
         int y = 4;
-            //Cabecera
-            gotoxy(50, y);
-            cout<<"ID";
-            gotoxy(55, y);
-            cout<<"Nombre";
-            gotoxy(75, y);
-            cout<<"Puesto";
-            gotoxy(50, y+1);
-            cout<<"-----------------------------------";
+        
+        // Cabecera
+        gotoxy(50, y);
+        cout << "ID";
+        gotoxy(55, y);
+        cout << "Nombre";
+        gotoxy(75, y);
+        cout << "Puesto";
+        gotoxy(50, y + 1);
+        cout << "-----------------------------------";
+
+        // Itera sobre la lista desde head hasta tail y muestra cada empleado
         while (temp != nullptr) {
-            y +=2;
-            //Empleados
+            y += 2;
+
+            // Muestra los detalles de cada empleado
             gotoxy(50, y);
-            cout<<temp->idEmpleado;
+            cout << temp->idEmpleado;
             gotoxy(55, y);
-            cout<<temp->nombre<<" "<<temp->apellido;
+            cout << temp->nombre << " " << temp->apellido;
             gotoxy(75, y);
-            cout<<temp->puesto;            
+            cout << temp->puesto;
+
+            // Avanza al siguiente empleado
             temp = temp->siguiente;
-            
+        }
+
+        // Muestra un mensaje indicando que se ha mostrado toda la lista en orden
+        gotoxy(x, y + 3);
+        cout << "Todos los empleados han sido mostrados en orden.\n";
+        
+        // Mostrar lista en orden inverso (opcional)
+        cout << "\nDeseas mostrar la lista en orden inverso? (s/n): ";
+        char opcion;
+        cin >> opcion;
+        if (opcion == 's' || opcion == 'S') {
+            system("cls");
+            gotoxy(x, 2);
+            cout << "--- Lista de Empleados (Orden Inverso) ---\n";
+
+            temp = tail;  // Empezamos desde el tail
+            y = 4;
+
+            // Cabecera
+            gotoxy(50, y);
+            cout << "ID";
+            gotoxy(55, y);
+            cout << "Nombre";
+            gotoxy(75, y);
+            cout << "Puesto";
+            gotoxy(50, y + 1);
+            cout << "-----------------------------------";
+
+            // Itera sobre la lista desde tail hasta head
+            while (temp != nullptr) {
+                y += 2;
+
+                // Muestra los detalles de cada empleado
+                gotoxy(50, y);
+                cout << temp->idEmpleado;
+                gotoxy(55, y);
+                cout << temp->nombre << " " << temp->apellido;
+                gotoxy(75, y);
+                cout << temp->puesto;
+
+                // Retrocede al empleado anterior
+                temp = temp->anterior;
+            }
+
+            // Muestra un mensaje indicando que se ha mostrado toda la lista en orden inverso
+            gotoxy(x, y + 3);
+            cout << "Todos los empleados han sido mostrados en orden inverso.\n";
         }
     }
-    cout << "\n";
-    system("pause");
+
+    system("pause");  // Pausa después de mostrar la lista completa
 }
 
-void actualizarEmpleado(Empleado* head, int id) {
+
+void actualizarEmpleado(Empleado* head, Empleado* tail, int id) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
@@ -267,13 +344,13 @@ void actualizarEmpleado(Empleado* head, int id) {
     }
     gotoxy(x, 2);
     cout << "Empleado con ID " << id << " no encontrado.\n";
-    system("pause");
+    getch();
 }
 
-void eliminarEmpleado(Empleado*& head, int id) {
+void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; 
+    int x = anchoConsola / 2 - 30;
 
     if (head == nullptr) {
         gotoxy(x, 2);
@@ -281,11 +358,20 @@ void eliminarEmpleado(Empleado*& head, int id) {
         system("pause");
         return;
     }
-//Inicio
+
+    // Caso especial: Eliminar el primer empleado (head)
     if (head->idEmpleado == id) {
         Empleado* temp = head;
-        head = head->siguiente;
 
+        // Actualizar el head al siguiente nodo
+        head = head->siguiente;
+        if (head != nullptr) {
+            head->anterior = nullptr;  // El nuevo head no debe tener anterior
+        } else {
+            tail = nullptr;  // Si la lista se vacía, tail también debe ser nullptr
+        }
+
+        // Liberar las pilas asociadas al empleado
         if (temp->pilaEvaluaciones != nullptr) {
             Evaluacion* evalTemp;
             while (temp->pilaEvaluaciones->cima != nullptr) {
@@ -295,6 +381,7 @@ void eliminarEmpleado(Empleado*& head, int id) {
             }
             delete temp->pilaEvaluaciones;
         }
+
         if (temp->pilaAsistencias != nullptr) {
             RegistroAsistencia* asisTemp;
             while (temp->pilaAsistencias->cima != nullptr) {
@@ -304,21 +391,33 @@ void eliminarEmpleado(Empleado*& head, int id) {
             }
             delete temp->pilaAsistencias;
         }
+
+        // Liberar la cola de solicitudes asociada al empleado
+        if (temp->colaSolicitudes != nullptr) {
+            Solicitud* solTemp;
+            while (temp->colaSolicitudes->cabeza != nullptr) {
+                solTemp = temp->colaSolicitudes->cabeza;
+                temp->colaSolicitudes->cabeza = temp->colaSolicitudes->cabeza->siguiente;
+                delete solTemp;
+            }
+            delete temp->colaSolicitudes;
+        }
+
         delete temp;
         gotoxy(x, 2);
         cout << "Empleado eliminado con éxito.\n";
         system("pause");
         return;
     }
-//Medio o final
+
+    // Caso general: Eliminar en el medio o al final de la lista
     Empleado* actual = head;
-    Empleado* anterior = nullptr;
 
     while (actual != nullptr && actual->idEmpleado != id) {
-        anterior = actual;
         actual = actual->siguiente;
     }
 
+    // Si no se encontró el empleado
     if (actual == nullptr) {
         gotoxy(x, 2);
         cout << "Empleado con ID " << id << " no encontrado.\n";
@@ -326,8 +425,18 @@ void eliminarEmpleado(Empleado*& head, int id) {
         return;
     }
 
-    anterior->siguiente = actual->siguiente;
-    // Liberar memoria de las pilas 
+    // Si el empleado a eliminar está en el medio o al final
+    if (actual->anterior != nullptr) {
+        actual->anterior->siguiente = actual->siguiente;  // Saltar al nodo siguiente
+    }
+    if (actual->siguiente != nullptr) {
+        actual->siguiente->anterior = actual->anterior;  // Saltar al nodo anterior
+    } else {
+        // Si no tiene siguiente, es el último nodo (actualizar tail)
+        tail = actual->anterior;
+    }
+
+    // Liberar las pilas asociadas al empleado
     if (actual->pilaEvaluaciones != nullptr) {
         Evaluacion* evalTemp;
         while (actual->pilaEvaluaciones->cima != nullptr) {
@@ -337,6 +446,7 @@ void eliminarEmpleado(Empleado*& head, int id) {
         }
         delete actual->pilaEvaluaciones;
     }
+
     if (actual->pilaAsistencias != nullptr) {
         RegistroAsistencia* asisTemp;
         while (actual->pilaAsistencias->cima != nullptr) {
@@ -346,13 +456,26 @@ void eliminarEmpleado(Empleado*& head, int id) {
         }
         delete actual->pilaAsistencias;
     }
+
+    // Liberar la cola de solicitudes asociada al empleado
+    if (actual->colaSolicitudes != nullptr) {
+        Solicitud* solTemp;
+        while (actual->colaSolicitudes->cabeza != nullptr) {
+            solTemp = actual->colaSolicitudes->cabeza;
+            actual->colaSolicitudes->cabeza = actual->colaSolicitudes->cabeza->siguiente;
+            delete solTemp;
+        }
+        delete actual->colaSolicitudes;
+    }
+
     delete actual;
     gotoxy(x, 2);
     cout << "Empleado eliminado con éxito.\n";
     system("pause");
 }
 
-int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
+
+int mostrarMenuGestionEmpleados(Empleado*& head, Empleado*& tail) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30; 
@@ -386,12 +509,11 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
 
     switch (opcion) {
         case 1: {
-            Empleado* nuevoEmpleado = crearEmpleado();
-            agregarEmpleado(listaEmpleados, nuevoEmpleado);
+            crearYAgregarEmpleado(head,tail);
             break;
         }
         case 2:
-            mostrarEmpleados(listaEmpleados);
+            mostrarEmpleados(head, tail);
             break;
         case 3: {
             int id;
@@ -407,7 +529,7 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
                     cout << string(50, ' '); 
                 }
             } while (!entradaValida);
-            actualizarEmpleado(listaEmpleados, id);
+            actualizarEmpleado(head,tail, id);
             break;
         }
         case 4: {
@@ -424,7 +546,7 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
                     cout << string(50, ' '); 
                 }
             } while (!entradaValida);
-            eliminarEmpleado(listaEmpleados, id);
+            eliminarEmpleado(head, tail, id);
             break;
         }
         case 5:

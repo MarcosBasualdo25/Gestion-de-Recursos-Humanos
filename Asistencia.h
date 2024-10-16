@@ -6,8 +6,8 @@
 
 using namespace std;
 
-// Función para obtener la hora y fecha actual
-string obtenerHoraActual() {
+// Función para obtener la hora y fecha actua
+inline string obtenerHoraActual() {
     time_t ahora = time(0);
     struct tm* timeinfo = localtime(&ahora);
     char buffer[80];
@@ -15,7 +15,7 @@ string obtenerHoraActual() {
     return string(buffer);
 }
 
-string obtenerFechaActual() {
+inline string obtenerFechaActual() {
     time_t ahora = time(0);
     struct tm* timeinfo = localtime(&ahora);
     char buffer[80];
@@ -61,6 +61,8 @@ void imprimirRegistros(PilaAsistencias* pila) {
         return;
     }
 
+    RegistroAsistencia* actual = pila->cima;
+
     // Imprimir el encabezado de la tabla
     cout << left << setw(5) << "No."
         << setw(15) << "Fecha"
@@ -71,14 +73,14 @@ void imprimirRegistros(PilaAsistencias* pila) {
     color(6); cout << string(75, '-') << endl; color(7);  // Separador
 
     // Recorrer la pila e imprimir cada registro en formato de tabla
-    while (pila->cima != NULL) {
+    while (actual != NULL) {
         gotoxy(x, 3+i);
         cout << left << setw(5) << i++  
-            << setw(15) << pila->cima->fecha
-            << setw(20) << pila->cima->horaEntrada
-            << setw(20) << pila->cima->horaSalida; 
-        color(2); cout<< setw(12) << pila->cima->estado<<endl; color(7);
+            << setw(15) << actual->fecha
+            << setw(20) << actual->horaEntrada
+            << setw(20) << actual->horaSalida; 
+        color(2); cout<< setw(12) << actual->estado<<endl; color(7);
 
-        pila->cima = pila->cima->siguiente;
+        actual = actual->siguiente;
     }
 }
