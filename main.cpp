@@ -16,10 +16,7 @@ int main() {
 
     SetConsoleOutputCP(CP_UTF8);
 
-    //Inicio de sesion
-    crearUsuario(PilaUsers, "david.aldana", "1234", "ADMINISTRADOR");
-    crearUsuario(PilaUsers, "gabriel.poma", "4321", "EMPLEADO");
-    
+    //Inicio de sesion 
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(PilaUsers);
 

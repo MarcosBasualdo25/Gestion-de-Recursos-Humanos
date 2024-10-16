@@ -80,6 +80,68 @@ inline bool obtenerEntero(int& numero) {
 
 // Implementación de funciones
 
+//De manejo de archivos 
+void guardarEmpleados(Empleado* head, const string& nombreArchivo) {
+    ofstream archivo(nombreArchivo);  // Abrimos el archivo en modo de escritura
+    if (archivo.is_open()) {
+        Empleado* aux = head;
+        while (aux != nullptr) {
+            archivo << aux->idEmpleado << " "
+                    << aux->nombre << " "
+                    << aux->apellido << " "
+                    << aux->contrasena << " "
+                    << aux->puesto << endl;
+            aux = aux->siguiente;
+        }
+        archivo.close();
+        //cout << "Empleados guardados correctamente en " << nombreArchivo << endl;
+    } else {
+        //cout << "Error al abrir el archivo " << nombreArchivo << endl;
+    }
+}
+
+void cargarEmpleados(Empleado*& head, const string& nombreArchivo) {
+    ifstream archivo(nombreArchivo);  // Abrimos el archivo en modo lectura
+    if (archivo.is_open()) {
+        string nombre, apellido, contrasena, puesto;
+        int id;
+        while (archivo >> id >> nombre >> apellido >> contrasena >> puesto) {
+            Empleado* nuevoEmpleado = new Empleado();
+            nuevoEmpleado->idEmpleado = id;
+            nuevoEmpleado->nombre = nombre;
+            nuevoEmpleado->apellido = apellido;
+            nuevoEmpleado->contrasena = contrasena;
+            nuevoEmpleado->puesto = puesto;
+            nuevoEmpleado->siguiente = nullptr;
+
+            agregarEmpleado(head, nuevoEmpleado);  // Agregar a la lista enlazada
+        }
+        archivo.close();
+        //cout << "Empleados cargados correctamente desde " << nombreArchivo << endl;
+    } else {
+        // cout << "Error al abrir el archivo " << nombreArchivo << endl;
+    }
+}
+
+void actualizarEmpleados(Empleado* head, const string& nombreArchivo) {
+    ofstream archivo(nombreArchivo, ios::trunc);  // Abrimos el archivo en modo truncar para sobrescribir
+    if (archivo.is_open()) {
+        Empleado* aux = head;
+        while (aux != nullptr) {
+            archivo << aux->idEmpleado << " "
+                    << aux->nombre << " "
+                    << aux->apellido << " "
+                    << aux->contrasena << " "
+                    << aux->puesto << endl;
+            aux = aux->siguiente;
+        }
+        archivo.close();
+        //cout << "Archivo de empleados actualizado correctamente." << endl;
+    } else {
+        //cout << "Error al abrir el archivo " << nombreArchivo << endl;
+    }
+}
+
 Empleado* crearEmpleado() {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
@@ -114,14 +176,13 @@ Empleado* crearEmpleado() {
     nuevoEmpleado->siguiente = nullptr;
     nuevoEmpleado->pilaEvaluaciones = nullptr; 
     nuevoEmpleado->pilaAsistencias = nullptr;
-
     // Creacion de la cuenta del usuario
     string user;
-    lower(nombre);
-    lower(apellido);
     user = nombre + "." + apellido;
+    lower(user);
     crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
     guardarUsuariosEnArchivo(PilaUsers, "Usuarios.txt");
+
     gotoxy(x, 9);
     color(2);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
@@ -140,13 +201,13 @@ void agregarEmpleado(Empleado*& head, Empleado* nuevoEmpleado) {
         }
         temp->siguiente = nuevoEmpleado;
     }
+    guardarEmpleados(head, "Empleados.txt");
 }
 
 void mostrarEmpleados(Empleado* head) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30; 
-
     gotoxy(x, 2);
     cout << "--- Lista de Empleados ---\n";
 
@@ -186,8 +247,11 @@ void actualizarEmpleado(Empleado* head, int id) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
-
+    cargarEmpleados(head, "Empleados.txt");
     Empleado* temp = head;
+    string user_actual = temp->nombre + "." + temp->apellido;
+    string user_nuevo;
+    lower(user_actual);
     while (temp != nullptr) {
         if (temp->idEmpleado == id) {
             int opcion;
@@ -230,6 +294,10 @@ void actualizarEmpleado(Empleado* head, int id) {
                     temp->nombre = nuevoValor;
                     gotoxy(x, 16);
                     cout << "Nombre actualizado con éxito.\n";
+                    //Actualizamos la pila de usuario
+                    user_nuevo = nuevoValor + "." + temp->apellido;
+                    lower(user_nuevo);
+                    actualizarUserUsuario(PilaUsers, user_actual, user_nuevo);
                     break;
                 case 2:
                     gotoxy(x, 14);
@@ -238,6 +306,10 @@ void actualizarEmpleado(Empleado* head, int id) {
                     temp->apellido = nuevoValor;
                     gotoxy(x, 16);
                     cout << "Apellido actualizado con éxito.\n";
+                    //Actualizamos la pila de usuario
+                    user_nuevo = temp->nombre + "." + nuevoValor;
+                    actualizarUserUsuario(PilaUsers, user_actual, user_nuevo);
+                    lower(user_nuevo);
                     break;
                 case 3:
                     gotoxy(x, 14);
@@ -246,6 +318,8 @@ void actualizarEmpleado(Empleado* head, int id) {
                     temp->contrasena = nuevoValor;
                     gotoxy(x, 16);
                     cout << "Contraseña actualizada con éxito.\n";
+                    //Actualizamos la pila de usuarios
+                    actualizarClaveUsuario(PilaUsers, user_actual, nuevoValor);
                     break;
                 case 4:
                     gotoxy(x, 14);
@@ -260,6 +334,8 @@ void actualizarEmpleado(Empleado* head, int id) {
                     cout << "Opción no válida. No se ha realizado ninguna modificación.\n";
                     break;
             }
+            //Sobrescribir nueva pila de usuarios en el txt
+            actualizarUsuarios(PilaUsers);
             system("pause");
             return;
         }

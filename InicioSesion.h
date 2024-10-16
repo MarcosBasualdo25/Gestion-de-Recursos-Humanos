@@ -65,6 +65,37 @@ void mostrarUsuarios(Nodo *&PilaUsers) {
     }
 }
 
+void actualizarUserUsuario(Nodo *&PilaUsers, const string& usuarioActual, const string& nuevoUsuario) {
+    Nodo *aux = PilaUsers;
+
+    while (aux != NULL) {
+        if (aux->dato.user == usuarioActual) {  // Buscamos el usuario a modificar
+            aux->dato.user = nuevoUsuario;  // Actualizamos el nombre de usuario
+            cout << "Usuario actualizado correctamente." << endl;
+            return;
+        }
+        aux = aux->siguiente;
+    }
+
+    cout << "Usuario no encontrado." << endl;
+}
+void actualizarClaveUsuario(Nodo *&PilaUsers, const string& usuarioActual, const string& nuevaClave) {
+    Nodo *aux = PilaUsers;
+
+    while (aux != NULL) {
+        if (aux->dato.user == usuarioActual) {  // Buscamos el usuario a modificar
+            aux->dato.clave = nuevaClave;  // Actualizamos la clave
+            cout << "Usuario actualizado correctamente." << endl;
+            return;
+        }
+        aux = aux->siguiente;
+    }
+
+    cout << "Usuario no encontrado." << endl;
+}
+
+
+//---- FUNCIONES PARA EL MANEJO DE ARCHIVOS ----
 // Función para guardar los usuarios en el archivo "Usuarios.txt"
 void guardarUsuariosEnArchivo(Nodo *PilaUsers, const string& nombreArchivo) {
     ofstream archivo(nombreArchivo);
@@ -77,9 +108,9 @@ void guardarUsuariosEnArchivo(Nodo *PilaUsers, const string& nombreArchivo) {
             aux = aux->siguiente;
         }
         archivo.close();
-        cout << "Usuarios guardados en " << nombreArchivo << endl;
+        //cout << "Usuarios guardados en " << nombreArchivo << endl;
     } else {
-        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+        //cout << "Error al abrir el archivo " << nombreArchivo << endl;
     }
 }
 
@@ -92,11 +123,32 @@ void cargarUsuariosDesdeArchivo(Nodo *&PilaUsers, const string& nombreArchivo) {
             crearUsuario(PilaUsers, user, clave, rol);
         }
         archivo.close();
-        cout << "Usuarios cargados desde " << nombreArchivo << endl;
+        //cout << "Usuarios cargados desde " << nombreArchivo << endl;
     } else {
-        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+        //cout << "Error al abrir el archivo " << nombreArchivo << endl;
     }
 }
+
+//Funcion que actualiza cambios en los usuarios (sobrescribe el txt)
+void actualizarUsuarios(Nodo *PilaUsers) {
+    ofstream archivo("Usuarios.txt", ios::trunc);  // Abrimos el archivo en modo trunc para sobrescribir
+    if (archivo.is_open()) {
+        Nodo *aux = PilaUsers;
+
+        // Recorremos la pila y escribimos cada usuario en el archivo
+        while (aux != NULL) {
+            archivo << aux->dato.user << " " << aux->dato.clave << " " << aux->dato.rol << endl;
+            aux = aux->siguiente;  // Pasamos al siguiente nodo
+        }
+
+        archivo.close();  // Cerramos el archivo
+        //cout << "Pila guardada correctamente en el archivo." << endl;
+    } else {
+        //cout << "Error: No se pudo abrir el archivo." << endl;
+    }
+}
+
+
 
 bool LoginUser = false;
 
