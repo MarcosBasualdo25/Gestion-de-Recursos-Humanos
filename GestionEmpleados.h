@@ -121,7 +121,7 @@ Empleado* crearEmpleado() {
     lower(apellido);
     user = nombre + "." + apellido;
     crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
-
+    guardarUsuariosEnArchivo(PilaUsers, "Usuarios.txt");
     gotoxy(x, 9);
     color(2);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";

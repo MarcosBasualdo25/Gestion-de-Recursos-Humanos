@@ -19,7 +19,7 @@ int main() {
     //Inicio de sesion
     crearUsuario(PilaUsers, "david.aldana", "1234", "ADMINISTRADOR");
     crearUsuario(PilaUsers, "gabriel.poma", "4321", "EMPLEADO");
-
+    
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(PilaUsers);
 
@@ -210,7 +210,7 @@ int main() {
                 system("pause");
                 break;
             default:
-                gotoxy(x, 12);
+                gotoxy(x, 12    );
                 cout << "Opción inválida. Intente de nuevo.\n";
                 system("pause");
                 break;

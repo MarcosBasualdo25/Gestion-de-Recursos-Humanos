@@ -5,8 +5,10 @@
 #include "gotoxy.h"
 #include <limits>
 #include <conio.h>
+#include <fstream>
 
 using namespace std;
+
 //Funcion para convertir una frase a minuscula o mayuscula
 void lower(string &frase){
 	for (char &c : frase) {
@@ -63,9 +65,45 @@ void mostrarUsuarios(Nodo *&PilaUsers) {
     }
 }
 
+// Función para guardar los usuarios en el archivo "Usuarios.txt"
+void guardarUsuariosEnArchivo(Nodo *PilaUsers, const string& nombreArchivo) {
+    ofstream archivo(nombreArchivo);
+    if (archivo.is_open()) {
+        Nodo *aux = PilaUsers;
+        while (aux != NULL) {
+            archivo << aux->dato.user << " "
+                    << aux->dato.clave << " "
+                    << aux->dato.rol << endl;
+            aux = aux->siguiente;
+        }
+        archivo.close();
+        cout << "Usuarios guardados en " << nombreArchivo << endl;
+    } else {
+        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+    }
+}
+
+// Funcion para cargar los usuarios creados previamente
+void cargarUsuariosDesdeArchivo(Nodo *&PilaUsers, const string& nombreArchivo) {
+    ifstream archivo(nombreArchivo);
+    if (archivo.is_open()) {
+        string user, clave, rol;
+        while (archivo >> user >> clave >> rol) {
+            crearUsuario(PilaUsers, user, clave, rol);
+        }
+        archivo.close();
+        cout << "Usuarios cargados desde " << nombreArchivo << endl;
+    } else {
+        cout << "Error al abrir el archivo " << nombreArchivo << endl;
+    }
+}
+
 bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&PilaUsers) {
+
+    cargarUsuariosDesdeArchivo(PilaUsers, "Usuarios.txt");
+
     while (!LoginUser) {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
