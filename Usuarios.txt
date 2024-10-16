@@ -1,2 +1,3 @@
 david.aldana 1234 ADMINISTRADOR
-gabriel.poma 1111 EMPLEADO
+miguel.taco 1111 EMPLEADO
+miguel.taco 1111 EMPLEADO

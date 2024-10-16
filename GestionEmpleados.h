@@ -181,7 +181,6 @@ Empleado* crearEmpleado() {
     user = nombre + "." + apellido;
     lower(user);
     crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
-    guardarUsuariosEnArchivo(PilaUsers, "Usuarios.txt");
 
     gotoxy(x, 9);
     color(2);
@@ -201,7 +200,6 @@ void agregarEmpleado(Empleado*& head, Empleado* nuevoEmpleado) {
         }
         temp->siguiente = nuevoEmpleado;
     }
-    guardarEmpleados(head, "Empleados.txt");
 }
 
 void mostrarEmpleados(Empleado* head) {
@@ -464,6 +462,8 @@ int mostrarMenuGestionEmpleados(Empleado*& listaEmpleados) {
         case 1: {
             Empleado* nuevoEmpleado = crearEmpleado();
             agregarEmpleado(listaEmpleados, nuevoEmpleado);
+            guardarUsuariosEnArchivo(PilaUsers, "Usuarios.txt");
+            guardarEmpleados(listaEmpleados, "Empleados.txt");
             break;
         }
         case 2:

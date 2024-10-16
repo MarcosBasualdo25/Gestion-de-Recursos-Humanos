@@ -19,10 +19,10 @@ int main() {
     //Inicio de sesion 
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(PilaUsers);
-
+    
     Empleado* listaEmpleados = nullptr;
     int opcionPrincipal;
-
+    cargarEmpleados(listaEmpleados, "Empleados.txt");
     do {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
