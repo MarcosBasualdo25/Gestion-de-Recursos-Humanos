@@ -52,7 +52,7 @@ int main() {
             if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 5) {
                 gotoxy(x, 12);
                 cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                gotoxy(x, 12);
+                gotoxy(x, 10);
                 cout << string(50, ' '); 
             }
         } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 5);
@@ -143,7 +143,7 @@ int main() {
                 if (listaEmpleados == nullptr) {
                     gotoxy(x, 12);
                     cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
-                    system("pause");
+                    getch();
                     break;
                 }
                 int id;
@@ -198,7 +198,7 @@ int main() {
                         default:
                             gotoxy(x, 12);
                             cout << "Opción inválida.\n";
-                            system("pause");
+                            getch();
                             break;
                     }
                 } while (opcionEvaluacion != 3);
@@ -210,12 +210,12 @@ int main() {
             case 5:
                 gotoxy(x, 12);
                 cout << "Saliendo del programa...\n";
-                system("pause");
+                getch();
                 break;
             default:
                 gotoxy(x, 12);
                 cout << "Opción inválida. Intente de nuevo.\n";
-                system("pause");
+                getch();
                 break;
         }
     } while (opcionPrincipal != 5);

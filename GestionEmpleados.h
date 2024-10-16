@@ -179,7 +179,7 @@ void mostrarEmpleados(Empleado* head) {
         }
     }
     cout << "\n";
-    system("pause");
+    getch();
 }
 
 void actualizarEmpleado(Empleado* head, int id) {
