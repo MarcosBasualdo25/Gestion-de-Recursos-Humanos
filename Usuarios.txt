@@ -1,3 +1,2 @@
 david.aldana 1234 ADMINISTRADOR
 miguel.taco 1111 EMPLEADO
-miguel.taco 1111 EMPLEADO
