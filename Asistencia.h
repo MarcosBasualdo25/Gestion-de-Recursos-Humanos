@@ -3,6 +3,8 @@
 #include <ctime>
 #include <windows.h>
 #include "GestionEmpleados.h"
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -50,16 +52,19 @@ void agregarRegistro(PilaAsistencias*& pila) {
 
 void imprimirRegistros(PilaAsistencias* pila) {
     system("cls");
+    
     int i = 1;
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 4;
     
     gotoxy(x,2);
-    if (pila == nullptr || pila->cima == nullptr) {
+    if (pila == nullptr) {
         
         cout << "No hay registros de asistencia.\n";
         return;
     }
+
+    RegistroAsistencia* actual = pila->cima;
 
     // Imprimir el encabezado de la tabla
     cout << left << setw(5) << "No."
@@ -71,14 +76,14 @@ void imprimirRegistros(PilaAsistencias* pila) {
     color(6); cout << string(75, '-') << endl; color(7);  // Separador
 
     // Recorrer la pila e imprimir cada registro en formato de tabla
-    while (pila->cima != NULL) {
+    while (actual != NULL) {
         gotoxy(x, 3+i);
         cout << left << setw(5) << i++  
-            << setw(15) << pila->cima->fecha
-            << setw(20) << pila->cima->horaEntrada
-            << setw(20) << pila->cima->horaSalida; 
-        color(2); cout<< setw(12) << pila->cima->estado<<endl; color(7);
+            << setw(15) << actual->fecha
+            << setw(20) << actual->horaEntrada
+            << setw(20) << actual->horaSalida; 
+        color(2); cout<< setw(12) << actual->estado<<endl; color(7);
 
-        pila->cima = pila->cima->siguiente;
+        actual= actual->siguiente;
     }
 }
