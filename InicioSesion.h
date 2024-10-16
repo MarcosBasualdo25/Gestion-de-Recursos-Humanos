@@ -69,8 +69,8 @@ void actualizarUserUsuario(Nodo *&PilaUsers, const string& usuarioActual, const 
     Nodo *aux = PilaUsers;
 
     while (aux != NULL) {
-        if (aux->dato.user == usuarioActual) {  // Buscamos el usuario a modificar
-            aux->dato.user = nuevoUsuario;  // Actualizamos el nombre de usuario
+        if (aux->dato.user == usuarioActual) {  //Buscamos el usuario a modificar
+            aux->dato.user = nuevoUsuario;  //Actualizamos el nombre de usuario
             cout << "Usuario actualizado correctamente." << endl;
             return;
         }
