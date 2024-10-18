@@ -31,6 +31,7 @@ int main() {
 
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(PilaUsers);
+    cin.ignore();
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
@@ -40,18 +41,65 @@ int main() {
     int x = anchoConsola / 2 - 20; 
     
     do {
+        Empleado* empleado;
         string titulo = "---Menú Principal---";
         string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Asistencia de empleados", "4. Solicitudes","5. Volver a iniciar sesion","6. Salir"};
         int n = 6;
         opc = menu(titulo,opciones,n);
-        
-        Empleado* empleado;
         switch (opc) {
             case 1: {
-                int continuar;
-                do {
-                    continuar = mostrarMenuGestionEmpleados(headEmpleados,tailEmpleados);
-                } while (continuar != 0);
+                string titulo = "--- Menú de Gestión de Empleados ---";
+                string opcionesEmpleado[] = {"1. Agregar empleado", "2. Mostrar empleados","3. Actualizar empleado", "4. Eliminar empleado","5. Volver al menú principal"};
+                int n = 5;
+                do{
+                    opc = menu(titulo, opcionesEmpleado, n);
+                    switch (opc) {
+                        case 1: {
+                            crearYAgregarEmpleado(headEmpleados,tailEmpleados);
+                            break;
+                        }
+                        case 2:
+                            mostrarEmpleados(headEmpleados, tailEmpleados);
+                            cin.ignore();
+                            break;
+                        case 3: {
+                            int id;
+                            bool entradaValida = false;
+                            do {
+                                gotoxy(x, 12);
+                                cout << "Ingrese el ID del empleado a actualizar: ";
+                                entradaValida = obtenerEntero(id);
+                                if (!entradaValida) {
+                                    gotoxy(x, 13);
+                                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+                                    gotoxy(x, 12);
+                                    cout << string(50, ' '); 
+                                }
+                            } while (!entradaValida);
+                            actualizarEmpleado(headEmpleados,tailEmpleados, id);
+                            break;
+                        }
+                        case 4: {
+                            int id;
+                            bool entradaValida = false;
+                            do {
+                                gotoxy(x, 12);
+                                cout << "Ingrese el ID del empleado a eliminar: ";
+                                entradaValida = obtenerEntero(id);
+                                if (!entradaValida) {
+                                    gotoxy(x, 13);
+                                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+                                    gotoxy(x, 12);
+                                    cout << string(50, ' '); 
+                                }
+                            } while (!entradaValida);
+                            eliminarEmpleado(headEmpleados, tailEmpleados, id);
+                            break;
+                        }
+                        case 5:
+                            break;
+                    }
+                }while(opc!= 5);
                 break;
             }
             case 2: {
