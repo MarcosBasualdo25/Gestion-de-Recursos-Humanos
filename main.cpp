@@ -9,11 +9,17 @@
 #include <windows.h>
 #include <fstream>
 #include <sstream>
+#include <string>
+
+#define up 105
+#define down 107
+#define enter 13
 
 using namespace std;
 
 int obtenerAnchoConsola();
 bool obtenerEntero(int& numero);
+int menu(string titulo, string opciones[], int n);
 
 int main() {
 
@@ -29,42 +35,18 @@ int main() {
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
 
-    int opcionPrincipal;
-
+    int opc;
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 20; 
+    
     do {
-        system("cls");
-        int anchoConsola = obtenerAnchoConsola();
-        int x = anchoConsola / 2 - 20; 
-
-        gotoxy(x, 2);
-        cout << "--- Menú Principal ---\n";
-        gotoxy(x, 4);
-        cout << "1. Gestión de empleados\n";
-        gotoxy(x, 5);
-        cout << "2. Evaluación de empleados\n";
-        gotoxy(x, 6);
-        cout << "3. Asistencia de empleados\n";
-        gotoxy(x, 7);
-        cout << "4. Solicitudes\n";
-        gotoxy(x, 8);
-        cout << "5. Volver a iniciar sesion\n";
-        gotoxy(x, 9);
-        cout << "6. Salir\n";
-
-        bool entradaValida = false;
-        do {
-            gotoxy(x, 12);
-            cout << "Ingrese una opción: ";
-            entradaValida = obtenerEntero(opcionPrincipal);
-            if (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 6) {
-                gotoxy(x, 14);
-                cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                gotoxy(x, 12);
-                cout << string(50, ' '); 
-            }
-        } while (!entradaValida || opcionPrincipal < 1 || opcionPrincipal > 6);
+        string titulo = "---Menú Principal---";
+        string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Asistencia de empleados", "4. Solicitudes","5. Volver a iniciar sesion","6. Salir"};
+        int n = 6;
+        opc = menu(titulo,opciones,n);
+        
         Empleado* empleado;
-        switch (opcionPrincipal) {
+        switch (opc) {
             case 1: {
                 int continuar;
                 do {
@@ -73,6 +55,7 @@ int main() {
                 break;
             }
             case 2: {
+                
                 if (headEmpleados == nullptr) {
                     gotoxy(x, 14);
                     cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
@@ -100,35 +83,14 @@ int main() {
                     system("pause");
                     break;
                 }
-
-                int opcionEvaluacion;
+                titulo = "Evaluaciones de " + empleado->nombre + " " + empleado->apellido;
+                string opcionesEvaluacion[] = {"1. Agregar evaluación", "2. Mostrar evaluaciones", "3. Volver al menú principal"};
+                n = 3;
                 do {
-                    system("cls");
-                    gotoxy(x, 2);
-                    cout << "--- Menú de Evaluación de Empleados ---\n";
-                    gotoxy(x, 4);
-                    cout << "Empleado: " << empleado->nombre << " " << empleado->apellido << "\n";
-                    gotoxy(x, 6);
-                    cout << "1. Agregar evaluación\n";
-                    gotoxy(x, 7);
-                    cout << "2. Mostrar evaluaciones\n";
-                    gotoxy(x, 8);
-                    cout << "3. Volver al menú principal\n";
+                    
+                    opc= menu(titulo, opcionesEvaluacion, n);
 
-                    bool entradaValida = false;
-                    do {
-                        gotoxy(x, 10);
-                        cout << "Ingrese una opción: ";
-                        entradaValida = obtenerEntero(opcionEvaluacion);
-                        if (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3) {
-                            gotoxy(x, 11);
-                            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                            gotoxy(x, 10);
-                            cout << string(50, ' '); 
-                        }
-                    } while (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3);
-
-                    switch (opcionEvaluacion) {
+                    switch (opc) {
                         case 1:
                             agregarEvaluacion(empleado->pilaEvaluaciones);
                             break;
@@ -137,13 +99,8 @@ int main() {
                             break;
                         case 3:
                             break;
-                        default:
-                            gotoxy(x, 12);
-                            cout << "Opción inválida.\n";
-                            system("pause");
-                            break;
                     }
-                } while (opcionEvaluacion != 3);
+                } while (opc != 3);
                 break;
             }
             case 3: {//Asistencias de empleados
@@ -154,9 +111,18 @@ int main() {
                     break;
                 }
                 int id;
-                gotoxy(x, 14);
-                cout << "Ingrese el ID del empleado para registrar asistencia: ";
-                cin>>id;
+                bool entradaValida = false;
+                do {
+                    gotoxy(x, 14);
+                    cout << "Ingrese el ID del empleado para evaluar: ";
+                    entradaValida = obtenerEntero(id);
+                    if (!entradaValida) {
+                        gotoxy(x, 15);
+                        cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
+                        gotoxy(x, 14);
+                        cout << string(50, ' ');
+                    }
+                } while (!entradaValida);
                 empleado = buscarEmpleado(headEmpleados, id);
                 if (empleado == nullptr) {
                     gotoxy(x,16);
@@ -164,35 +130,13 @@ int main() {
                     getch();
                     break;
                 }
-
-                int opcionEvaluacion;
+                titulo = "Asistencias de " + empleado->nombre + " " + empleado->apellido;
+                string opcionesAsistencia[] = {"1. Agregar registro de asistencia", "2. Mostrar registro de asistencia", "3. Volver al menú principal"};
+                n = 3;
                 do {
-                    system("cls");
-                    gotoxy(x, 2);
-                    cout << "--- Asistencia ---\n";
-                    gotoxy(x, 4);
-                    cout << "Empleado: " << empleado->nombre << " " << empleado->apellido << "\n";
-                    gotoxy(x, 5);
-                    cout << "1. Agregar registro de asistencia\n";
-                    gotoxy(x, 6);
-                    cout << "2. Mostrar registro de asistencias\n";
-                    gotoxy(x, 7);
-                    cout << "3. Volver al menú principal\n";
+                    opc= menu(titulo, opcionesAsistencia, n);
 
-                    bool entradaValida = false;
-                    do {
-                        gotoxy(x, 10);
-                        cout << "Ingrese una opción: ";
-                        entradaValida = obtenerEntero(opcionEvaluacion);
-                        if (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3) {
-                            gotoxy(x, 11);
-                            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                            gotoxy(x, 10);
-                            cout << string(50, ' '); 
-                        }
-                    } while (!entradaValida || opcionEvaluacion < 1 || opcionEvaluacion > 3);
-
-                    switch (opcionEvaluacion) {
+                    switch (opc) {
                         case 1:
                             agregarRegistro(empleado->pilaAsistencias);
                             getch();
@@ -203,13 +147,8 @@ int main() {
                             break;
                         case 3:
                             break;
-                        default:
-                            gotoxy(x, 12);
-                            cout << "Opción inválida.\n";
-                            system("pause");
-                            break;
                     }
-                } while (opcionEvaluacion != 3);
+                } while (opc != 3);
                 break;
             }
             case 4:{ //solicitud
@@ -242,52 +181,22 @@ int main() {
                     system("pause");
                     break;
                 }
-
-                int opcionSolicitud;
+                titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
+                string opcionesSolicitud[] = {"1. Enviar solicitud", "2. Mostrar solicitudes", "3. Volver al menú principal"};
+                n = 3;
                 do {
-                    system("cls");
-                    gotoxy(x, 2);
-                    cout << "--- Menú de Solicitudes de Empleados ---\n";
-                    gotoxy(x, 4);
-                    cout << "Empleado: " << empleado->nombre << " " << empleado->apellido << "\n";
-                    gotoxy(x, 6);
-                    cout << "1. Enviar solicitud\n";
-                    gotoxy(x, 7);
-                    cout << "2. Mostrar solicitudes\n";
-                    gotoxy(x, 8);
-                    cout << "3. Volver al menú principal\n";
-
-                    // Validar la opción ingresada por el usuario
-                    bool entradaValida = false;
-                    do {
-                        gotoxy(x, 10);
-                        cout << "Ingrese una opción: ";
-                        entradaValida = obtenerEntero(opcionSolicitud);
-                        if (!entradaValida || opcionSolicitud < 1 || opcionSolicitud > 3) {
-                            gotoxy(x, 11);
-                            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                            gotoxy(x, 10);
-                            cout << string(50, ' ');  // Limpia la línea
-                        }
-                    } while (!entradaValida || opcionSolicitud < 1 || opcionSolicitud > 3);
-
-                    // Ejecutar la opción seleccionada
-                    switch (opcionSolicitud) {
+                    opc = menu(titulo, opcionesSolicitud, n);
+                    switch (opc) {
                         case 1:
-                            enviarSolicitud(empleado->colaSolicitudes);  // Agregar una nueva solicitud a la cola del empleado
+                            enviarSolicitud(empleado->colaSolicitudes);
                             break;
                         case 2:
-                            mostrarSolicitudesEmpleado(empleado->colaSolicitudes);  // Mostrar las solicitudes del empleado
+                            mostrarSolicitudesEmpleado(empleado->colaSolicitudes);
                             break;
                         case 3:
-                            break;  // Salir al menú principal
-                        default:
-                            gotoxy(x, 12);
-                            cout << "Opción inválida.\n";
-                            system("pause");
                             break;
                     }
-                } while (opcionSolicitud != 3);  // Volver al menú principal cuando se selecciona la opción 3
+                } while (opc != 3);
                 break;
             }
             case 5: {
@@ -301,14 +210,8 @@ int main() {
                 system("pause");
                 break;
             }
-            default:{
-                gotoxy(x, 12);
-                cout << "Opción inválida. Intente de nuevo.\n";
-                system("pause");
-                break;
-            }
         }
-    } while (opcionPrincipal != 6);
+    } while (opc != 6);
 
 
     Empleado* temp;
@@ -340,4 +243,48 @@ int main() {
     }
 
     return 0;
+}
+
+int menu(string titulo, string opciones[], int n){
+    int opcion = 1;
+    int tecla;
+    bool repite = true;
+    int longitud = titulo.length();
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 20; 
+    do{
+        system("cls");
+        
+        gotoxy(anchoConsola/2-(longitud/2),2); cout<<titulo;
+        gotoxy(x-5,3+opcion); cout<<"--->";
+        for(int i=0;i<n;i++){
+            gotoxy(x,4+i); cout<<opciones[i];
+        }
+        do{
+            tecla = getch();
+        }while(tecla != up && tecla!= down && tecla != enter);
+
+        switch(tecla){
+            case up:{
+                opcion--;
+                if(opcion < 1){
+                    opcion = n;
+                }
+                break;
+            }
+            case down:{
+                opcion++;
+                if(opcion > n){
+                    opcion = 1;
+                }
+                break;
+            }
+            case enter:{
+                repite=false;
+                break;
+            }
+        }
+
+    }while(repite);
+    return opcion;
 }
