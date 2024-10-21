@@ -11,8 +11,8 @@
 #include <sstream>
 #include <string>
 
-#define up 105
-#define down 107
+#define up 72
+#define down 80
 #define enter 13
 
 using namespace std;
@@ -26,11 +26,11 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
-    crearUsuario(PilaUsers, "david.aldana", "1234", "ADMINISTRADOR");
-    crearUsuario(PilaUsers, "gabriel.poma", "4321", "EMPLEADO");
+    crearUsuario(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
+    crearUsuario(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
 
     //Mostramos la pantalla para iniciar sesion
-    pantallaInicioSesion(PilaUsers);
+    pantallaInicioSesion(ListaUsers);
     cin.ignore();
 
     Empleado* headEmpleados = nullptr;
@@ -249,7 +249,7 @@ int main() {
             }
             case 5: {
                 LoginUser = false;
-                pantallaInicioSesion(PilaUsers);
+                pantallaInicioSesion(ListaUsers);
                 break;
             }
             case 6:{
