@@ -113,6 +113,7 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
 
     gotoxy(x, 4);
     cout << "Ingrese el nombre del empleado: ";
+    fflush(stdin);
     getline(cin, nombre);
     gotoxy(x, 5);
     cout << "Ingrese el apellido del empleado: ";
@@ -251,10 +252,11 @@ void mostrarEmpleados(Empleado* head, Empleado* tail) {
             // Muestra un mensaje indicando que se ha mostrado toda la lista en orden inverso
             gotoxy(x, y + 3);
             cout << "Todos los empleados han sido mostrados en orden inverso.\n";
+        }else{
+            return;
         }
     }
-
-    system("pause");  // Pausa después de mostrar la lista completa
+    getch();
 }
 
 
