@@ -475,7 +475,7 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
     system("pause");
 }
 
-
+/*
 int mostrarMenuGestionEmpleados(Empleado*& head, Empleado*& tail) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
@@ -562,7 +562,7 @@ int mostrarMenuGestionEmpleados(Empleado*& head, Empleado*& tail) {
     }
     return 1; 
 }
-
+*/
 Empleado* buscarEmpleado(Empleado* head, int id) {
     Empleado* temp = head;
     while (temp != nullptr) {

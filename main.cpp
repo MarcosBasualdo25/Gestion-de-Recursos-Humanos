@@ -11,8 +11,8 @@
 #include <sstream>
 #include <string>
 
-#define up 105
-#define down 107
+#define up 72
+#define down 80
 #define enter 13
 
 using namespace std;
@@ -31,6 +31,7 @@ int main() {
 
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(ListaUsers);
+    cin.ignore();
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
