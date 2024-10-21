@@ -22,6 +22,16 @@ inline void ocultarCursor() {
     SetConsoleCursorInfo(hCon, &cci);
 }
 
+// Función para mostrar el cursos en la consola
+inline void mostrarCursor() {
+    HANDLE hCon;
+    hCon = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_CURSOR_INFO cci;
+    cci.dwSize = 50;
+    cci.bVisible = TRUE; // Cambiar el cursor a visible
+    SetConsoleCursorInfo(hCon, &cci);
+}
+
 // Función para obtener la posición actual del cursor en el eje X (columna) dentro de la consola
 inline int whereX() {
     CONSOLE_SCREEN_BUFFER_INFO csbi;

@@ -41,8 +41,9 @@ int main() {
     int x = anchoConsola / 2 - 20; 
     
     do {
+        ocultarCursor();
         Empleado* empleado;
-        string titulo = "---Menú Principal---";
+        string titulo = ".:Menú Principal:.";
         string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Asistencia de empleados", "4. Solicitudes","5. Volver a iniciar sesion","6. Salir"};
         int n = 6;
         opc = menu(titulo,opciones,n);
@@ -52,17 +53,21 @@ int main() {
                 string opcionesEmpleado[] = {"1. Agregar empleado", "2. Mostrar empleados","3. Actualizar empleado", "4. Eliminar empleado","5. Volver al menú principal"};
                 int n = 5;
                 do{
+                    ocultarCursor();
                     opc = menu(titulo, opcionesEmpleado, n);
                     switch (opc) {
                         case 1: {
+                            mostrarCursor();
                             crearYAgregarEmpleado(headEmpleados,tailEmpleados);
                             break;
                         }
                         case 2:
+                            mostrarCursor();
                             mostrarEmpleados(headEmpleados, tailEmpleados);
                             cin.ignore();
                             break;
                         case 3: {
+                            mostrarCursor();
                             int id;
                             bool entradaValida = false;
                             do {
@@ -80,6 +85,7 @@ int main() {
                             break;
                         }
                         case 4: {
+                            mostrarCursor();
                             int id;
                             bool entradaValida = false;
                             do {
@@ -113,6 +119,7 @@ int main() {
                 int id;
                 bool entradaValida = false;
                 do {
+                    mostrarCursor();
                     gotoxy(x, 14);
                     cout << "Ingrese el ID del empleado para evaluar: ";
                     entradaValida = obtenerEntero(id);
@@ -135,14 +142,16 @@ int main() {
                 string opcionesEvaluacion[] = {"1. Agregar evaluación", "2. Mostrar evaluaciones", "3. Volver al menú principal"};
                 n = 3;
                 do {
-                    
+                    ocultarCursor();
                     opc= menu(titulo, opcionesEvaluacion, n);
 
                     switch (opc) {
                         case 1:
+                            mostrarCursor();
                             agregarEvaluacion(empleado->pilaEvaluaciones);
                             break;
                         case 2:
+                            mostrarCursor();
                             mostrarEvaluacionesEmpleado(empleado->pilaEvaluaciones);
                             break;
                         case 3:
@@ -161,8 +170,9 @@ int main() {
                 int id;
                 bool entradaValida = false;
                 do {
+                    mostrarCursor();
                     gotoxy(x, 14);
-                    cout << "Ingrese el ID del empleado para evaluar: ";
+                    cout << "Ingrese el ID del empleado para la asistencia: ";
                     entradaValida = obtenerEntero(id);
                     if (!entradaValida) {
                         gotoxy(x, 15);
@@ -178,6 +188,7 @@ int main() {
                     getch();
                     break;
                 }
+                ocultarCursor();
                 titulo = "Asistencias de " + empleado->nombre + " " + empleado->apellido;
                 string opcionesAsistencia[] = {"1. Agregar registro de asistencia", "2. Mostrar registro de asistencia", "3. Volver al menú principal"};
                 n = 3;
@@ -211,6 +222,7 @@ int main() {
 
                 // Solicitar el ID del empleado para gestionar solicitudes
                 do {
+                    mostrarCursor();
                     gotoxy(x, 14);
                     cout << "Ingrese el ID del empleado para gestionar solicitudes: ";
                     entradaValida = obtenerEntero(id);
@@ -229,6 +241,7 @@ int main() {
                     system("pause");
                     break;
                 }
+                ocultarCursor();
                 titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
                 string opcionesSolicitud[] = {"1. Enviar solicitud", "2. Mostrar solicitudes", "3. Volver al menú principal"};
                 n = 3;
@@ -236,6 +249,7 @@ int main() {
                     opc = menu(titulo, opcionesSolicitud, n);
                     switch (opc) {
                         case 1:
+                        mostrarCursor();
                             enviarSolicitud(empleado->colaSolicitudes);
                             break;
                         case 2:
@@ -247,8 +261,9 @@ int main() {
                 } while (opc != 3);
                 break;
             }
-            case 5: {
+            case 5: { //Desloguearse
                 LoginUser = false;
+                mostrarCursor();
                 pantallaInicioSesion(ListaUsers);
                 break;
             }
@@ -303,8 +318,8 @@ int menu(string titulo, string opciones[], int n){
     do{
         system("cls");
         
-        gotoxy(anchoConsola/2-(longitud/2),2); cout<<titulo;
-        gotoxy(x-5,3+opcion); cout<<"--->";
+        gotoxy(anchoConsola/2-(longitud/2) - 5,2); cout<<titulo;
+        gotoxy(x-5,3+opcion); cout<<"➤";
         for(int i=0;i<n;i++){
             gotoxy(x,4+i); cout<<opciones[i];
         }
