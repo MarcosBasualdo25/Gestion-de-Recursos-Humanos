@@ -136,10 +136,9 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
 
     // Creación de la cuenta del usuario
     string user;
-    lower(nombre);
-    lower(apellido);
     user = nombre + "." + apellido;
-    crearUsuario(PilaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
+    lower(user);
+    crearUsuario(ListaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
 
     // Asignación del ID y enlace a la lista
     if (head == nullptr) {
@@ -510,6 +509,8 @@ int mostrarMenuGestionEmpleados(Empleado*& head, Empleado*& tail) {
     switch (opcion) {
         case 1: {
             crearYAgregarEmpleado(head,tail);
+            mostrarUsuarios(ListaUsers);
+            system("pause");
             break;
         }
         case 2:

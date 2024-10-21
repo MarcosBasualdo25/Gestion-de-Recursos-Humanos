@@ -33,18 +33,19 @@ struct Nodo {
     Nodo *siguiente;
 };
 
-Nodo *PilaUsers = NULL;
+Nodo *ListaUsers = NULL;
 
-void crearUsuario(Nodo *&PilaUsers, string u, string c, string r) {
+//Lista simplemente enlazada (insercion de elementos al final)
+void crearUsuario(Nodo *&ListaUsers, string u, string c, string r) {
     Nodo *nuevo_nodo = new Nodo();
     nuevo_nodo->dato.user = u;
     nuevo_nodo->dato.clave = c;
     nuevo_nodo->dato.rol = r;
     nuevo_nodo->siguiente = NULL;
-    if (PilaUsers == NULL) {
-        PilaUsers = nuevo_nodo;
+    if (ListaUsers == NULL) {
+        ListaUsers = nuevo_nodo;
     } else {
-        Nodo *aux = PilaUsers;
+        Nodo *aux = ListaUsers;
         while (aux->siguiente != NULL) {
             aux = aux->siguiente;
         }
@@ -52,8 +53,8 @@ void crearUsuario(Nodo *&PilaUsers, string u, string c, string r) {
     }
 }
 
-void mostrarUsuarios(Nodo *&PilaUsers) {
-    Nodo *aux = PilaUsers;
+void mostrarUsuarios(Nodo *&ListaUsers) {
+    Nodo *aux = ListaUsers;
     while (aux != NULL) {
         cout << aux->dato.user << endl;
         cout << aux->dato.clave << endl;
@@ -63,24 +64,36 @@ void mostrarUsuarios(Nodo *&PilaUsers) {
     }
 }
 
+void fondoInicioSesion(){
+    color(127);
+    for(int i=1; i<19; i++){
+        gotoxy(55, i);
+        cout<<"                                      ";
+    }  
+    color(7);
+}
+
 bool LoginUser = false;
 
-void pantallaInicioSesion(Nodo *&PilaUsers) {
+void pantallaInicioSesion(Nodo *&ListaUsers) {
     while (!LoginUser) {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
         int x = anchoConsola / 2 - 20;
         int mensajeY = 16;
-
+        fondoInicioSesion();
+        color(112); //Color del inicio de sesion
+        //cambiamos el color del fondo y texto
+        //system("color F0");
         string rol;
         string usuario;
         string clave;
-        gotoxy(x, 1);
-        cout<<"--------------------------";
+        gotoxy(x-5, 1);
+        cout<<"######################################";
         gotoxy(x+5, 2);
         cout <<"Inicio de Sesion";
-        gotoxy(x, 3);
-        cout<<"--------------------------"; 
+        gotoxy(x-5, 3);
+        cout<<"--------------------------------------"; 
         gotoxy(x, 4);
         cout << "[1] Administrador";
 
@@ -118,7 +131,7 @@ void pantallaInicioSesion(Nodo *&PilaUsers) {
         gotoxy(x, 15);
         cin >> clave;
 
-        Nodo *aux = PilaUsers;
+        Nodo *aux = ListaUsers;
         while (aux != NULL) {
             if ((aux->dato.user == usuario) && (aux->dato.clave == clave) && (aux->dato.rol == rol)) {
                 LoginUser = true;
@@ -128,14 +141,15 @@ void pantallaInicioSesion(Nodo *&PilaUsers) {
 
         gotoxy(x, 17);
         if (LoginUser) {
-            color(2);
+            color(114);
             cout << "Ingreso al sistema con exito!" << endl;
             color(7);
         } else {
-            color(4);
-            cout << "Ingreso denegado, datos no validos" << endl;
+            color(116);
+            cout << "Ingreso denegado" << endl;
             color(7);
         }
+        color(7); //volver a la normalidad el color del inicio de sesion
         getch();
     }
 }

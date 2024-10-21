@@ -20,11 +20,11 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
-    crearUsuario(PilaUsers, "david.aldana", "1234", "ADMINISTRADOR");
-    crearUsuario(PilaUsers, "gabriel.poma", "4321", "EMPLEADO");
+    crearUsuario(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
+    crearUsuario(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
 
     //Mostramos la pantalla para iniciar sesion
-    pantallaInicioSesion(PilaUsers);
+    pantallaInicioSesion(ListaUsers);
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
@@ -292,7 +292,7 @@ int main() {
             }
             case 5: {
                 LoginUser = false;
-                pantallaInicioSesion(PilaUsers);
+                pantallaInicioSesion(ListaUsers);
                 break;
             }
             case 6:{
