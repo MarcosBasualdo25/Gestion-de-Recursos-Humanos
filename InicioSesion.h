@@ -83,8 +83,10 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
         int mensajeY = 16;
         fondoInicioSesion();
         color(112); //Color del inicio de sesion
-        //cambiamos el color del fondo y texto
-        //system("color F0");
+
+            //cambiamos el color del fondo y texto
+            //system("color F0"); <---- con esto cambio tanto el FONDO de la CONSOLA como el color del texto...
+
         string rol;
         string usuario;
         string clave;
