@@ -5,8 +5,13 @@
 #include "gotoxy.h"
 #include <limits>
 #include <conio.h>
-
+#define up 72
+#define down 80
+#define enter 13
+#ifndef INICIOSESION_H
+#define INICIOSESION_H
 using namespace std;
+
 //Funcion para convertir una frase a minuscula o mayuscula
 void lower(string &frase){
 	for (char &c : frase) {
@@ -21,6 +26,70 @@ void upper(string &frase){
 }
 
 extern int obtenerAnchoConsola();
+
+//Menu interactivo propio para el INICIO DE SESION
+int menuInicioSesion(string titulo, string opciones[], int n){
+    int opcion = 1;
+    int tecla;
+    bool repite = true;
+    int longitud = titulo.length();
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 20; 
+    do{
+        system("cls");
+        // CABECERA
+        gotoxy(40, 1);
+        cout<<" _____ _____    _____ _____ _____ _____ _____ _____ _____ _____ _____"<<endl;
+        gotoxy(40, 2);
+        cout<<"|   __|     |  |_   _| __  |  _  |   | |   __|  _  |     | __  |_   _|"<<endl;
+        gotoxy(40, 3);
+        cout<<"|__   | | | |    | | |    -|     | | | |__   |   __|  |  |    -| | |"<<endl;  
+        gotoxy(40, 4);
+        cout<<"|_____|_|_|_|    |_| |__|__|__|__|_|___|_____|__|  |_____|__|__| |_|"<<endl;
+
+        gotoxy(x-5, 6);
+        cout<<"--------------------------------------";
+        gotoxy(x-5, 7);
+        cout<<"|";
+        gotoxy(x+32, 7);
+        cout<<"|";
+        gotoxy(x+5, 7);
+        cout <<"Inicio de Sesion";
+        gotoxy(x-5, 8);
+        cout<<"--------------------------------------"; 
+        
+        gotoxy(x-5,8+opcion); cout<<"➤";
+        for(int i=0;i<n;i++){
+            gotoxy(x,9+i); cout<<opciones[i];
+        }
+        do{
+            tecla = getch();
+        }while(tecla != up && tecla!= down && tecla != enter);
+
+        switch(tecla){
+            case up:{
+                opcion--;
+                if(opcion < 1){
+                    opcion = n;
+                }
+                break;
+            }
+            case down:{
+                opcion++;
+                if(opcion > n){
+                    opcion = 1;
+                }
+                break;
+            }
+            case enter:{
+                repite=false;
+                break;
+            }
+        }
+
+    }while(repite);
+    return opcion;
+}
 
 struct Usuario {
     string user;
@@ -64,73 +133,41 @@ void mostrarUsuarios(Nodo *&ListaUsers) {
     }
 }
 
-void fondoInicioSesion(){
-    color(127);
-    for(int i=1; i<19; i++){
-        gotoxy(55, i);
-        cout<<"                                      ";
-    }  
-    color(7);
-}
-
 bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&ListaUsers) {
+    ocultarCursor();
     while (!LoginUser) {
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
         int x = anchoConsola / 2 - 20;
         int mensajeY = 16;
-        fondoInicioSesion();
-        color(112); //Color del inicio de sesion
-
-            //cambiamos el color del fondo y texto
-            //system("color F0"); <---- con esto cambio tanto el FONDO de la CONSOLA como el color del texto...
+        system("color 70"); // con esto cambio tanto el FONDO de la CONSOLA como el color del texto...
 
         string rol;
         string usuario;
         string clave;
-        gotoxy(x-5, 1);
-        cout<<"######################################";
-        gotoxy(x+5, 2);
-        cout <<"Inicio de Sesion";
-        gotoxy(x-5, 3);
-        cout<<"--------------------------------------"; 
-        gotoxy(x, 4);
-        cout << "[1] Administrador";
 
-        gotoxy(x, 5);
-        cout << "[2] Empleado";
+        int opcionRol;
+        string opciones[] = {"[1] ADMINISTRADOR", "[2] EMPLEADO"};
+        opcionRol = menuInicioSesion(" ", opciones, 2);
+        
+        if (opcionRol == 1) {
+            rol = "ADMINISTRADOR";
+        } 
+        else{
+            rol = "EMPLEADO";
+        }
 
-        int opcionRol = 0;
-        bool entradaValida = false;
-
-        do {
-            gotoxy(x, 7);
-            cout << "Seleccione su rol (1 o 2): ";
-            gotoxy(x + 28, 7);
-            cin >> opcionRol;
-            if (opcionRol == 1) {
-                rol = "ADMINISTRADOR";
-                entradaValida = true;
-            } else if (opcionRol == 2) {
-                rol = "EMPLEADO";
-                entradaValida = true;
-            } else {
-                gotoxy(x, mensajeY);
-                cout << "Opción no válida. Intente de nuevo.";
-                entradaValida = false;
-            }
-        } while (!entradaValida);
-
-        gotoxy(x, 9);
+        mostrarCursor();
+        gotoxy(x, 12);
         cout << "Ingrese su nombre de usuario: ";
-        gotoxy(x, 11);
+        gotoxy(x, 14);
         cin >> usuario;
 
-        gotoxy(x, 13);
+        gotoxy(x, 16);
         cout << "Ingrese su clave: ";
-        gotoxy(x, 15);
+        gotoxy(x, 18);
         cin >> clave;
 
         Nodo *aux = ListaUsers;
@@ -141,7 +178,7 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             aux = aux->siguiente;
         }
 
-        gotoxy(x, 17);
+        gotoxy(x, 20);
         if (LoginUser) {
             color(114);
             cout << "Ingreso al sistema con exito!" << endl;
@@ -151,7 +188,8 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             cout << "Ingreso denegado" << endl;
             color(7);
         }
-        color(7); //volver a la normalidad el color del inicio de sesion
         getch();
     }
 }
+
+#endif
