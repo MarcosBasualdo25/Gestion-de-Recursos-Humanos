@@ -199,11 +199,13 @@ int main() {
                         case 1:
                             agregarRegistro(empleado->pilaAsistencias);
                             getch();
+                        
                             break;
                         case 2:
                             imprimirRegistros(empleado->pilaAsistencias);
                             getch();
                             break;
+                        
                         case 3:
                             break;
                     }
@@ -263,7 +265,6 @@ int main() {
             }
             case 5: { //Desloguearse
                 LoginUser = false;
-                mostrarCursor();
                 pantallaInicioSesion(ListaUsers);
                 break;
             }
@@ -309,6 +310,8 @@ int main() {
 }
 
 int menu(string titulo, string opciones[], int n){
+    system("color 70");
+
     int opcion = 1;
     int tecla;
     bool repite = true;
