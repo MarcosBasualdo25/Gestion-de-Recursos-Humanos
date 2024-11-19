@@ -39,32 +39,27 @@ int menuInicioSesion(string titulo, string opciones[], int n){
         system("cls");
         // CABECERA
         /*
-         ____    ____        _   _   _   _      ____    ___    _   _   _   _   _____    ____   _____ 
-        |  _ \  |  _ \      | | | | | | | |    / ___|  / _ \  | \ | | | \ | | | ____|  / ___| |_   _|
-        | |_) | | |_) |     | |_| | | |_| |   | |     | | | | |  \| | |  \| | |  _|   | |       | |  
-        |  _ <  |  _ <   _  |  _  | |  _  |   | |___  | |_| | | |\  | | |\  | | |___  | |___    | |  
-        |_| \_\ |_| \_\ (_) |_| |_| |_| |_|    \____|  \___/  |_| \_| |_| \_| |_____|  \____|   |_|
-          
+         ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ 
+        |   __ \|   __ \    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|
+        |      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  
+        |___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  
+
         */
-        gotoxy(36, 1);
-        cout<<" ____    ____        _   _   _   _      ____    ___    _   _   _   _   _____    ____   _____ "<<endl;
-        gotoxy(36, 2);
-        cout<<"|  _ \\  |  _ \\      | | | | | | | |    / ___|  / _ \\  | \\ | | | \\ | | | ____|  / ___| |_   _|"<<endl;
-        gotoxy(36, 3);
-        cout<<"| |_) | | |_) |     | |_| | | |_| |   | |     | | | | |  \\| | |  \\| | |  _|   | |       | |  "<<endl;  
-        gotoxy(36, 4);
-        cout<<"|_| \\_\\ |_| \\_\\ (_) |_| |_| |_| |_|    \\____|  \\___/  |_| \\_| |_| \\_| |_____|  \\____|   |_|"<<endl;
+        gotoxy(30, 1);
+        cout<<" ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ "<<endl;
+        gotoxy(30, 2);
+        cout<<"|   __ \\|   __ \\    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|"<<endl;
+        gotoxy(30, 3);
+        cout<<"|      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  "<<endl;  
+        gotoxy(30, 4);
+        cout<<"|___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  "<<endl;
 
         gotoxy(x-5, 6);
-        cout<<"--------------------------------------";
+        cout<<"╔════════════════════════════════════╗";
         gotoxy(x-5, 7);
-        cout<<"|";
-        gotoxy(x+32, 7);
-        cout<<"|";
-        gotoxy(x+5, 7);
-        cout <<"Inicio de Sesion";
+        cout<<"║          Inicio de Sesion          ║";
         gotoxy(x-5, 8);
-        cout<<"--------------------------------------"; 
+        cout<<"╚════════════════════════════════════╝"; 
         
         gotoxy(x-5,8+opcion); cout<<"➤";
         for(int i=0;i<n;i++){
@@ -144,8 +139,8 @@ void mostrarUsuarios(Nodo *&ListaUsers) {
 bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&ListaUsers) {
-    ocultarCursor();
     while (!LoginUser) {
+        ocultarCursor();
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
         int x = anchoConsola / 2 - 20;
@@ -186,14 +181,24 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             aux = aux->siguiente;
         }
 
-        gotoxy(x, 20);
+        ocultarCursor();
         if (LoginUser) {
             color(114);
-            cout << "Ingreso al sistema con exito!" << endl;
+            gotoxy(x-2, 20);
+            cout << "╔═══════════════════════════════╗";
+            gotoxy(x-2, 21);
+            cout << "║ Ingreso al sistema con éxito! ║";
+            gotoxy(x-2, 22);
+            cout << "╚═══════════════════════════════╝";
             color(7);
         } else {
             color(116);
-            cout << "Ingreso denegado" << endl;
+            gotoxy(x+4, 20);
+            cout<<"╔═══════════════════╗";
+            gotoxy(x+4, 21);
+            cout<<"║ Ingreso denegado! ║";
+            gotoxy(x+4, 22);
+            cout<<"╚═══════════════════╝";
             color(7);
         }
         getch();
