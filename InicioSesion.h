@@ -38,25 +38,28 @@ int menuInicioSesion(string titulo, string opciones[], int n){
     do{
         system("cls");
         // CABECERA
-        gotoxy(40, 1);
-        cout<<" _____ _____    _____ _____ _____ _____ _____ _____ _____ _____ _____"<<endl;
-        gotoxy(40, 2);
-        cout<<"|   __|     |  |_   _| __  |  _  |   | |   __|  _  |     | __  |_   _|"<<endl;
-        gotoxy(40, 3);
-        cout<<"|__   | | | |    | | |    -|     | | | |__   |   __|  |  |    -| | |"<<endl;  
-        gotoxy(40, 4);
-        cout<<"|_____|_|_|_|    |_| |__|__|__|__|_|___|_____|__|  |_____|__|__| |_|"<<endl;
+        /*
+         ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ 
+        |   __ \|   __ \    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|
+        |      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  
+        |___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  
+
+        */
+        gotoxy(30, 1);
+        cout<<" ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ "<<endl;
+        gotoxy(30, 2);
+        cout<<"|   __ \\|   __ \\    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|"<<endl;
+        gotoxy(30, 3);
+        cout<<"|      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  "<<endl;  
+        gotoxy(30, 4);
+        cout<<"|___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  "<<endl;
 
         gotoxy(x-5, 6);
-        cout<<"--------------------------------------";
+        cout<<"╔════════════════════════════════════╗";
         gotoxy(x-5, 7);
-        cout<<"|";
-        gotoxy(x+32, 7);
-        cout<<"|";
-        gotoxy(x+5, 7);
-        cout <<"Inicio de Sesion";
+        cout<<"║          Inicio de Sesion          ║";
         gotoxy(x-5, 8);
-        cout<<"--------------------------------------"; 
+        cout<<"╚════════════════════════════════════╝"; 
         
         gotoxy(x-5,8+opcion); cout<<"➤";
         for(int i=0;i<n;i++){
@@ -136,8 +139,8 @@ void mostrarUsuarios(Nodo *&ListaUsers) {
 bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&ListaUsers) {
-    ocultarCursor();
     while (!LoginUser) {
+        ocultarCursor();
         system("cls");
         int anchoConsola = obtenerAnchoConsola();
         int x = anchoConsola / 2 - 20;
@@ -178,14 +181,24 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             aux = aux->siguiente;
         }
 
-        gotoxy(x, 20);
+        ocultarCursor();
         if (LoginUser) {
             color(114);
-            cout << "Ingreso al sistema con exito!" << endl;
+            gotoxy(x-2, 20);
+            cout << "╔═══════════════════════════════╗";
+            gotoxy(x-2, 21);
+            cout << "║ Ingreso al sistema con éxito! ║";
+            gotoxy(x-2, 22);
+            cout << "╚═══════════════════════════════╝";
             color(7);
         } else {
             color(116);
-            cout << "Ingreso denegado" << endl;
+            gotoxy(x+4, 20);
+            cout<<"╔═══════════════════╗";
+            gotoxy(x+4, 21);
+            cout<<"║ Ingreso denegado! ║";
+            gotoxy(x+4, 22);
+            cout<<"╚═══════════════════╝";
             color(7);
         }
         getch();
