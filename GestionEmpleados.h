@@ -157,7 +157,7 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
     
     // Mensaje de confirmación
     gotoxy(x, 9);
-    color(2);
+    color(114);
     cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
     color(7);
     getch();

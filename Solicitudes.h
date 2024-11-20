@@ -142,7 +142,7 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola) {
             gotoxy(x, y++);
             cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
             gotoxy(x, y++);
-            cout << "-------------------------------------------";
+            cout << "-------------------------------------------"<<endl;
 
             actual = actual->siguiente;
             numeroSolicitud++;

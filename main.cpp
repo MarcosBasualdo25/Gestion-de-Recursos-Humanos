@@ -33,6 +33,7 @@ int main() {
     //Mostramos la pantalla para iniciar sesion
     rol = pantallaInicioSesion(ListaUsers);
     cin.ignore();
+    getch();
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
@@ -357,6 +358,7 @@ while (true) {
                 case 4: {
                     LoginUser = false;
                     rol = pantallaInicioSesion(ListaUsers);
+                    getch();
                     break;
                 }
                 case 5: {
