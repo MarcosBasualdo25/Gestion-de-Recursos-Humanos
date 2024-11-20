@@ -43,7 +43,8 @@ struct Solicitud {
     string Descripcion;         
     string Estado;              
     string FechaResolucion;     
-    string ComentarioAdmin;      
+    string ComentarioAdmin;
+    int Prioridad;      
     Solicitud* siguiente;     
 };
 
