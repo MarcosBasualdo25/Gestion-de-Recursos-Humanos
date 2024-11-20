@@ -45,15 +45,15 @@ int main() {
 while (true) {
         ocultarCursor();
         Empleado* empleado;
-        string titulo = ".:MENÃš PRINCIPAL - " + rol + ":.";
+        string titulo = ".:MENÚ PRINCIPAL - " + rol + ":.";
         if (rol == "ADMINISTRADOR") {
-            string opciones[] = {"1. GestiÃ³n de empleados", "2. EvaluaciÃ³n de empleados","3. Solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesion","6. Salir"};   
+            string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesión","6. Salir"};   
             int n = 6;
             opc = menu(titulo, opciones, n);
             switch (opc) {
                 case 1: {
-                    string titulo = "--- MenÃº de GestiÃ³n de Empleados ---";
-                    string opcionesEmpleado[] = {"1. Agregar empleado", "2. Mostrar empleados","3. Actualizar empleado", "4. Eliminar empleado","5. Volver al menÃº principal"};
+                    string titulo = "--- Menú de Gestión de Empleados ---";
+                    string opcionesEmpleado[] = {"1. Agregar empleado", "2. Mostrar empleados","3. Actualizar empleado", "4. Eliminar empleado","5. Volver al menú principal"};
                     int n = 5;
                     int opcEmpleado;
                     do {
@@ -80,7 +80,7 @@ while (true) {
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
                                         gotoxy(x, 13);
-                                        cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                                        cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                                         gotoxy(x, 12);
                                         cout << string(50, ' '); 
                                     }
@@ -98,7 +98,7 @@ while (true) {
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
                                         gotoxy(x, 13);
-                                        cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                                        cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                                         gotoxy(x, 12);
                                         cout << string(50, ' '); 
                                     }
@@ -115,7 +115,7 @@ while (true) {
                 case 2: {
                     if (headEmpleados == nullptr) {
                         gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menÃº y agregue empleados primero.\n";
+                        cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
                         system("pause");
                         break;
                     }
@@ -128,7 +128,7 @@ while (true) {
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
                             gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                             gotoxy(x, 14);
                             cout << string(50, ' ');
                         }
@@ -142,7 +142,7 @@ while (true) {
                         break;
                     }
                     string tituloEva = "Evaluaciones de " + empleado->nombre + " " + empleado->apellido;
-                    string opcionesEva[] = {"1. Agregar evaluaciÃ³n", "2. Mostrar evaluaciones", "3. Volver al menÃº principal"};
+                    string opcionesEva[] = {"1. Agregar evaluación", "2. Mostrar evaluaciones", "3. Volver al menú principal"};
                     int opcEvaluacion = 3;
                     do {
                         mostrarCursor();
@@ -176,7 +176,7 @@ while (true) {
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
                             gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                             gotoxy(x, 14);
                             cout << string(50, ' ');  // Limpia la lÃ­nea
                         }
@@ -212,14 +212,14 @@ while (true) {
                 }
             }
         } else {
-            string opciones[] = {"1. EvaluaciÃ³n de empleado", "2. Asistencia de empleado","3. Solicitudes","4. Volver a iniciar sesion","5. Salir"};
+            string opciones[] = {"1. Evaluación de empleado", "2. Asistencia de empleado","3. Solicitudes","4. Volver a iniciar sesión","5. Salir"};
             int n = 5;
             opc = menu(titulo, opciones, n);
             switch (opc) {
                 case 1: {
                     if (headEmpleados == nullptr) {
                         gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menÃº y agregue empleados primero.\n";
+                        cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
                         system("pause");
                         break;
                     }
@@ -232,7 +232,7 @@ while (true) {
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
                             gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                             gotoxy(x, 14);
                             cout << string(50, ' ');
                         }
@@ -253,7 +253,7 @@ while (true) {
                 case 2: {
                     if (headEmpleados == nullptr) {
                         gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menÃº y agregue empleados primero.\n";
+                        cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
                         system("pause");
                         break;
                     }
@@ -266,7 +266,7 @@ while (true) {
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
                             gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                             gotoxy(x, 14);
                             cout << string(50, ' ');
                         }
@@ -280,7 +280,7 @@ while (true) {
                     }
                     ocultarCursor();
                     titulo = "Asistencias de " + empleado->nombre + " " + empleado->apellido;
-                    string opcionesAsistencia[] = {"1. Agregar registro de asistencia", "2. Mostrar registro de asistencia", "3. Volver al menÃº principal"};
+                    string opcionesAsistencia[] = {"1. Agregar registro de asistencia", "2. Mostrar registro de asistencia", "3. Volver al menú principal"};
                     n = 3;
                     int opcAsistencia;
                     do {
@@ -303,7 +303,7 @@ while (true) {
                 case 3: {
                     if (headEmpleados == nullptr) {
                         gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menÃº y agregue empleados primero.\n";
+                        cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
                         system("pause");
                         break;
                     }
@@ -318,7 +318,7 @@ while (true) {
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
                             gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un nÃºmero entero.";
+                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
                             gotoxy(x, 14);
                             cout << string(50, ' ');  // Limpia la lÃ­nea
                         }
@@ -333,7 +333,7 @@ while (true) {
                     }
                     ocultarCursor();
                     titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
-                    string opcionesSolicitud[] = {"1. Enviar solicitud", "2. Mostrar solicitudes", "3. Eliminar solicitud",  "4. Volver al menÃº principal"};
+                    string opcionesSolicitud[] = {"1. Enviar solicitud", "2. Mostrar solicitudes", "3. Eliminar solicitud",  "4. Volver al menú principal"};
                     n = 4;
                     int opcSolicitud;
                     do {
