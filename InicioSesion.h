@@ -152,7 +152,7 @@ void actualizarUsuario(Nodo *&ListaUser, int idUser, string new_username, string
 
 bool LoginUser = false;
 
-void pantallaInicioSesion(Nodo *&ListaUsers) {
+string pantallaInicioSesion(Nodo *&ListaUsers) {
     while (!LoginUser) {
         ocultarCursor();
         system("cls");
@@ -205,6 +205,7 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
             gotoxy(x-2, 22);
             cout << "╚═══════════════════════════════╝";
             color(7);
+            return rol;
         } else {
             color(116);
             gotoxy(x+4, 20);
@@ -217,6 +218,7 @@ void pantallaInicioSesion(Nodo *&ListaUsers) {
         }
         getch();
     }
+    return "";
 }
 
 #endif
