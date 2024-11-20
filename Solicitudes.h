@@ -151,6 +151,7 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola) {
     }
     system("pause");
 }
+
 inline void atenderSolicitud(ColaSolicitudes*& cola) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
@@ -166,43 +167,44 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         return;
     }
 
-    int idSolicitud;
-    gotoxy(x, 4);
-    cout << "Ingrese el ID de la solicitud que desea atender: ";
-    cin >> idSolicitud;
-    cin.ignore();  // Limpiar el buffer de entrada
-
-    // Buscar la solicitud por ID
+    // Buscar la primera solicitud con estado "Pendiente"
     Solicitud* actual = cola->cabeza;
-    while (actual != nullptr && actual->IDsolicitud != idSolicitud) {
+    while (actual != nullptr && actual->Estado != "Pendiente") {
         actual = actual->siguiente;
     }
 
     if (actual == nullptr) {
-        // Si no se encuentra la solicitud
-        gotoxy(x, 6);
-        cout << "No se encontró una solicitud con el ID ingresado.\n";
+        // No se encontró ninguna solicitud pendiente
+        gotoxy(x, 4);
+        cout << "No hay solicitudes con estado 'Pendiente' para atender.\n";
         system("pause");
         return;
     }
 
-    // Solicitud encontrada
+    // Mostrar los datos de la solicitud a atender
+    gotoxy(x, 4);
+    cout << "Primera solicitud pendiente en la cola:";
+    gotoxy(x, 5);
+    cout << "ID: " << actual->IDsolicitud;
     gotoxy(x, 6);
-    cout << "Solicitud encontrada: " << "\n";
+    cout << "Razón: " << actual->Razon;
     gotoxy(x, 7);
-    cout << "Razon: " << actual->Razon << "\n";
+    cout << "Descripción: " << actual->Descripcion;
     gotoxy(x, 8);
-    cout << "Descripcion: " << actual->Descripcion << "\n";
+    cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
 
+    // Preguntar el nuevo estado de la solicitud
     gotoxy(x, 10);
     cout << "Seleccione el nuevo estado de la solicitud:";
     gotoxy(x, 11);
     cout << "1. Aceptada";
     gotoxy(x, 12);
     cout << "2. Rechazada";
+    gotoxy(x, 13);
+    cout << "3. Volver al menú";
 
     int opcionEstado;
-    gotoxy(x, 13);
+    gotoxy(x, 15);
     cout << "Opción: ";
     cin >> opcionEstado;
     cin.ignore();  // Limpiar el buffer de entrada
@@ -214,8 +216,10 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         case 2:
             actual->Estado = "Rechazada";
             break;
+        case 3: 
+            return;
         default:
-            gotoxy(x, 14);
+            gotoxy(x, 17);
             cout << "Opción inválida. No se realizará ningún cambio.\n";
             system("pause");
             return;
@@ -225,7 +229,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
     actual->FechaResolucion = obtenerFechaActual();
 
     // Solicitar comentario opcional
-    gotoxy(x, 15);
+    gotoxy(x, 16);
     cout << "Ingrese un comentario administrativo (opcional, presione Enter para omitir): ";
     string comentarioAdmin;
     getline(cin, comentarioAdmin);
@@ -233,10 +237,12 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         actual->ComentarioAdmin = comentarioAdmin;
     }
 
-    gotoxy(x, 16);
-    cout << "Solicitud actualizada exitosamente.\n";
+    gotoxy(x, 18);
+    cout << "La solicitud fue atendida exitosamente.\n";
     system("pause");
 }
+
+
 inline void eliminarSolicitud(ColaSolicitudes*& cola) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
