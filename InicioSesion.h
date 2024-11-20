@@ -138,6 +138,18 @@ void mostrarUsuarios(Nodo *&ListaUsers) {
     }
 }
 
+void actualizarUsuario(Nodo *&ListaUser, int idUser, string new_username, string new_clave){
+    Nodo *aux = ListaUser;
+    while(aux != NULL){
+        if(aux->dato.id == idUser){
+            aux->dato.user = new_username;
+            aux->dato.clave = new_clave;
+            break;
+        }
+        aux = aux->siguiente;
+    }
+}
+
 bool LoginUser = false;
 
 void pantallaInicioSesion(Nodo *&ListaUsers) {

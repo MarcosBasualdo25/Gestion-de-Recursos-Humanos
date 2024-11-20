@@ -338,6 +338,13 @@ void actualizarEmpleado(Empleado* head, Empleado* tail, int id) {
                     cout << "Opción no válida. No se ha realizado ninguna modificación.\n";
                     break;
             }
+
+            //Se actualiza el usuario tambien
+            string new_username = temp->nombre + "." + temp->apellido;
+            lower(new_username);
+            string new_clave = temp->contrasena;
+            actualizarUsuario(ListaUsers, id, new_username, new_clave);
+
             system("pause");
             return;
         }
