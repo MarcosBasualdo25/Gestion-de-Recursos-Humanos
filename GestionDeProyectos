@@ -1,0 +1,56 @@
+#include <string>
+#include <iostream>
+#include <vector>
+using namespace std;
+class Proyecto {
+public:
+    Proyecto(int id, const string& nombre) : id(id), nombre(nombre) {}
+    int getId() const { return id; }
+    string getNombre() const { return nombre; }
+private:
+    int id;
+    string nombre;
+};
+
+
+#include "Proyecto.h"
+#include <iostream>
+
+using namespace std;
+class GestorProyectos {
+public:
+    GestorProyectos() : contador(0) {}
+    void asignarProyecto(int id, const string& nombre) {
+        if (contador < 100) {  // Limitar el número máximo de proyectos
+            Proyecto proyecto(id, nombre);
+            proyectos[contador] = proyecto;
+            contador++;
+            cout << "Proyecto asignado: ID=" << id << ", Nombre=" << nombre << endl;
+        } else {
+            cout << "No se pueden asignar más proyectos." << endl;
+        }
+    }
+    void eliminarProyecto(int id) {
+        for (int i = 0; i < contador; ++i) {
+            if (proyectos[i].getId() == id) {
+                // Desplazar los proyectos posteriores para llenar el espacio vacío
+                for (int j = i; j < contador - 1; ++j) {
+                    proyectos[j] = proyectos[j + 1];
+                }
+                contador--;
+                cout << "Proyecto eliminado: ID=" << id << endl;
+                return;
+            }
+        }
+        cout << "Proyecto con ID=" << id << " no encontrado." << endl;
+    }
+    void listarProyectos() const {
+        cout << "Lista de proyectos:" << endl;
+        for (int i = 0; i < contador; ++i) {
+            cout << "ID=" << proyectos[i].getId() << ", Nombre=" << proyectos[i].getNombre() << endl;
+        }
+    }
+private:
+    Proyecto proyectos[100];  // Arreglo estático de tamaño 100
+    int contador;
+};

@@ -41,10 +41,10 @@ void agregarRegistro(PilaAsistencias*& pila) {
         nuevoRegistro->horaSalida = "";  
         nuevoRegistro->siguiente = pila->cima;
         pila->cima = nuevoRegistro;
-        color(2); cout << "Hora de entrada registrada correctamente.\n"; color(7);
+        color(114);; cout << "Hora de entrada registrada correctamente.\n"; color(7);
     } else if (pila->cima->horaSalida.empty()) {
         pila->cima->horaSalida = obtenerHoraActual();
-        color(2); cout << "Hora de salida registrada correctamente.\n"; color(7);
+        color(114);; cout << "Hora de salida registrada correctamente.\n"; color(7);
     }
 }
 
@@ -70,16 +70,17 @@ void imprimirRegistros(PilaAsistencias* pila) {
         << setw(20) << "Hora Salida"
         << setw(12) << "Estado"<<endl;
     gotoxy(x, 3);
-    color(6); cout << string(75, '-') << endl; color(7);  // Separador
+    color(118); cout << string(75, '-') << endl; color(7);  // Separador
 
     // Recorrer la pila e imprimir cada registro en formato de tabla
     while (actual != NULL) {
         gotoxy(x, 3+i);
+        color(112);
         cout << left << setw(5) << i++  
             << setw(15) << actual->fecha
             << setw(20) << actual->horaEntrada
             << setw(20) << actual->horaSalida; 
-        color(2); cout<< setw(12) << actual->estado<<endl; color(7);
+        color(114); cout<< setw(12) << actual->estado<<endl; color(7);
 
         actual = actual->siguiente;
     }
