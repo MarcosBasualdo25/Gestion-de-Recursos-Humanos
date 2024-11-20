@@ -245,8 +245,8 @@ int main() {
                 }
                 ocultarCursor();
                 titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
-                string opcionesSolicitud[] = {"1. Enviar solicitud", "2. Mostrar solicitudes", "3. Volver al menú principal"};
-                n = 3;
+                string opcionesSolicitud[] = {"1. Enviar solicitud(Empleado)", "2. Mostrar solicitudes(E y A)", "3. Volver al menú principal", "4. Atender solicitud(Administrador)", "5. Eliminar solicitud(Empleado)"};
+                n = 5;
                 do {
                     opc = menu(titulo, opcionesSolicitud, n);
                     switch (opc) {
@@ -259,6 +259,12 @@ int main() {
                             break;
                         case 3:
                             break;
+                        case 4:
+                            atenderSolicitud(empleado->colaSolicitudes);
+                            break;
+                        case 5:
+                            eliminarSolicitud(empleado->colaSolicitudes);
+                        break;
                     }
                 } while (opc != 3);
                 break;
