@@ -135,13 +135,7 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
     nuevoEmpleado->anterior = nullptr;
     nuevoEmpleado->pilaEvaluaciones = nullptr;
     nuevoEmpleado->pilaAsistencias = nullptr;
-
-    // Creación de la cuenta del usuario
-    string user;
-    user = nombre + "." + apellido;
-    lower(user);
-    crearUsuario(ListaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO");
-
+    
     // Asignación del ID y enlace a la lista
     if (head == nullptr) {
         // Si la lista está vacía, el nuevo empleado es tanto el head como el tail
@@ -156,6 +150,11 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
         tail = nuevoEmpleado;  // Actualizar el tail para que apunte al nuevo empleado
     }
 
+    // Creación de la cuenta del usuario
+    string user = nombre + "." + apellido;
+    lower(user);
+    crearUsuario(ListaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO", nuevoEmpleado->idEmpleado);
+    
     // Mensaje de confirmación
     gotoxy(x, 9);
     color(2);

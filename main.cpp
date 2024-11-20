@@ -26,8 +26,8 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
-    crearUsuario(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR");
-    crearUsuario(ListaUsers, "gabriel.poma", "4321", "EMPLEADO");
+    crearUsuario(ListaUsers, "david.aldana", "1234", "ADMINISTRADOR",0);
+
 
     //Mostramos la pantalla para iniciar sesion
     pantallaInicioSesion(ListaUsers);

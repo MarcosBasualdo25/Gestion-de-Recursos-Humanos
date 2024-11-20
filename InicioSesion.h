@@ -95,6 +95,7 @@ int menuInicioSesion(string titulo, string opciones[], int n){
 }
 
 struct Usuario {
+    int id;
     string user;
     string clave;
     string rol;
@@ -108,8 +109,9 @@ struct Nodo {
 Nodo *ListaUsers = NULL;
 
 //Lista simplemente enlazada (insercion de elementos al final)
-void crearUsuario(Nodo *&ListaUsers, string u, string c, string r) {
+void crearUsuario(Nodo *&ListaUsers, string u, string c, string r, int idUsuario) {
     Nodo *nuevo_nodo = new Nodo();
+    nuevo_nodo->dato.id = idUsuario;
     nuevo_nodo->dato.user = u;
     nuevo_nodo->dato.clave = c;
     nuevo_nodo->dato.rol = r;
