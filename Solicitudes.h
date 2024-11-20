@@ -25,11 +25,44 @@ inline void enviarSolicitud(ColaSolicitudes*& cola) {
     string razon, descripcion;
     int idSolicitud = (cola == nullptr || cola->cabeza == nullptr) ? 1 : cola->cola->IDsolicitud + 1;  // ID incrementa automáticamente
 
+    // Mostrar lista de razones para seleccionar
     gotoxy(x, 4);
-    cout << "Ingrese la razón de la solicitud: ";
-    getline(cin, razon);
-    
+    cout << "Seleccione la razón de la solicitud:";
     gotoxy(x, 5);
+    cout << "1. Seguridad o Salud";
+    gotoxy(x, 6);
+    cout << "2. Condiciones Laborales";
+    gotoxy(x, 7);
+    cout << "3. Beneficios Adicionales";
+
+    int opcionRazon;
+    gotoxy(x, 8);
+    cout << "Opción: ";
+    cin >> opcionRazon;
+    cin.ignore();  // Limpiar el buffer de entrada
+
+    int prioridad;
+    switch (opcionRazon) {
+        case 1:
+            razon = "Seguridad o Salud";
+            prioridad = 1;  // Alta prioridad
+            break;
+        case 2:
+            razon = "Condiciones Laborales";
+            prioridad = 2;  // Prioridad media
+            break;
+        case 3:
+            razon = "Beneficios Adicionales";
+            prioridad = 3;  // Baja prioridad
+            break;
+        default:
+            gotoxy(x, 9);
+            cout << "Opción inválida. Seleccione una razón válida.\n";
+            system("pause");
+            return;
+    }
+
+    gotoxy(x, 10);
     cout << "Ingrese una breve descripción: ";
     getline(cin, descripcion);
 
@@ -42,28 +75,40 @@ inline void enviarSolicitud(ColaSolicitudes*& cola) {
     nuevaSolicitud->Estado = "Pendiente";
     nuevaSolicitud->FechaResolucion = "N/A";
     nuevaSolicitud->ComentarioAdmin = "";
+    nuevaSolicitud->Prioridad = prioridad;  // Nueva propiedad para la prioridad
     nuevaSolicitud->siguiente = nullptr;
 
     // Si la cola no existe, inicializarla
     if (cola == nullptr) {
         cola = new ColaSolicitudes();
-        cola->cabeza = cola->cola = nullptr;
-    }
-
-    // Agregar la solicitud a la cola
-    if (cola->cabeza == nullptr) {
-        // Si la cola está vacía, la nueva solicitud es tanto la cabeza como la cola
         cola->cabeza = cola->cola = nuevaSolicitud;
     } else {
-        // Si no está vacía, agregar la solicitud al final (en cola)
-        cola->cola->siguiente = nuevaSolicitud;
-        cola->cola = nuevaSolicitud;
+        // Insertar la solicitud según su prioridad
+        if (cola->cabeza == nullptr || nuevaSolicitud->Prioridad < cola->cabeza->Prioridad) {
+            // Insertar al inicio si es de mayor prioridad que la cabeza actual
+            nuevaSolicitud->siguiente = cola->cabeza;
+            cola->cabeza = nuevaSolicitud;
+        } else {
+            // Insertar en su posición correcta
+            Solicitud* actual = cola->cabeza;
+            while (actual->siguiente != nullptr && actual->siguiente->Prioridad <= nuevaSolicitud->Prioridad) {
+                actual = actual->siguiente;
+            }
+            nuevaSolicitud->siguiente = actual->siguiente;
+            actual->siguiente = nuevaSolicitud;
+
+            // Ajustar cola si es el último nodo
+            if (nuevaSolicitud->siguiente == nullptr) {
+                cola->cola = nuevaSolicitud;
+            }
+        }
     }
 
-    gotoxy(x, 7);
+    gotoxy(x, 12);
     cout << "Solicitud enviada exitosamente con ID " << idSolicitud << ".\n";
     system("pause");
 }
+
 
 inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola) {
     system("cls");
@@ -106,3 +151,184 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola) {
     }
     system("pause");
 }
+inline void atenderSolicitud(ColaSolicitudes*& cola) {
+    system("cls");
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 30;
+
+    gotoxy(x, 2);
+    cout << "--- Atender Solicitud ---\n";
+
+    if (cola == nullptr || cola->cabeza == nullptr) {
+        gotoxy(x, 4);
+        cout << "No hay solicitudes en la cola para atender.\n";
+        system("pause");
+        return;
+    }
+
+    int idSolicitud;
+    gotoxy(x, 4);
+    cout << "Ingrese el ID de la solicitud que desea atender: ";
+    cin >> idSolicitud;
+    cin.ignore();  // Limpiar el buffer de entrada
+
+    // Buscar la solicitud por ID
+    Solicitud* actual = cola->cabeza;
+    while (actual != nullptr && actual->IDsolicitud != idSolicitud) {
+        actual = actual->siguiente;
+    }
+
+    if (actual == nullptr) {
+        // Si no se encuentra la solicitud
+        gotoxy(x, 6);
+        cout << "No se encontró una solicitud con el ID ingresado.\n";
+        system("pause");
+        return;
+    }
+
+    // Solicitud encontrada
+    gotoxy(x, 6);
+    cout << "Solicitud encontrada: " << "\n";
+    gotoxy(x, 7);
+    cout << "Razon: " << actual->Razon << "\n";
+    gotoxy(x, 8);
+    cout << "Descripcion: " << actual->Descripcion << "\n";
+
+    gotoxy(x, 10);
+    cout << "Seleccione el nuevo estado de la solicitud:";
+    gotoxy(x, 11);
+    cout << "1. Aceptada";
+    gotoxy(x, 12);
+    cout << "2. Rechazada";
+
+    int opcionEstado;
+    gotoxy(x, 13);
+    cout << "Opción: ";
+    cin >> opcionEstado;
+    cin.ignore();  // Limpiar el buffer de entrada
+
+    switch (opcionEstado) {
+        case 1:
+            actual->Estado = "Aceptada";
+            break;
+        case 2:
+            actual->Estado = "Rechazada";
+            break;
+        default:
+            gotoxy(x, 14);
+            cout << "Opción inválida. No se realizará ningún cambio.\n";
+            system("pause");
+            return;
+    }
+
+    // Actualizar fecha de resolución
+    actual->FechaResolucion = obtenerFechaActual();
+
+    // Solicitar comentario opcional
+    gotoxy(x, 15);
+    cout << "Ingrese un comentario administrativo (opcional, presione Enter para omitir): ";
+    string comentarioAdmin;
+    getline(cin, comentarioAdmin);
+    if (!comentarioAdmin.empty()) {
+        actual->ComentarioAdmin = comentarioAdmin;
+    }
+
+    gotoxy(x, 16);
+    cout << "Solicitud actualizada exitosamente.\n";
+    system("pause");
+}
+inline void eliminarSolicitud(ColaSolicitudes*& cola) {
+    system("cls");
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 30;
+
+    gotoxy(x, 2);
+    cout << "--- Eliminar Solicitud ---\n";
+
+    if (cola == nullptr || cola->cabeza == nullptr) {
+        gotoxy(x, 4);
+        cout << "No hay solicitudes en la cola para eliminar.\n";
+        system("pause");
+        return;
+    }
+
+    int idSolicitud;
+    gotoxy(x, 4);
+    cout << "Ingrese el ID de la solicitud que desea eliminar: ";
+    cin >> idSolicitud;
+    cin.ignore();  // Limpiar el buffer de entrada
+
+    // Buscar la solicitud por ID
+    Solicitud* actual = cola->cabeza;
+    Solicitud* anterior = nullptr;
+
+    while (actual != nullptr && actual->IDsolicitud != idSolicitud) {
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+
+    if (actual == nullptr) {
+        // Si no se encuentra la solicitud
+        gotoxy(x, 6);
+        cout << "No se encontró una solicitud con el ID ingresado.\n";
+        system("pause");
+        return;
+    }
+
+    // Mostrar los datos de la solicitud antes de confirmar eliminación
+    gotoxy(x, 6);
+    cout << "Solicitud encontrada:";
+    gotoxy(x, 7);
+    cout << "ID: " << actual->IDsolicitud;
+    gotoxy(x, 8);
+    cout << "Razón: " << actual->Razon;
+    gotoxy(x, 9);
+    cout << "Descripción: " << actual->Descripcion;
+    gotoxy(x, 10);
+    cout << "Estado: " << actual->Estado;
+    gotoxy(x, 11);
+    cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
+    gotoxy(x, 12);
+    cout << "Fecha de Resolución: " << actual->FechaResolucion;
+    gotoxy(x, 13);
+    cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
+
+    gotoxy(x, 15);
+    cout << "¿Está seguro que desea eliminar esta solicitud? (S/N): ";
+    char confirmacion;
+    cin >> confirmacion;
+
+    if (tolower(confirmacion) != 's') {
+        gotoxy(x, 17);
+        cout << "Operación cancelada. La solicitud no fue eliminada.\n";
+        system("pause");
+        return;
+    }
+
+    // Eliminar la solicitud
+    if (actual == cola->cabeza) {
+        // Caso: La solicitud a eliminar es la cabeza
+        cola->cabeza = actual->siguiente;
+
+        // Si la cabeza era también la cola
+        if (cola->cabeza == nullptr) {
+            cola->cola = nullptr;
+        }
+    } else {
+        // Caso: La solicitud está en el medio o final
+        anterior->siguiente = actual->siguiente;
+
+        // Si la solicitud era la última, actualizar la cola
+        if (actual == cola->cola) {
+            cola->cola = anterior;
+        }
+    }
+
+    delete actual;  // Liberar memoria
+
+    gotoxy(x, 17);
+    cout << "La solicitud con ID " << idSolicitud << " fue eliminada exitosamente.\n";
+    system("pause");
+}
+
+
