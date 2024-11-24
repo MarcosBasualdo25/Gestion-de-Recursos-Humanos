@@ -86,6 +86,12 @@ inline int obtenerAnchoConsola() {
     return columns;
 }
 
+inline int obtenerAltoConsola(){
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+    return csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+}
+
 
 inline bool obtenerEntero(int& numero) {
     cin >> numero;
