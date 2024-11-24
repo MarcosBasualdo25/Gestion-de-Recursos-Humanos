@@ -34,7 +34,7 @@ void agregarRegistro(PilaAsistencias*& pila) {
         pila = new PilaAsistencias();
         pila->cima = nullptr;
     }
-    gotoxy(x,13);
+    gotoxy(x,15);
     if (pila->cima == NULL || (!pila->cima->horaEntrada.empty() && !pila->cima->horaSalida.empty())) {
         nuevoRegistro->horaEntrada = obtenerHoraActual();
         nuevoRegistro->estado = "Presente";
@@ -53,7 +53,6 @@ void imprimirRegistros(PilaAsistencias* pila) {
     int i = 1;
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 4;
-    
     gotoxy(x,2);
     if (pila == nullptr || pila->cima == nullptr) {
         
@@ -63,18 +62,27 @@ void imprimirRegistros(PilaAsistencias* pila) {
 
     RegistroAsistencia* actual = pila->cima;
 
+    gotoxy(x, 2);
+    cout << "╔═══════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                           MIS ASISTENCIAS                         ║";
+    gotoxy(x, 4);
+    cout << "╚═══════════════════════════════════════════════════════════════════╝";
+    
     // Imprimir el encabezado de la tabla
+    cout<<endl;
+        gotoxy(x, 5);
     cout << left << setw(5) << "No."
         << setw(15) << "Fecha"
         << setw(20) << "Hora Entrada"
         << setw(20) << "Hora Salida"
         << setw(12) << "Estado"<<endl;
-    gotoxy(x, 3);
+    gotoxy(x, 6);
     color(118); cout << string(75, '-') << endl; color(7);  // Separador
 
     // Recorrer la pila e imprimir cada registro en formato de tabla
     while (actual != NULL) {
-        gotoxy(x, 3+i);
+        gotoxy(x, 6+i);
         color(112);
         cout << left << setw(5) << i++  
             << setw(15) << actual->fecha
