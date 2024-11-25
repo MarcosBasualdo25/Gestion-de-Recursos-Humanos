@@ -50,46 +50,58 @@ void agregarRegistro(PilaAsistencias*& pila) {
 
 void imprimirRegistros(PilaAsistencias* pila) {
     system("cls");
-    int i = 1;
+    system("color 70");
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 4;
-    gotoxy(x,2);
-    if (pila == nullptr || pila->cima == nullptr) {
-        
-        cout << "No hay registros de asistencia.\n";
-        return;
-    }
+    int x = anchoConsola / 2 - 40;  // Centrar tabla
 
-    RegistroAsistencia* actual = pila->cima;
-
+    // Cuadro para el título
     gotoxy(x, 2);
-    cout << "╔═══════════════════════════════════════════════════════════════════╗";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
     gotoxy(x, 3);
-    cout << "║                           MIS ASISTENCIAS                         ║";
+    cout << "║                           REGISTRO DE ASISTENCIAS                          ║";
     gotoxy(x, 4);
-    cout << "╚═══════════════════════════════════════════════════════════════════╝";
-    
-    // Imprimir el encabezado de la tabla
-    cout<<endl;
-        gotoxy(x, 5);
-    cout << left << setw(5) << "No."
-        << setw(15) << "Fecha"
-        << setw(20) << "Hora Entrada"
-        << setw(20) << "Hora Salida"
-        << setw(12) << "Estado"<<endl;
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+
+    // Espaciado entre el título y la tabla
     gotoxy(x, 6);
-    color(118); cout << string(75, '-') << endl; color(7);  // Separador
 
-    // Recorrer la pila e imprimir cada registro en formato de tabla
-    while (actual != NULL) {
-        gotoxy(x, 6+i);
-        color(112);
-        cout << left << setw(5) << i++  
-            << setw(15) << actual->fecha
-            << setw(20) << actual->horaEntrada
-            << setw(20) << actual->horaSalida; 
-        color(114); cout<< setw(12) << actual->estado<<endl; color(7);
+    // Cuadro para la tabla
+    cout << "╔═══════╦══════════════╦═════════════════╦═════════════════╦═════════════════╗";
+    gotoxy(x, 7);
+    cout << "║  No.  ║     Fecha    ║   Hora Entrada  ║   Hora Salida   ║      Estado     ║";
+    gotoxy(x, 8);
+    cout << "╠═══════╬══════════════╬═════════════════╬═════════════════╬═════════════════╣";
 
-        actual = actual->siguiente;
+    if (pila == nullptr || pila->cima == nullptr) {
+        gotoxy(x, 9);
+        cout << "║                         No hay registros de asistencia.                   ║";
+        gotoxy(x, 10);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    } else {
+        RegistroAsistencia* actual = pila->cima;
+        int i = 1, y = 9;
+
+        // Iterar sobre la pila
+        while (actual != nullptr) {
+            gotoxy(x, y++);
+            cout << "║ " << setw(5) << left << i++
+                 << " ║ " << setw(12) << centerText(actual->fecha, 12)
+                 << " ║ " << setw(15) << centerText(actual->horaEntrada, 15)
+                 << " ║ " << setw(15) << centerText((actual->horaSalida.empty() ? "N/A" : actual->horaSalida), 15)
+                 << " ║ " << setw(15) << centerText(actual->estado, 15) << " ║";
+
+            actual = actual->siguiente;
+
+            // Si hay más registros, dibujar separador
+            if (actual != nullptr) {
+                gotoxy(x, y++);
+                cout << "╠═══════╬══════════════╬═════════════════╬═════════════════╬═════════════════╣";
+            }
+        }
+
+        // Dibujar el pie de la tabla
+        gotoxy(x, y);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
+    getch();
 }

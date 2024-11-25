@@ -17,32 +17,69 @@ void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila);
 
 inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
     system("cls");
+    system("color 70"); // Fondo gris claro, texto negro
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 20; 
+    int x = anchoConsola / 2 - 40; // Centrar la interfaz
 
+    // Cuadro para el título
+    color(113); // Texto azul sobre fondo gris claro
     gotoxy(x, 2);
-    cout << "--- Agregar Evaluación ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                           AGREGAR EVALUACIÓN                               ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Texto negro sobre fondo gris claro
 
     string comentario;
     int calificacion;
-
-    gotoxy(x, 4);
-    cout << "Ingrese el comentario de la evaluación: ";
-    getline(cin, comentario);
-
     bool entradaValida = false;
+
+    // Cuadro para el comentario
+    gotoxy(x, 6);
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 7);
+    cout << "║ Ingrese el comentario de la evaluación:                                    ║";
+    gotoxy(x, 8);
+    cout << "║                                                                            ║";
+    gotoxy(x, 9);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+
+    // Entrada del comentario
     do {
-        gotoxy(x, 5);
-        cout << "Ingrese la calificación (0-10): ";
+        gotoxy(x + 4, 8);
+        getline(cin, comentario);
+        if (comentario.empty()) {
+            gotoxy(x + 4, 10);
+            color(124); // Texto rojo sobre fondo gris claro
+            cout << "Error: El comentario no puede estar vacío. Por favor, ingréselo.";
+            color(112); // Regresar a texto negro
+        }
+    } while (comentario.empty());
+
+    // Cuadro para la calificación
+    gotoxy(x, 12);
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 13);
+    cout << "║ Ingrese la calificación (0-10):                                            ║";
+    gotoxy(x, 14);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+
+    // Validar la entrada de la calificación
+    do {
+        gotoxy(x + 34, 13);
         entradaValida = obtenerEntero(calificacion);
         if (!entradaValida || calificacion < 0 || calificacion > 10) {
-            gotoxy(x, 6);
-            cout << "Entrada no aceptada. Por favor, ingrese un número entre 0 y 10.";
-            gotoxy(x, 5);
-            cout << string(50, ' '); 
+            gotoxy(x + 4, 15);
+            color(124); // Texto rojo sobre fondo gris claro
+            cout << "Error: Entrada no válida. Ingrese un número entre 0 y 10.";
+            gotoxy(x + 4, 13);
+            cout << string(50, ' '); // Limpia la línea de entrada
+            color(112); // Regresar a texto negro
         }
     } while (!entradaValida || calificacion < 0 || calificacion > 10);
 
+    // Crear y apilar la evaluación
     Evaluacion* nuevaEvaluacion = new Evaluacion();
     nuevaEvaluacion->comentario = comentario;
     nuevaEvaluacion->calificacion = calificacion;
@@ -53,58 +90,75 @@ inline void agregarEvaluacion(PilaEvaluaciones*& pila) {
         pila->cima = nullptr;
     }
 
-    // Apilar la nueva evaluación
     nuevaEvaluacion->siguiente = pila->cima;
     pila->cima = nuevaEvaluacion;
 
-    gotoxy(x, 8);
-    cout << "Evaluación agregada exitosamente.\n";
-    system("pause");
+    // Mensaje de confirmación
+    color(114); // Texto verde sobre fondo gris claro
+    gotoxy(x, 17);
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 18);
+    cout << "║                  Evaluación agregada exitosamente.                         ║";
+    gotoxy(x, 19);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Regresar a texto negro
+
+    getch();
 }
 
-inline void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
-    system("cls");
-    int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; 
 
+void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
+    system("cls");
+    system("color 70");
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 40;  // Centrar tabla
+
+    // Cuadro para el título
     gotoxy(x, 2);
-    cout << "--- Evaluaciones del Empleado ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                         EVALUACIONES DEL EMPLEADO                          ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+
+    // Espaciado entre el título y la tabla
+    gotoxy(x, 6);
+
+    // Cuadro para la tabla
+    cout << "╔═══════╦═════════════════╦══════════════════════════════════════════════════╗";
+    gotoxy(x, 7);
+    cout << "║  No.  ║   Calificación  ║                    Comentario                    ║";
+    gotoxy(x, 8);
+    cout << "╠═══════╬═════════════════╬══════════════════════════════════════════════════╣";
 
     if (pila == nullptr || pila->cima == nullptr) {
-        gotoxy(x, 4);
-        cout << "No hay evaluaciones para este empleado.\n";
+        gotoxy(x, 9);
+        cout << "║                         No hay evaluaciones disponibles.                   ║";
+        gotoxy(x, 10);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     } else {
         Evaluacion* actual = pila->cima;
-        int numeroEvaluacion = 1;
-        int y = 4;
-        int sumaCalificaciones = 0;
-        int totalEvaluaciones = 0;
+        int i = 1, y = 9;
 
+        // Iterar sobre la pila
         while (actual != nullptr) {
             gotoxy(x, y++);
-            if (actual == pila->cima) {
-                cout << "Evaluación #" << numeroEvaluacion << " (Más reciente):";
-            } else {
-                cout << "Evaluación #" << numeroEvaluacion << ":";
-            }
-            gotoxy(x, y++);
-            cout << "Calificación: " << actual->calificacion << "/10";
-            gotoxy(x, y++);
-            cout << "Comentario: " << actual->comentario;
-            gotoxy(x, y++);
-            cout << "-------------------------";
-            sumaCalificaciones += actual->calificacion;
-            totalEvaluaciones++;
+            cout << "║ " << setw(5) << left << i++
+                 << " ║ " << setw(15) << centerText(to_string(actual->calificacion) + "/10", 15)
+                 << " ║ " << setw(48) << centerText(actual->comentario, 48) << " ║";
+
             actual = actual->siguiente;
-            numeroEvaluacion++;
-            y++; 
+
+            // Si hay más evaluaciones, dibujar separador
+            if (actual != nullptr) {
+                gotoxy(x, y++);
+                cout << "╠═══════╬═════════════════╬══════════════════════════════════════════════════╣";
+            }
         }
 
-        // Calcular y mostrar el promedio
-        double promedio = static_cast<double>(sumaCalificaciones) / totalEvaluaciones;
-        gotoxy(x, y++);
-        cout << "Promedio de calificaciones: " << promedio << "/10";
+        // Dibujar el pie de la tabla
+        gotoxy(x, y);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
-    cout << "\n";
-    system("pause");
+    getch();
 }

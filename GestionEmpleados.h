@@ -9,6 +9,7 @@
 #include "InicioSesion.h"
 #include <fstream>
 #include <sstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -108,40 +109,106 @@ inline bool obtenerEntero(int& numero) {
 
 Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
     system("cls");
+    system("color 70"); // Fondo gris claro
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; 
+    int x = anchoConsola / 2 - 40; // Centrar la interfaz
 
-    gotoxy(x, 2);
-    cout << "--- Agregar Nuevo Empleado ---\n";
+    // Título en azul
+    color(113); // Texto azul sobre fondo gris claro
+    gotoxy(x+6, 2);
+    cout << "╔════════════════════════════════════════════════════════════════╗";
+    gotoxy(x+6, 3);
+    cout << "║                  AGREGAR NUEVO EMPLEADO                        ║";
+    gotoxy(x+6, 4);
+    cout << "╚════════════════════════════════════════════════════════════════╝";
+    color(112); // Regresa a texto negro sobre fondo gris claro
 
     // Creación de un nuevo empleado
     Empleado* nuevoEmpleado = new Empleado();
     string nombre, apellido, contrasena, puesto;
 
-    gotoxy(x, 4);
-    cout << "Ingrese el nombre del empleado: ";
-    fflush(stdin);
-    getline(cin, nombre);
-    gotoxy(x, 5);
-    cout << "Ingrese el apellido del empleado: ";
-    getline(cin, apellido);
-    gotoxy(x, 6);
-    cout << "Ingrese la contraseña del empleado: ";
-    getline(cin, contrasena);
-    gotoxy(x, 7);
-    cout << "Ingrese el puesto del empleado: ";
-    getline(cin, puesto);
+    // Entrada: Nombre
+    do {
+        gotoxy(x, 6);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 7);
+        cout << "║ Ingrese el nombre del empleado:                                            ║";
+        gotoxy(x, 8);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 35, 7);
+        getline(cin, nombre);
+        if (nombre.empty()) {
+            gotoxy(x + 4, 9);
+            color(124); // Texto rojo para error
+            cout << "Error: El nombre no puede estar vacío. Por favor, ingréselo.";
+            color(112); // Regresa a texto negro
+        }
+    } while (nombre.empty());
+
+    // Entrada: Apellido
+    do {
+        gotoxy(x, 9);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 10);
+        cout << "║ Ingrese el apellido del empleado:                                          ║";
+        gotoxy(x, 11);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 36, 10);
+        getline(cin, apellido);
+        if (apellido.empty()) {
+            gotoxy(x + 4, 12);
+            color(124); // Texto rojo para error
+            cout << "Error: El apellido no puede estar vacío. Por favor, ingréselo.";
+            color(112); // Regresa a texto negro
+        }
+    } while (apellido.empty());
+
+    // Entrada: Contraseña
+    do {
+        gotoxy(x, 12);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 13);
+        cout << "║ Ingrese la contraseña del empleado:                                        ║";
+        gotoxy(x, 14);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 38, 13);
+        getline(cin, contrasena);
+        if (contrasena.empty()) {
+            gotoxy(x + 4, 15);
+            color(124); // Texto rojo para error
+            cout << "Error: La contraseña no puede estar vacía. Por favor, ingrésela.";
+            color(112); // Regresa a texto negro
+        }
+    } while (contrasena.empty());
+
+    // Entrada: Puesto
+    do {
+        gotoxy(x, 15);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 16);
+        cout << "║ Ingrese el puesto del empleado:                                            ║";
+        gotoxy(x, 17);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 35, 16);
+        getline(cin, puesto);
+        if (puesto.empty()) {
+            gotoxy(x + 4, 18);
+            color(124); // Texto rojo para error
+            cout << "Error: El puesto no puede estar vacío. Por favor, ingréselo.";
+            color(112); // Regresa a texto negro
+        }
+    } while (puesto.empty());
 
     // Asignar valores al nuevo empleado
     nuevoEmpleado->nombre = nombre;
     nuevoEmpleado->apellido = apellido;
     nuevoEmpleado->contrasena = contrasena;
     nuevoEmpleado->puesto = puesto;
-    nuevoEmpleado->siguiente = nullptr;  // Será el último
+    nuevoEmpleado->siguiente = nullptr; // Será el último
     nuevoEmpleado->anterior = nullptr;
     nuevoEmpleado->pilaEvaluaciones = nullptr;
     nuevoEmpleado->pilaAsistencias = nullptr;
-    
+
     // Asignación del ID y enlace a la lista
     if (head == nullptr) {
         // Si la lista está vacía, el nuevo empleado es tanto el head como el tail
@@ -150,117 +217,87 @@ Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail) {
         tail = nuevoEmpleado;
     } else {
         // Si ya hay empleados, agregar al final
-        nuevoEmpleado->idEmpleado = tail->idEmpleado + 1;  // El ID será uno más que el último empleado
-        nuevoEmpleado->anterior = tail;  // El anterior del nuevo empleado es el tail actual
-        tail->siguiente = nuevoEmpleado;  // El siguiente del tail actual es el nuevo empleado
-        tail = nuevoEmpleado;  // Actualizar el tail para que apunte al nuevo empleado
+        nuevoEmpleado->idEmpleado = tail->idEmpleado + 1; // El ID será uno más que el último empleado
+        nuevoEmpleado->anterior = tail;                  // El anterior del nuevo empleado es el tail actual
+        tail->siguiente = nuevoEmpleado;                 // El siguiente del tail actual es el nuevo empleado
+        tail = nuevoEmpleado;                            // Actualizar el tail para que apunte al nuevo empleado
     }
 
     // Creación de la cuenta del usuario
     string user = nombre + "." + apellido;
     lower(user);
     crearUsuario(ListaUsers, user, nuevoEmpleado->contrasena, "EMPLEADO", nuevoEmpleado->idEmpleado);
-    
-    // Mensaje de confirmación
-    gotoxy(x, 9);
-    color(114);
-    cout << "Empleado agregado exitosamente con ID " << nuevoEmpleado->idEmpleado << ".\n";
-    color(7);
+
+    // Mensaje de confirmación en verde
+    color(114); // Texto verde para confirmación
+    gotoxy(x+11, 19);
+    cout << "╔════════════════════════════════════════════════╗";
+    gotoxy(x+11, 20);
+    cout << "║   Empleado agregado exitosamente con ID " << setw(4) << nuevoEmpleado->idEmpleado << "   ║";
+    gotoxy(x+11, 21);
+    cout << "╚════════════════════════════════════════════════╝";
+    color(112); // Regresa a texto negro
+
     getch();
 
     return nuevoEmpleado;
 }
 
 
-void mostrarEmpleados(Empleado* head, Empleado* tail) {
-    system("cls");  // Limpia la consola
-    int anchoConsola = obtenerAnchoConsola();  // Obtiene el ancho de la consola
-    int x = anchoConsola / 2 - 30;  // Centra el título en la consola
 
+void mostrarEmpleados(Empleado* head, Empleado* tail) {
+    system("cls");
+    system("color 70");
+    int anchoConsola = obtenerAnchoConsola();
+    int x = anchoConsola / 2 - 40;  // Centrar tabla
+
+    // Cuadro para el título
     gotoxy(x, 2);
-    cout << "--- Lista de Empleados ---\n";  // Título
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                             LISTA DE EMPLEADOS                             ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+
+    // Espaciado entre el título y la tabla
+    gotoxy(x, 6);
+
+    // Cuadro para la tabla
+    cout << "╔═══════╦══════════════════════════════╦═══════════════════╦═════════════════╗";
+    gotoxy(x, 7);
+    cout << "║  ID   ║       Nombre Completo        ║      Puesto       ║   Contraseña    ║";
+    gotoxy(x, 8);
+    cout << "╠═══════╬══════════════════════════════╬═══════════════════╬═════════════════╣";
 
     if (head == nullptr) {
-        gotoxy(x, 4);
-        cout << "No hay empleados en la lista.\n";  // Mensaje si no hay empleados
+        gotoxy(x, 9);
+        cout << "║                          No hay empleados registrados                      ║";
+        gotoxy(x, 10);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     } else {
         Empleado* temp = head;
-        int y = 4;
-        
-        // Cabecera
-        gotoxy(50, y);
-        cout << "ID";
-        gotoxy(55, y);
-        cout << "Nombre";
-        gotoxy(75, y);
-        cout << "Puesto";
-        gotoxy(50, y + 1);
-        cout << "-----------------------------------";
+        int y = 9;
 
-        // Itera sobre la lista desde head hasta tail y muestra cada empleado
+        // Iterar sobre la lista de empleados
         while (temp != nullptr) {
-            y += 2;
+            gotoxy(x, y++);
+            cout << "║ " << setw(5) << left << temp->idEmpleado
+                 << " ║ " << setw(28) << centerText(temp->nombre + " " + temp->apellido, 28)
+                 << " ║ " << setw(17) << centerText(temp->puesto, 17)
+                 << " ║ " << setw(15) << centerText(temp->contrasena, 15) << " ║";
 
-            // Muestra los detalles de cada empleado
-            gotoxy(50, y);
-            cout << temp->idEmpleado;
-            gotoxy(55, y);
-            cout << temp->nombre << " " << temp->apellido;
-            gotoxy(75, y);
-            cout << temp->puesto;
-
-            // Avanza al siguiente empleado
             temp = temp->siguiente;
-        }
 
-        // Muestra un mensaje indicando que se ha mostrado toda la lista en orden
-        gotoxy(x, y + 3);
-        cout << "Todos los empleados han sido mostrados en orden.\n";
-        
-        // Mostrar lista en orden inverso (opcional)
-        cout << "\nDeseas mostrar la lista en orden inverso? (s/n): ";
-        char opcion;
-        cin >> opcion;
-        if (opcion == 's' || opcion == 'S') {
-            system("cls");
-            gotoxy(x, 2);
-            cout << "--- Lista de Empleados (Orden Inverso) ---\n";
-
-            temp = tail;  // Empezamos desde el tail
-            y = 4;
-
-            // Cabecera
-            gotoxy(50, y);
-            cout << "ID";
-            gotoxy(55, y);
-            cout << "Nombre";
-            gotoxy(75, y);
-            cout << "Puesto";
-            gotoxy(50, y + 1);
-            cout << "-----------------------------------";
-
-            // Itera sobre la lista desde tail hasta head
-            while (temp != nullptr) {
-                y += 2;
-
-                // Muestra los detalles de cada empleado
-                gotoxy(50, y);
-                cout << temp->idEmpleado;
-                gotoxy(55, y);
-                cout << temp->nombre << " " << temp->apellido;
-                gotoxy(75, y);
-                cout << temp->puesto;
-
-                // Retrocede al empleado anterior
-                temp = temp->anterior;
+            // Si hay más empleados, dibujar separador
+            if (temp != nullptr) {
+                gotoxy(x, y++);
+                cout << "╠═══════╬══════════════════════════════╬═══════════════════╬═════════════════╣";
             }
-
-            // Muestra un mensaje indicando que se ha mostrado toda la lista en orden inverso
-            gotoxy(x, y + 3);
-            cout << "Todos los empleados han sido mostrados en orden inverso.\n";
-        }else{
-            return;
         }
+
+        // Dibujar el pie de la tabla
+        gotoxy(x, y);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
     getch();
 }
@@ -268,98 +305,148 @@ void mostrarEmpleados(Empleado* head, Empleado* tail) {
 
 void actualizarEmpleado(Empleado* head, Empleado* tail, int id) {
     system("cls");
+    system("color 70"); // Fondo gris claro
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30;
+    int x = anchoConsola / 2 - 40; // Centrar la interfaz
 
     Empleado* temp = head;
+
+    // Buscar el empleado por ID
     while (temp != nullptr) {
         if (temp->idEmpleado == id) {
-            int opcion;
+            // Título
+            color(113); // Azul para el título
             gotoxy(x, 2);
-            cout << "--- Actualizar Empleado ---\n";
+            cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+            gotoxy(x, 3);
+            cout << "║                         ACTUALIZAR EMPLEADO                                ║";
             gotoxy(x, 4);
-            cout << "Empleado seleccionado: " << temp->nombre << " " << temp->apellido << "\n";
+            cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+            color(112); // Texto negro sobre fondo gris claro
 
+            // Mostrar información del empleado seleccionado
             gotoxy(x, 6);
-            cout << "Seleccione el atributo a modificar:\n";
-            gotoxy(x, 7);
-            cout << "1. Nombre\n";
-            gotoxy(x, 8);
-            cout << "2. Apellido\n";
-            gotoxy(x, 9);
-            cout << "3. Contraseña\n";
-            gotoxy(x, 10);
-            cout << "4. Puesto\n";
+            cout << "Empleado seleccionado: " << temp->nombre << " " << temp->apellido;
 
+            // Menú de opciones
+            gotoxy(x+12, 8);
+            cout << "╔═══════════════════════════════════════════════════╗";
+            gotoxy(x+12, 9);
+            cout << "║                 1. Nombre                         ║";
+            gotoxy(x+12, 10);
+            cout << "║                 2. Apellido                       ║";
+            gotoxy(x+12, 11);
+            cout << "║                 3. Contraseña                     ║";
+            gotoxy(x+12, 12);
+            cout << "║                 4. Puesto                         ║";
+            gotoxy(x+12, 13);
+            cout << "╚═══════════════════════════════════════════════════╝";
+
+            // Validar la opción seleccionada
+            int opcion;
             bool entradaValida = false;
             do {
-                gotoxy(x, 12);
-                cout << "Ingrese su opción: ";
+                gotoxy(x, 15);
+                cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+                gotoxy(x, 16);
+                cout << "║ Ingrese su opción:                                                         ║";
+                gotoxy(x, 17);
+                cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+                gotoxy(x + 21, 16);
                 entradaValida = obtenerEntero(opcion);
                 if (!entradaValida || opcion < 1 || opcion > 4) {
-                    gotoxy(x, 13);
-                    cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-                    gotoxy(x, 12);
-                    cout << string(50, ' '); // Limpia la línea
+                    gotoxy(x + 4, 18);
+                    color(124); // Rojo para error
+                    cout << "Error: Ingrese una opción válida (1-4).";
+                    gotoxy(x + 20, 16);
+                    cout << string(30, ' '); // Limpia la entrada
+                    color(112); // Regresa al color estándar
                 }
             } while (!entradaValida || opcion < 1 || opcion > 4);
 
+            // Validar y actualizar el campo seleccionado
             string nuevoValor;
+            do {
+                gotoxy(x, 18);
+                cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+                switch (opcion) {
+                    case 1: // Actualizar nombre
+                        gotoxy(x, 19);
+                        cout << "║ Ingrese el nuevo nombre:                                                   ║";
+                        break;
+                    case 2: // Actualizar apellido
+                        gotoxy(x, 19);
+                        cout << "║ Ingrese el nuevo apellido:                                                 ║";
+                        break;
+                    case 3: // Actualizar contraseña
+                        gotoxy(x, 19);
+                        cout << "║ Ingrese la nueva contraseña:                                               ║";
+                        break;
+                    case 4: // Actualizar puesto
+                        gotoxy(x, 19);
+                        cout << "║ Ingrese el nuevo puesto:                                                   ║";
+                        break;
+                }
+                gotoxy(x, 20);
+                cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+                gotoxy(x + 30, 19);
+                getline(cin, nuevoValor);
+                if (nuevoValor.empty()) {
+                    gotoxy(x + 4, 21);
+                    color(124); // Rojo para error
+                    cout << "Error: Este campo no puede estar vacío.";
+                    color(112);
+                }
+            } while (nuevoValor.empty());
 
-            switch(opcion) {
+            // Actualizar el atributo correspondiente
+            switch (opcion) {
                 case 1:
-                    gotoxy(x, 14);
-                    cout << "Ingrese el nuevo nombre: ";
-                    getline(cin, nuevoValor);
                     temp->nombre = nuevoValor;
-                    gotoxy(x, 16);
-                    cout << "Nombre actualizado con éxito.\n";
                     break;
                 case 2:
-                    gotoxy(x, 14);
-                    cout << "Ingrese el nuevo apellido: ";
-                    getline(cin, nuevoValor);
                     temp->apellido = nuevoValor;
-                    gotoxy(x, 16);
-                    cout << "Apellido actualizado con éxito.\n";
                     break;
                 case 3:
-                    gotoxy(x, 14);
-                    cout << "Ingrese la nueva contraseña: ";
-                    getline(cin, nuevoValor);
                     temp->contrasena = nuevoValor;
-                    gotoxy(x, 16);
-                    cout << "Contraseña actualizada con éxito.\n";
                     break;
                 case 4:
-                    gotoxy(x, 14);
-                    cout << "Ingrese el nuevo puesto: ";
-                    getline(cin, nuevoValor);
                     temp->puesto = nuevoValor;
-                    gotoxy(x, 16);
-                    cout << "Puesto actualizado con éxito.\n";
-                    break;
-                default:
-                    gotoxy(x, 14);
-                    cout << "Opción no válida. No se ha realizado ninguna modificación.\n";
                     break;
             }
 
-            //Se actualiza el usuario tambien
+            // Actualizar usuario (nombre de usuario y clave)
             string new_username = temp->nombre + "." + temp->apellido;
             lower(new_username);
             string new_clave = temp->contrasena;
             actualizarUsuario(ListaUsers, id, new_username, new_clave);
+
+            // Mensaje de confirmación
+            color(114); // Verde para confirmación
+            gotoxy(x+14, 22);
+            cout << "╔════════════════════════════════════════════════╗";
+            gotoxy(x+14, 23);
+            cout << "║     ¡Empleado actualizado exitosamente!        ║";
+            gotoxy(x+14, 24);
+            cout << "╚════════════════════════════════════════════════╝";
+            color(112); // Regresa al color estándar
 
             system("pause");
             return;
         }
         temp = temp->siguiente;
     }
-    gotoxy(x, 2);
-    cout << "Empleado con ID " << id << " no encontrado.\n";
+
+    // Si no se encuentra el empleado
+    color(124); // Rojo para mensaje de error
+    gotoxy(x, 6);
+    cout << "Error: Empleado con ID " << id << " no encontrado.";
+    color(112);
     getch();
 }
+
+
+
 
 void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
     system("cls");

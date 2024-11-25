@@ -77,13 +77,13 @@ while (true) {
                                 int id;
                                 bool entradaValida = false;
                                 do {
-                                    gotoxy(x, 12);
+                                    gotoxy(x, 18);
                                     cout << "Ingrese el ID del empleado a actualizar: ";
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
-                                        gotoxy(x, 13);
+                                        gotoxy(x, 19);
                                         cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                                        gotoxy(x, 12);
+                                        gotoxy(x, 18);
                                         cout << string(50, ' '); 
                                     }
                                 } while (!entradaValida);
@@ -95,13 +95,13 @@ while (true) {
                                 int id;
                                 bool entradaValida = false;
                                 do {
-                                    gotoxy(x, 12);
+                                    gotoxy(x, 18);
                                     cout << "Ingrese el ID del empleado a eliminar: ";
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
-                                        gotoxy(x, 13);
+                                        gotoxy(x, 19);
                                         cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                                        gotoxy(x, 12);
+                                        gotoxy(x, 18);
                                         cout << string(50, ' '); 
                                     }
                                 } while (!entradaValida);
