@@ -1,6 +1,9 @@
 
 #pragma once
 #include <Windows.h>
+#include <iomanip>
+#include <iostream>
+using namespace std;
 
 // Función para mover el cursor a una posición específica en la consola
 inline void gotoxy(int x, int y) {
@@ -48,6 +51,12 @@ inline int whereY() {
     GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
     row = csbi.dwCursorPosition.Y;
     return row;
+}
+
+inline string centerText(const string& text, int width) {
+    int padding = (width - text.length()) / 2;
+    return string(padding > 0 ? padding : 0, ' ') + text +
+           string(padding > 0 ? padding : 0, ' ');
 }
 
 /*

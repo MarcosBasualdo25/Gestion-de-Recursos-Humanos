@@ -45,13 +45,13 @@ int menuInicioSesion(string titulo, string opciones[], int n){
         |___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  
 
         */
-        gotoxy(30, 1);
+        gotoxy(x-30, 1);
         cout<<" ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ "<<endl;
-        gotoxy(30, 2);
+        gotoxy(x-30, 2);
         cout<<"|   __ \\|   __ \\    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|"<<endl;
-        gotoxy(30, 3);
+        gotoxy(x-30, 3);
         cout<<"|      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  "<<endl;  
-        gotoxy(30, 4);
+        gotoxy(x-30, 4);
         cout<<"|___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  "<<endl;
 
         gotoxy(x-5, 6);
@@ -169,13 +169,6 @@ string pantallaInicioSesion(Nodo *&ListaUsers) {
         string opciones[] = {"[1] ADMINISTRADOR", "[2] EMPLEADO"};
         opcionRol = menuInicioSesion(" ", opciones, 2);
         
-        if (opcionRol == 1) {
-            rol = "ADMINISTRADOR";
-        } 
-        else{
-            rol = "EMPLEADO";
-        }
-
         mostrarCursor();
         gotoxy(x, 12);
         cout << "Ingrese su nombre de usuario: ";
@@ -187,14 +180,21 @@ string pantallaInicioSesion(Nodo *&ListaUsers) {
         gotoxy(x, 18);
         cin >> clave;
 
+        if (opcionRol == 1) {
+            rol = "ADMINISTRADOR";
+        } 
+        else{
+            rol = usuario;
+        }
+
         Nodo *aux = ListaUsers;
         while (aux != NULL) {
-            if ((aux->dato.user == usuario) && (aux->dato.clave == clave) && (aux->dato.rol == rol)) {
+            if ((aux->dato.user == usuario) && (aux->dato.clave == clave) ) {
                 LoginUser = true;
             }
             aux = aux->siguiente;
         }
-
+        //&& (aux->dato.rol == rol)
         ocultarCursor();
         if (LoginUser) {
             color(114);
@@ -219,6 +219,19 @@ string pantallaInicioSesion(Nodo *&ListaUsers) {
         getch();
     }
     return "";
+}
+
+int buscarUsuario(Nodo* cabeza, const string& nombreUsuario) {
+    Nodo* actual = cabeza; // Apuntador para recorrer la lista
+    
+    while (actual != nullptr) { // Mientras no lleguemos al final de la lista
+        if (actual->dato.user == nombreUsuario) { // Comparamos el nombre del usuario
+            return actual->dato.id; // Retornamos el ID si lo encontramos
+        }
+        actual = actual->siguiente; // Avanzamos al siguiente nodo
+    }
+    
+    return -1; // Retornamos -1 si el usuario no se encuentra
 }
 
 #endif

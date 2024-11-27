@@ -18,12 +18,14 @@
 using namespace std;
 
 int obtenerAnchoConsola();
+int obtenerAltoConsola();
 bool obtenerEntero(int& numero);
 int menu(string titulo, string opciones[], int n);
+int menuAdministrador(string titulo, string opciones[], int n);
+
 string rol = "";
 
 int main() {
-
     SetConsoleOutputCP(CP_UTF8);
 
     //Inicio de sesion
@@ -37,6 +39,7 @@ int main() {
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
+    ColaSolicitudes*  colaSolicitudes = nullptr;
 
     int opc;
     int anchoConsola = obtenerAnchoConsola();
@@ -45,20 +48,20 @@ int main() {
 while (true) {
         ocultarCursor();
         Empleado* empleado;
-        string titulo = ".:MENÚ PRINCIPAL - " + rol + ":.";
+        string titulo = "";
         if (rol == "ADMINISTRADOR") {
-            string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesión","6. Salir"};   
+
+            string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Atender solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesión","6. Salir"};   
             int n = 6;
-            opc = menu(titulo, opciones, n);
+            opc = menu("MENU PRINCIPAL ADMINISTRADOR", opciones, n);
             switch (opc) {
                 case 1: {
-                    string titulo = "--- Menú de Gestión de Empleados ---";
                     string opcionesEmpleado[] = {"1. Agregar empleado", "2. Mostrar empleados","3. Actualizar empleado", "4. Eliminar empleado","5. Volver al menú principal"};
                     int n = 5;
                     int opcEmpleado;
                     do {
                         ocultarCursor();
-                        opcEmpleado = menu(titulo, opcionesEmpleado, n);
+                        opcEmpleado = menu("Gestion de Empleados", opcionesEmpleado, n);
                         switch (opcEmpleado) {
                             case 1: {
                                 mostrarCursor();
@@ -75,13 +78,13 @@ while (true) {
                                 int id;
                                 bool entradaValida = false;
                                 do {
-                                    gotoxy(x, 12);
+                                    gotoxy(x, 18);
                                     cout << "Ingrese el ID del empleado a actualizar: ";
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
-                                        gotoxy(x, 13);
+                                        gotoxy(x, 19);
                                         cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                                        gotoxy(x, 12);
+                                        gotoxy(x, 18);
                                         cout << string(50, ' '); 
                                     }
                                 } while (!entradaValida);
@@ -93,13 +96,13 @@ while (true) {
                                 int id;
                                 bool entradaValida = false;
                                 do {
-                                    gotoxy(x, 12);
+                                    gotoxy(x, 18);
                                     cout << "Ingrese el ID del empleado a eliminar: ";
                                     entradaValida = obtenerEntero(id);
                                     if (!entradaValida) {
-                                        gotoxy(x, 13);
+                                        gotoxy(x, 19);
                                         cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                                        gotoxy(x, 12);
+                                        gotoxy(x, 18);
                                         cout << string(50, ' '); 
                                     }
                                 } while (!entradaValida);
@@ -123,13 +126,13 @@ while (true) {
                     bool entradaValida = false;
                     do {
                         mostrarCursor();
-                        gotoxy(x, 14);
+                        gotoxy(x, 19);
                         cout << "Ingrese el ID del empleado para evaluar: ";
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
-                            gotoxy(x, 15);
+                            gotoxy(x, 20);
                             cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
+                            gotoxy(x, 19);
                             cout << string(50, ' ');
                         }
                     } while (!entradaValida);
@@ -167,32 +170,9 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para gestionar solicitudes: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');  // Limpia la lÃ­nea
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);  // Busca el empleado por ID
-                    if (empleado == nullptr) {
-                        gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
-                        system("pause");
-                        break;
-                    }
-
                     ocultarCursor();
                     titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
-                    atenderSolicitud(empleado->colaSolicitudes);
+                    atenderSolicitud(colaSolicitudes);
                     break;
                 }
                 case 4: {
@@ -214,7 +194,8 @@ while (true) {
         } else {
             string opciones[] = {"1. Evaluación de empleado", "2. Asistencia de empleado","3. Solicitudes","4. Volver a iniciar sesión","5. Salir"};
             int n = 5;
-            opc = menu(titulo, opciones, n);
+            opc = menu("MENU PRINCIPAL - EMPLEADO", opciones, n);
+            int idEmpleado = buscarUsuario(ListaUsers, rol);
             switch (opc) {
                 case 1: {
                     if (headEmpleados == nullptr) {
@@ -223,25 +204,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para evaluar: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);
                     if (empleado == nullptr) {
                         gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         system("pause");
                         break;
                     }
@@ -257,24 +223,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para la asistencia: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');
-                        }
-                    } while (!entradaValida);
-                    empleado = buscarEmpleado(headEmpleados, id);
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);
                     if (empleado == nullptr) {
                         gotoxy(x,16);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         getch();
                         break;
                     }
@@ -307,27 +259,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-
-                    // Solicitar el ID del empleado para gestionar solicitudes
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para gestionar solicitudes: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');  // Limpia la lÃ­nea
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);  // Busca el empleado por ID
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);  // Busca el empleado por ID
                     if (empleado == nullptr) {
                         gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         system("pause");
                         break;
                     }
@@ -341,13 +276,13 @@ while (true) {
                         switch (opcSolicitud) {
                             case 1:
                                 mostrarCursor();
-                                enviarSolicitud(empleado->colaSolicitudes);
+                                enviarSolicitud(colaSolicitudes, idEmpleado);
                                 break;
                             case 2:
-                                mostrarSolicitudesEmpleado(empleado->colaSolicitudes);
+                                mostrarSolicitudesEmpleado(colaSolicitudes, idEmpleado);
                                 break;
                             case 3:
-                                eliminarSolicitud(empleado->colaSolicitudes);
+                                eliminarSolicitud(colaSolicitudes, idEmpleado);
                                 break;
                             case 4:
                                 break;
@@ -374,7 +309,82 @@ while (true) {
     return 0;
 }
 
-int menu(string titulo, string opciones[], int n){
+int menu(string titulo, string opciones[], int n) {
+    system("color 70");
+    int opcion = 1, tecla;
+    bool repite = true;
+
+    do {
+        system("cls");
+
+        // Dimensiones de la consola
+        int ancho = obtenerAnchoConsola();
+        int alto = obtenerAltoConsola();
+
+        // Calcular posición del marco y contenido
+        int x = (ancho - 40) / 2; // Centrar el marco horizontalmente
+        int y = (alto)/10; // Centrar el marco verticalmente
+
+        // Dibujar marco superior
+        gotoxy(x, y);     cout << "╔══════════════════════════════════════════╗";
+
+        // Ajuste del título dentro del marco
+        int espaciosTotales = 42 - (titulo.length());
+        int espacioIzq = espaciosTotales / 2;
+        int espacioDer = espaciosTotales - espacioIzq;
+
+        gotoxy(x, y + 1);
+        cout << "║" << string(espacioIzq, ' ') <<titulo << string(espacioDer, ' ') << "║";
+
+        gotoxy(x, y + 2); cout << "╠══════════════════════════════════════════╣";
+
+        // Espacios interiores para las opciones
+        for (int i = 0; i < n * 2; i++) {
+            gotoxy(x, y + 3 + i);
+            cout << "║" << string(38, ' ') << "    ║";
+        }
+
+        // Marco inferior
+        gotoxy(x, y + 3 + n * 2); cout << "╚══════════════════════════════════════════╝";
+
+        // Mostrar opciones y flecha
+        for (int i = 0; i < n; i++) {
+            gotoxy(x + 3, y + 3 + i * 2);
+            if (i + 1 == opcion) {
+                color(113); //Le da color a la opcion seleccionada
+                cout << "➤   " << opciones[i];
+                color(112);
+            } else {
+                cout << "     " << opciones[i];
+            }
+        }
+
+        // Detectar teclas
+        do {
+            tecla = getch();
+        } while (tecla != 72 && tecla != 80 && tecla != 13); // Teclas: arriba (72), abajo (80), enter (13)
+
+        // Cambiar opción según la tecla
+        switch (tecla) {
+            case 72: // Flecha hacia arriba
+                opcion--;
+                if (opcion < 1) opcion = n;
+                break;
+            case 80: // Flecha hacia abajo
+                opcion++;
+                if (opcion > n) opcion = 1;
+                break;
+            case 13: // Enter
+                repite = false;
+                break;
+        }
+    } while (repite);
+
+    return opcion;
+}
+
+//Menu personalizado para administrador (PRUEBA)
+int menuAdministrador(string titulo, string opciones[], int n){
     system("color 70");
 
     int opcion = 1;
@@ -386,10 +396,24 @@ int menu(string titulo, string opciones[], int n){
     do{
         system("cls");
         
-        gotoxy(anchoConsola/2-(longitud/2) - 5,2); cout<<titulo;
-        gotoxy(x-5,3+opcion); cout<<"➤";
+        gotoxy(x, 1);
+        cout<<"╔══════════════════════════════════════╗";
+        gotoxy(x,2);
+        cout<<"║    MENÚ PRINCIPAL - ADMINISTRADOR    ║";
+        gotoxy(x,3);
+        cout<<"╠══════════════════════════════════════╣";  
+        for(int i=0; i<=12; i++){
+            gotoxy(x, 4 + i);
+            cout<<"║                                      ║";
+            if(i == 12){
+                gotoxy(x, 4 + (i+1));
+                cout<<"╚══════════════════════════════════════╝";
+            }
+        }     
+
+        gotoxy(x+2,5+(opcion - 1) * 2); cout<<"➤";
         for(int i=0;i<n;i++){
-            gotoxy(x,4+i); cout<<opciones[i];
+            gotoxy(x + 6,5+2*i); cout<<opciones[i];
         }
         do{
             tecla = getch();
