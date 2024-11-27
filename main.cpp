@@ -217,6 +217,7 @@ while (true) {
             string opciones[] = {"1. Evaluación de empleado", "2. Asistencia de empleado","3. Solicitudes","4. Volver a iniciar sesión","5. Salir"};
             int n = 5;
             opc = menu("MENU PRINCIPAL - EMPLEADO", opciones, n);
+            int idEmpleado = buscarUsuario(ListaUsers, rol);
             switch (opc) {
                 case 1: {
                     if (headEmpleados == nullptr) {
@@ -225,25 +226,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para evaluar: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);
                     if (empleado == nullptr) {
                         gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         system("pause");
                         break;
                     }
@@ -259,24 +245,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para la asistencia: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');
-                        }
-                    } while (!entradaValida);
-                    empleado = buscarEmpleado(headEmpleados, id);
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);
                     if (empleado == nullptr) {
                         gotoxy(x,16);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         getch();
                         break;
                     }
@@ -309,27 +281,10 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-
-                    // Solicitar el ID del empleado para gestionar solicitudes
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para gestionar solicitudes: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');  // Limpia la lÃ­nea
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);  // Busca el empleado por ID
+                    empleado = buscarEmpleado(headEmpleados, idEmpleado);  // Busca el empleado por ID
                     if (empleado == nullptr) {
                         gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
+                        cout << "Empleado con ID " << idEmpleado << " no encontrado.\n";
                         system("pause");
                         break;
                     }
