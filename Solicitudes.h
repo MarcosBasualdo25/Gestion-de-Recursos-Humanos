@@ -14,7 +14,7 @@ void mostrarSolicitudesEmpleado(ColaSolicitudes* cola);
 
 // Implementación de funciones
 
-inline void enviarSolicitud(ColaSolicitudes*& cola) {
+inline void enviarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 20;
@@ -76,6 +76,7 @@ inline void enviarSolicitud(ColaSolicitudes*& cola) {
     nuevaSolicitud->FechaResolucion = "N/A";
     nuevaSolicitud->ComentarioAdmin = "";
     nuevaSolicitud->Prioridad = prioridad;  // Nueva propiedad para la prioridad
+    nuevaSolicitud->idEmpleado = idEmpleado;
     nuevaSolicitud->siguiente = nullptr;
 
     // Si la cola no existe, inicializarla
@@ -110,40 +111,41 @@ inline void enviarSolicitud(ColaSolicitudes*& cola) {
 }
 
 
-inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola) {
+inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
 
     gotoxy(x, 2);
-    cout << "--- Solicitudes del Empleado ---\n";
+    cout << "--- Mis Solicitudes ---\n";
 
     if (cola == nullptr || cola->cabeza == nullptr) {
         gotoxy(x, 4);
-        cout << "No hay solicitudes enviadas por este empleado.\n";
+        cout << "No tienes ninguna solicitud enviada.\n";
     } else {
         Solicitud* actual = cola->cabeza;
         int numeroSolicitud = 1;
         int y = 4;
 
         while (actual != nullptr) {
-            gotoxy(x, y++);
-            cout << "Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << "):";
-            gotoxy(x, y++);
-            cout << "Razón: " << actual->Razon;
-            gotoxy(x, y++);
-            cout << "Descripción: " << actual->Descripcion;
-            gotoxy(x, y++);
-            cout << "Estado: " << actual->Estado;
-            gotoxy(x, y++);
-            cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
-            gotoxy(x, y++);
-            cout << "Fecha de Resolución: " << actual->FechaResolucion;
-            gotoxy(x, y++);
-            cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
-            gotoxy(x, y++);
-            cout << "-------------------------------------------"<<endl;
-
+            if(actual->idEmpleado == idEmpleado){
+                gotoxy(x, y++);
+                cout << "Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << "):";
+                gotoxy(x, y++);
+                cout << "Razón: " << actual->Razon;
+                gotoxy(x, y++);
+                cout << "Descripción: " << actual->Descripcion;
+                gotoxy(x, y++);
+                cout << "Estado: " << actual->Estado;
+                gotoxy(x, y++);
+                cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
+                gotoxy(x, y++);
+                cout << "Fecha de Resolución: " << actual->FechaResolucion;
+                gotoxy(x, y++);
+                cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
+                gotoxy(x, y++);
+                cout << "-------------------------------------------"<<endl;
+            }
             actual = actual->siguiente;
             numeroSolicitud++;
             y++;  // Espacio entre solicitudes
@@ -243,7 +245,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
 }
 
 
-inline void eliminarSolicitud(ColaSolicitudes*& cola) {
+inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
@@ -268,7 +270,7 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola) {
     Solicitud* actual = cola->cabeza;
     Solicitud* anterior = nullptr;
 
-    while (actual != nullptr && actual->IDsolicitud != idSolicitud) {
+    while (actual != nullptr && (actual->IDsolicitud != idSolicitud || actual->idEmpleado != idEmpleado)) {
         anterior = actual;
         actual = actual->siguiente;
     }

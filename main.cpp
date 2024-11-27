@@ -39,6 +39,7 @@ int main() {
 
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
+    ColaSolicitudes*  colaSolicitudes = nullptr;
 
     int opc;
     int anchoConsola = obtenerAnchoConsola();
@@ -50,7 +51,7 @@ while (true) {
         string titulo = "";
         if (rol == "ADMINISTRADOR") {
 
-            string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesión","6. Salir"};   
+            string opciones[] = {"1. Gestión de empleados", "2. Evaluación de empleados","3. Atender solicitudes", "4. Gestion de Proyectos","5. Volver a iniciar sesión","6. Salir"};   
             int n = 6;
             opc = menu("MENU PRINCIPAL ADMINISTRADOR", opciones, n);
             switch (opc) {
@@ -169,32 +170,9 @@ while (true) {
                         system("pause");
                         break;
                     }
-                    int id;
-                    bool entradaValida = false;
-                    do {
-                        mostrarCursor();
-                        gotoxy(x, 14);
-                        cout << "Ingrese el ID del empleado para gestionar solicitudes: ";
-                        entradaValida = obtenerEntero(id);
-                        if (!entradaValida) {
-                            gotoxy(x, 15);
-                            cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
-                            cout << string(50, ' ');  // Limpia la lÃ­nea
-                        }
-                    } while (!entradaValida);
-
-                    empleado = buscarEmpleado(headEmpleados, id);  // Busca el empleado por ID
-                    if (empleado == nullptr) {
-                        gotoxy(x, 12);
-                        cout << "Empleado con ID " << id << " no encontrado.\n";
-                        system("pause");
-                        break;
-                    }
-
                     ocultarCursor();
                     titulo = "Solicitudes de " + empleado->nombre + " " + empleado->apellido;
-                    atenderSolicitud(empleado->colaSolicitudes);
+                    atenderSolicitud(colaSolicitudes);
                     break;
                 }
                 case 4: {
@@ -298,13 +276,13 @@ while (true) {
                         switch (opcSolicitud) {
                             case 1:
                                 mostrarCursor();
-                                enviarSolicitud(empleado->colaSolicitudes);
+                                enviarSolicitud(colaSolicitudes, idEmpleado);
                                 break;
                             case 2:
-                                mostrarSolicitudesEmpleado(empleado->colaSolicitudes);
+                                mostrarSolicitudesEmpleado(colaSolicitudes, idEmpleado);
                                 break;
                             case 3:
-                                eliminarSolicitud(empleado->colaSolicitudes);
+                                eliminarSolicitud(colaSolicitudes, idEmpleado);
                                 break;
                             case 4:
                                 break;

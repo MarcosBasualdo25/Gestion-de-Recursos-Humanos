@@ -45,14 +45,14 @@ struct Solicitud {
     string Estado;              
     string FechaResolucion;     
     string ComentarioAdmin;
-    int Prioridad;      
+    int Prioridad;
+    int idEmpleado;      
     Solicitud* siguiente;     
 };
 
 struct ColaSolicitudes {
     Solicitud* cabeza;  
-    Solicitud* cola;    
-
+    Solicitud* cola;   
 };
 
 struct Empleado {
@@ -64,8 +64,7 @@ struct Empleado {
     Empleado* anterior;
     Empleado* siguiente;
     PilaEvaluaciones* pilaEvaluaciones; 
-    PilaAsistencias* pilaAsistencias; 
-    ColaSolicitudes* colaSolicitudes;
+    PilaAsistencias* pilaAsistencias;
 };
 
 // Declaración de funciones
@@ -493,17 +492,6 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
             delete temp->pilaAsistencias;
         }
 
-        // Liberar la cola de solicitudes asociada al empleado
-        if (temp->colaSolicitudes != nullptr) {
-            Solicitud* solTemp;
-            while (temp->colaSolicitudes->cabeza != nullptr) {
-                solTemp = temp->colaSolicitudes->cabeza;
-                temp->colaSolicitudes->cabeza = temp->colaSolicitudes->cabeza->siguiente;
-                delete solTemp;
-            }
-            delete temp->colaSolicitudes;
-        }
-
         delete temp;
         gotoxy(x, 2);
         cout << "Empleado eliminado con éxito.\n";
@@ -556,17 +544,6 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
             delete asisTemp;
         }
         delete actual->pilaAsistencias;
-    }
-
-    // Liberar la cola de solicitudes asociada al empleado
-    if (actual->colaSolicitudes != nullptr) {
-        Solicitud* solTemp;
-        while (actual->colaSolicitudes->cabeza != nullptr) {
-            solTemp = actual->colaSolicitudes->cabeza;
-            actual->colaSolicitudes->cabeza = actual->colaSolicitudes->cabeza->siguiente;
-            delete solTemp;
-        }
-        delete actual->colaSolicitudes;
     }
 
     delete actual;
