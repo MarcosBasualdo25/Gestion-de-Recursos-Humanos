@@ -126,13 +126,13 @@ while (true) {
                     bool entradaValida = false;
                     do {
                         mostrarCursor();
-                        gotoxy(x, 14);
+                        gotoxy(x, 19);
                         cout << "Ingrese el ID del empleado para evaluar: ";
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
-                            gotoxy(x, 15);
+                            gotoxy(x, 20);
                             cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 14);
+                            gotoxy(x, 19);
                             cout << string(50, ' ');
                         }
                     } while (!entradaValida);

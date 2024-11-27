@@ -16,81 +16,114 @@ void mostrarSolicitudesEmpleado(ColaSolicitudes* cola);
 
 inline void enviarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     system("cls");
+    system("color 70"); // Fondo gris claro
     int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 20;
+    int x = anchoConsola / 2 - 40; // Centrar la interfaz
 
+    // Título
+    color(113); // Azul para el título
     gotoxy(x, 2);
-    cout << "--- Enviar Solicitud ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                          ENVIAR SOLICITUD                                  ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Texto negro sobre fondo gris claro
 
     string razon, descripcion;
-    int idSolicitud = (cola == nullptr || cola->cabeza == nullptr) ? 1 : cola->cola->IDsolicitud + 1;  // ID incrementa automáticamente
+    int idSolicitud = (cola == nullptr || cola->cabeza == nullptr) ? 1 : cola->cola->IDsolicitud + 1;
 
-    // Mostrar lista de razones para seleccionar
-    gotoxy(x, 4);
-    cout << "Seleccione la razón de la solicitud:";
-    gotoxy(x, 5);
-    cout << "1. Seguridad o Salud";
-    gotoxy(x, 6);
-    cout << "2. Condiciones Laborales";
-    gotoxy(x, 7);
-    cout << "3. Beneficios Adicionales";
+    // Lista de razones para seleccionar
+    gotoxy(x+10, 6);
+    cout << "╔════════════════════════════════════════════════════════╗";
+    gotoxy(x+10, 7);
+    cout << "║ Seleccione la razón de la solicitud:                   ║";
+    gotoxy(x+10, 8);
+    cout << "║   1. Seguridad o Salud                                 ║";
+    gotoxy(x+10, 9);
+    cout << "║   2. Condiciones Laborales                             ║";
+    gotoxy(x+10, 10);
+    cout << "║   3. Beneficios Adicionales                            ║";
+    gotoxy(x+10, 11);
+    cout << "╚════════════════════════════════════════════════════════╝";
 
     int opcionRazon;
-    gotoxy(x, 8);
-    cout << "Opción: ";
-    cin >> opcionRazon;
-    cin.ignore();  // Limpiar el buffer de entrada
+    bool entradaValida = false;
+    do {
+        gotoxy(x, 13);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 14);
+        cout << "║ Ingrese la opción (1-3):                                                   ║";
+        gotoxy(x, 15);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 28, 14);
+        entradaValida = obtenerEntero(opcionRazon);
+        if (!entradaValida || opcionRazon < 1 || opcionRazon > 3) {
+            gotoxy(x + 4, 16);
+            color(124); // Rojo para error
+            cout << "Error: Seleccione una opción válida (1-3).";
+            gotoxy(x + 28, 14);
+            cout << string(10, ' '); // Limpiar entrada
+            color(112); // Regresa al color estándar
+        }
+    } while (!entradaValida || opcionRazon < 1 || opcionRazon > 3);
 
     int prioridad;
     switch (opcionRazon) {
         case 1:
             razon = "Seguridad o Salud";
-            prioridad = 1;  // Alta prioridad
+            prioridad = 1; // Alta prioridad
             break;
         case 2:
             razon = "Condiciones Laborales";
-            prioridad = 2;  // Prioridad media
+            prioridad = 2; // Prioridad media
             break;
         case 3:
             razon = "Beneficios Adicionales";
-            prioridad = 3;  // Baja prioridad
+            prioridad = 3; // Baja prioridad
             break;
-        default:
-            gotoxy(x, 9);
-            cout << "Opción inválida. Seleccione una razón válida.\n";
-            system("pause");
-            return;
     }
 
-    gotoxy(x, 10);
-    cout << "Ingrese una breve descripción: ";
-    getline(cin, descripcion);
+    // Solicitar descripción
+    do {
+        gotoxy(x, 17);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 18);
+        cout << "║ Breve descripción:                                                         ║";
+        gotoxy(x, 19);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x + 21, 18);
+        getline(cin, descripcion);
+        if (descripcion.empty()) {
+            gotoxy(x + 4, 20);
+            color(124); // Rojo para error
+            cout << "Error: La descripción no puede estar vacía. Por favor, ingrésela.";
+            color(112); // Regresa al color estándar
+        }
+    } while (descripcion.empty());
 
     // Crear nueva solicitud
     Solicitud* nuevaSolicitud = new Solicitud();
     nuevaSolicitud->IDsolicitud = idSolicitud;
     nuevaSolicitud->Razon = razon;
-    nuevaSolicitud->FechaSolicitud = obtenerFechaActual();  // Función que genera la fecha actual
+    nuevaSolicitud->FechaSolicitud = obtenerFechaActual();
     nuevaSolicitud->Descripcion = descripcion;
     nuevaSolicitud->Estado = "Pendiente";
     nuevaSolicitud->FechaResolucion = "N/A";
     nuevaSolicitud->ComentarioAdmin = "";
-    nuevaSolicitud->Prioridad = prioridad;  // Nueva propiedad para la prioridad
+    nuevaSolicitud->Prioridad = prioridad;
     nuevaSolicitud->idEmpleado = idEmpleado;
     nuevaSolicitud->siguiente = nullptr;
 
-    // Si la cola no existe, inicializarla
+    // Insertar en la cola
     if (cola == nullptr) {
         cola = new ColaSolicitudes();
         cola->cabeza = cola->cola = nuevaSolicitud;
     } else {
-        // Insertar la solicitud según su prioridad
         if (cola->cabeza == nullptr || nuevaSolicitud->Prioridad < cola->cabeza->Prioridad) {
-            // Insertar al inicio si es de mayor prioridad que la cabeza actual
             nuevaSolicitud->siguiente = cola->cabeza;
             cola->cabeza = nuevaSolicitud;
         } else {
-            // Insertar en su posición correcta
             Solicitud* actual = cola->cabeza;
             while (actual->siguiente != nullptr && actual->siguiente->Prioridad <= nuevaSolicitud->Prioridad) {
                 actual = actual->siguiente;
@@ -98,17 +131,25 @@ inline void enviarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
             nuevaSolicitud->siguiente = actual->siguiente;
             actual->siguiente = nuevaSolicitud;
 
-            // Ajustar cola si es el último nodo
             if (nuevaSolicitud->siguiente == nullptr) {
                 cola->cola = nuevaSolicitud;
             }
         }
     }
 
-    gotoxy(x, 12);
-    cout << "Solicitud enviada exitosamente con ID " << idSolicitud << ".\n";
-    system("pause");
+    // Confirmación
+    color(114); // Verde para confirmación
+    gotoxy(x+16, 22);
+    cout << "╔══════════════════════════════════════════════╗";
+    gotoxy(x+16, 23);
+    cout << "║  Solicitud enviada exitosamente con ID " << setw(4) << idSolicitud << "  ║";
+    gotoxy(x+16, 24);
+    cout << "╚══════════════════════════════════════════════╝";
+    color(112); // Regresa al color estándar
+
+    getch();
 }
+
 
 
 inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
@@ -116,55 +157,89 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
 
+    // Título
+    color(113); // Azul para el título
     gotoxy(x, 2);
-    cout << "--- Mis Solicitudes ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                            MIS SOLICITUDES                                 ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Texto negro sobre fondo gris claro
 
     if (cola == nullptr || cola->cabeza == nullptr) {
-        gotoxy(x, 4);
-        cout << "No tienes ninguna solicitud enviada.\n";
+        gotoxy(x, 6);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 7);
+        cout << "║    No tienes ninguna solicitud enviada.                                    ║";
+        gotoxy(x, 8);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        system("pause");
+        return;
     } else {
         Solicitud* actual = cola->cabeza;
         int numeroSolicitud = 1;
-        int y = 4;
+        int y = 6;
 
         while (actual != nullptr) {
-            if(actual->idEmpleado == idEmpleado){
+            if (actual->idEmpleado == idEmpleado) {
                 gotoxy(x, y++);
-                cout << "Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << "):";
+                cout << "╔══════════════════════╗";
                 gotoxy(x, y++);
-                cout << "Razón: " << actual->Razon;
+                cout << "║ Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << ") ║";
                 gotoxy(x, y++);
-                cout << "Descripción: " << actual->Descripcion;
+                cout << "╚══════════════════════╝";
                 gotoxy(x, y++);
-                cout << "Estado: " << actual->Estado;
+                cout << "╔════════════════════════════════════════════════════╗";
                 gotoxy(x, y++);
-                cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
+                cout << "║ Razón: " << actual->Razon;
                 gotoxy(x, y++);
-                cout << "Fecha de Resolución: " << actual->FechaResolucion;
+                cout << "║ Descripción: " << actual->Descripcion;
                 gotoxy(x, y++);
-                cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
+                cout << "║ Estado: " << actual->Estado;
                 gotoxy(x, y++);
-                cout << "-------------------------------------------"<<endl;
+                cout << "║ Fecha de Solicitud: " << actual->FechaSolicitud;
+                gotoxy(x, y++);
+                cout << "║ Fecha de Resolución: " << actual->FechaResolucion;
+                gotoxy(x, y++);
+                cout << "║ Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
+                gotoxy(x, y++);
+                cout << "╚════════════════════════════════════════════════════╝";
+                numeroSolicitud++;
+                y += 2;  // Espacio entre solicitudes
             }
             actual = actual->siguiente;
-            numeroSolicitud++;
-            y++;  // Espacio entre solicitudes
         }
     }
     system("pause");
 }
+
+
 
 inline void atenderSolicitud(ColaSolicitudes*& cola) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
 
+    // Título con borde
+    color(113); // Azul para el título
     gotoxy(x, 2);
-    cout << "--- Atender Solicitud ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                            ATENDER SOLICITUD                               ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Texto negro sobre fondo gris claro
 
     if (cola == nullptr || cola->cabeza == nullptr) {
-        gotoxy(x, 4);
-        cout << "No hay solicitudes en la cola para atender.\n";
+        color(124);
+        gotoxy(x, 6);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 7);
+        cout << "║ No hay solicitudes en la cola para atender.                                ║";
+        gotoxy(x, 8);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        color(112);
         system("pause");
         return;
     }
@@ -177,36 +252,50 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
 
     if (actual == nullptr) {
         // No se encontró ninguna solicitud pendiente
-        gotoxy(x, 4);
-        cout << "No hay solicitudes con estado 'Pendiente' para atender.\n";
+        gotoxy(x, 6);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 7);
+        cout << "║ No hay solicitudes con estado 'Pendiente' para atender.                    ║";
+        gotoxy(x, 8);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
         system("pause");
         return;
     }
 
     // Mostrar los datos de la solicitud a atender
-    gotoxy(x, 4);
-    cout << "Primera solicitud pendiente en la cola:";
-    gotoxy(x, 5);
-    cout << "ID: " << actual->IDsolicitud;
     gotoxy(x, 6);
-    cout << "Razón: " << actual->Razon;
+    cout << "╔══════════════════════════════╗";
     gotoxy(x, 7);
-    cout << "Descripción: " << actual->Descripcion;
+    cout << "║ Solicitud Pendiente (ID: " << actual->IDsolicitud << ")  ║";
     gotoxy(x, 8);
-    cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
+    cout << "╚══════════════════════════════╝";
+    gotoxy(x, 9);
+    cout << "╔═════════════════════════════════════════════╗";
+    gotoxy(x, 10);
+    cout << "║ Razón: " << actual->Razon;
+    gotoxy(x, 11);
+    cout << "║ Descripción: " << actual->Descripcion;
+    gotoxy(x, 12);
+    cout << "║ Fecha de Solicitud: " << actual->FechaSolicitud;
+    gotoxy(x, 13);
+    cout << "╚═════════════════════════════════════════════╝";
 
     // Preguntar el nuevo estado de la solicitud
-    gotoxy(x, 10);
-    cout << "Seleccione el nuevo estado de la solicitud:";
-    gotoxy(x, 11);
-    cout << "1. Aceptada";
-    gotoxy(x, 12);
-    cout << "2. Rechazada";
-    gotoxy(x, 13);
-    cout << "3. Volver al menú";
+    gotoxy(x, 15);
+    cout << "╔═════════════════════════════════════════════╗";
+    gotoxy(x, 16);
+    cout << "║ Seleccione el nuevo estado de la solicitud: ║";
+    gotoxy(x, 17);
+    cout << "║ 1. Aceptada                                 ║";
+    gotoxy(x, 18);
+    cout << "║ 2. Rechazada                                ║";
+    gotoxy(x, 19);
+    cout << "║ 3. Volver al menú                           ║";
+    gotoxy(x, 20);
+    cout << "╚═════════════════════════════════════════════╝";
 
     int opcionEstado;
-    gotoxy(x, 15);
+    gotoxy(x, 22);
     cout << "Opción: ";
     cin >> opcionEstado;
     cin.ignore();  // Limpiar el buffer de entrada
@@ -221,8 +310,14 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         case 3: 
             return;
         default:
-            gotoxy(x, 17);
-            cout << "Opción inválida. No se realizará ningún cambio.\n";
+            color(124);
+            gotoxy(x, 23);
+            cout << "╔════════════════════════════════════════════════╗";
+            gotoxy(x, 24);
+            cout << "║ Opción inválida. No se realizará ningún cambio.║";
+            gotoxy(x, 25);
+            cout << "╚════════════════════════════════════════════════╝";
+            color(112);
             system("pause");
             return;
     }
@@ -231,18 +326,26 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
     actual->FechaResolucion = obtenerFechaActual();
 
     // Solicitar comentario opcional
-    gotoxy(x, 16);
-    cout << "Ingrese un comentario administrativo (opcional, presione Enter para omitir): ";
+    gotoxy(x, 23);
+    cout << "Ingrese un comentario administrativo (opcional): ";
     string comentarioAdmin;
     getline(cin, comentarioAdmin);
     if (!comentarioAdmin.empty()) {
         actual->ComentarioAdmin = comentarioAdmin;
     }
 
-    gotoxy(x, 18);
-    cout << "La solicitud fue atendida exitosamente.\n";
+    color(114);
+    gotoxy(x, 24);
+    cout << "╔══════════════════════════════════════════╗";
+    gotoxy(x,25);
+    cout << "║ La solicitud fue atendida exitosamente.  ║";
+    gotoxy(x, 26);
+    cout << "╚══════════════════════════════════════════╝";
+    color(112);
     system("pause");
 }
+
+
 
 
 inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
@@ -250,19 +353,35 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 30;
 
+    // Título con borde
+    color(113); // Azul para el título
     gotoxy(x, 2);
-    cout << "--- Eliminar Solicitud ---\n";
+    cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+    gotoxy(x, 3);
+    cout << "║                           ELIMINAR SOLICITUD                               ║";
+    gotoxy(x, 4);
+    cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112); // Texto negro sobre fondo gris claro
 
     if (cola == nullptr || cola->cabeza == nullptr) {
-        gotoxy(x, 4);
-        cout << "No hay solicitudes en la cola para eliminar.\n";
+        gotoxy(x, 6);
+        cout << "╔════════════════════════════════════════════════════════════════════════════╗";
+        gotoxy(x, 7);
+        cout << "║ No hay solicitudes en la cola para eliminar.                               ║";
+        gotoxy(x, 8);
+        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
         system("pause");
         return;
     }
 
     int idSolicitud;
-    gotoxy(x, 4);
-    cout << "Ingrese el ID de la solicitud que desea eliminar: ";
+    gotoxy(x, 6);
+    cout << "╔══════════════════════════════════════════════════════╗";
+    gotoxy(x, 7);
+    cout << "║ Ingrese el ID de la solicitud que desea eliminar:    ║";
+    gotoxy(x, 8);
+    cout << "╚══════════════════════════════════════════════════════╝";
+    gotoxy(x+52,7);
     cin >> idSolicitud;
     cin.ignore();  // Limpiar el buffer de entrada
 
@@ -277,38 +396,61 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
 
     if (actual == nullptr) {
         // Si no se encuentra la solicitud
-        gotoxy(x, 6);
-        cout << "No se encontró una solicitud con el ID ingresado.\n";
+        gotoxy(x, 10);
+        cout << "╔═══════════════════════════════════════════════════╗";
+        gotoxy(x, 11);
+        cout << "║ No se encontró una solicitud con el ID ingresado. ║";
+        gotoxy(x, 12);
+        cout << "╚═══════════════════════════════════════════════════╝";
         system("pause");
         return;
     }
 
     // Mostrar los datos de la solicitud antes de confirmar eliminación
-    gotoxy(x, 6);
-    cout << "Solicitud encontrada:";
-    gotoxy(x, 7);
-    cout << "ID: " << actual->IDsolicitud;
-    gotoxy(x, 8);
-    cout << "Razón: " << actual->Razon;
-    gotoxy(x, 9);
-    cout << "Descripción: " << actual->Descripcion;
     gotoxy(x, 10);
-    cout << "Estado: " << actual->Estado;
+    cout << "╔════════════════════════╗";
     gotoxy(x, 11);
-    cout << "Fecha de Solicitud: " << actual->FechaSolicitud;
+    cout << "║ Solicitud encontrada   ║";
     gotoxy(x, 12);
-    cout << "Fecha de Resolución: " << actual->FechaResolucion;
+    cout << "╚════════════════════════╝";
     gotoxy(x, 13);
-    cout << "Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
-
+    cout << "╔════════════════════════════════════════════════════════╗";
+    gotoxy(x, 14);
+    cout << "║ ID: " << actual->IDsolicitud;
     gotoxy(x, 15);
-    cout << "¿Está seguro que desea eliminar esta solicitud? (S/N): ";
+    cout << "║ Razón: " << actual->Razon;
+    gotoxy(x, 16);
+    cout << "║ Descripción: " << actual->Descripcion;
+    gotoxy(x, 17);
+    cout << "║ Estado: " << actual->Estado;
+    gotoxy(x, 18);
+    cout << "║ Fecha de Solicitud: " << actual->FechaSolicitud;
+    gotoxy(x, 19);
+    cout << "║ Fecha de Resolución: " << actual->FechaResolucion;
+    gotoxy(x, 20);
+    cout << "║ Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
+    gotoxy(x, 21);
+    cout << "╚════════════════════════════════════════════════════════╝";
+
+    gotoxy(x, 23);
+    cout << "╔══════════════════════════════════════════════════════════╗";
+    gotoxy(x, 24);
+    cout << "║ ¿Está seguro que desea eliminar esta solicitud? (S/N):   ║";
+    gotoxy(x, 25);
+    cout << "╚══════════════════════════════════════════════════════════╝";
     char confirmacion;
+    gotoxy(x+56, 24);
     cin >> confirmacion;
 
     if (tolower(confirmacion) != 's') {
-        gotoxy(x, 17);
-        cout << "Operación cancelada. La solicitud no fue eliminada.\n";
+        color(124);
+        gotoxy(x, 27);
+        cout << "╔═════════════════════════════════════════════════════╗";
+        gotoxy(x, 28);
+        cout << "║ Operación cancelada. La solicitud no fue eliminada. ║";
+        gotoxy(x, 29);
+        cout << "╚═════════════════════════════════════════════════════╝";
+        color(112);
         system("pause");
         return;
     }
@@ -334,9 +476,14 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
 
     delete actual;  // Liberar memoria
 
-    gotoxy(x, 17);
-    cout << "La solicitud con ID " << idSolicitud << " fue eliminada exitosamente.\n";
+    color(114);
+    gotoxy(x, 27);
+    cout << "╔════════════════════════════════════════════════════╗";
+    gotoxy(x, 28);
+    cout << "║ La solicitud con ID " << idSolicitud << " fue eliminada exitosamente.  ║";
+    gotoxy(x, 29);
+    cout << "╚════════════════════════════════════════════════════╝";
+    color(112);
     system("pause");
 }
-
 
