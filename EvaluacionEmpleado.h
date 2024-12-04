@@ -112,7 +112,8 @@ void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
     system("color 70");
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 40;  // Centrar tabla
-
+    
+    color(113);
     // Cuadro para el título
     gotoxy(x, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
@@ -120,7 +121,7 @@ void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
     cout << "║                         EVALUACIONES DEL EMPLEADO                          ║";
     gotoxy(x, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
-
+    color(112);
     // Espaciado entre el título y la tabla
     gotoxy(x, 6);
 

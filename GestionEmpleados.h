@@ -298,7 +298,6 @@ void mostrarEmpleados(Empleado* head, Empleado* tail) {
         gotoxy(x, y);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
-    getch();
 }
 
 
@@ -430,7 +429,7 @@ void actualizarEmpleado(Empleado* head, Empleado* tail, int id) {
             cout << "╚════════════════════════════════════════════════╝";
             color(112); // Regresa al color estándar
 
-            system("pause");
+            getch();
             return;
         }
         temp = temp->siguiente;
@@ -495,7 +494,7 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
         delete temp;
         gotoxy(x, 2);
         cout << "Empleado eliminado con éxito.\n";
-        system("pause");
+        getch();
         return;
     }
 

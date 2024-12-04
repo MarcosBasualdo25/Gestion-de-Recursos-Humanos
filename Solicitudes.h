@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
-#include "GestionEmpleados.h"  // Asegúrate de que este archivo incluye la definición de la estructura ColaSolicitudes
+#include "GestionEmpleados.h" 
 #include "gotoxy.h"
 #include <limits>
 #include <ctime>
 
 using namespace std;
 
-// Funciones para manejar solicitudes
+// Funciones para manejar solicitudes (nuestras plantillas ah)
 void enviarSolicitud(ColaSolicitudes*& cola);
 void mostrarSolicitudesEmpleado(ColaSolicitudes* cola);
 
@@ -20,15 +20,15 @@ inline void enviarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 40; // Centrar la interfaz
 
-    // Título
-    color(113); // Azul para el título
+   
+    color(113); 
     gotoxy(x, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
     gotoxy(x, 3);
     cout << "║                          ENVIAR SOLICITUD                                  ║";
     gotoxy(x, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
-    color(112); // Texto negro sobre fondo gris claro
+    color(112);
 
     string razon, descripcion;
     int idSolicitud = (cola == nullptr || cola->cabeza == nullptr) ? 1 : cola->cola->IDsolicitud + 1;
@@ -60,11 +60,11 @@ inline void enviarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
         entradaValida = obtenerEntero(opcionRazon);
         if (!entradaValida || opcionRazon < 1 || opcionRazon > 3) {
             gotoxy(x + 4, 16);
-            color(124); // Rojo para error
+            color(124);
             cout << "Error: Seleccione una opción válida (1-3).";
             gotoxy(x + 28, 14);
             cout << string(10, ' '); // Limpiar entrada
-            color(112); // Regresa al color estándar
+            color(112); 
         }
     } while (!entradaValida || opcionRazon < 1 || opcionRazon > 3);
 
@@ -159,20 +159,20 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
 
     // Título
     color(113); // Azul para el título
-    gotoxy(x, 2);
+    gotoxy(x-5, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
-    gotoxy(x, 3);
+    gotoxy(x-5, 3);
     cout << "║                            MIS SOLICITUDES                                 ║";
-    gotoxy(x, 4);
+    gotoxy(x-5, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     color(112); // Texto negro sobre fondo gris claro
 
     if (cola == nullptr || cola->cabeza == nullptr) {
-        gotoxy(x, 6);
+        gotoxy(x-5, 6);
         cout << "╔════════════════════════════════════════════════════════════════════════════╗";
-        gotoxy(x, 7);
+        gotoxy(x-5, 7);
         cout << "║    No tienes ninguna solicitud enviada.                                    ║";
-        gotoxy(x, 8);
+        gotoxy(x-5, 8);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
         system("pause");
         return;
@@ -211,7 +211,7 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
             actual = actual->siguiente;
         }
     }
-    system("pause");
+    getch();
 }
 
 
@@ -240,7 +240,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         gotoxy(x, 8);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
         color(112);
-        system("pause");
+        getch();
         return;
     }
 
@@ -258,7 +258,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
         cout << "║ No hay solicitudes con estado 'Pendiente' para atender.                    ║";
         gotoxy(x, 8);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
-        system("pause");
+        getch();
         return;
     }
 
@@ -318,7 +318,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
             gotoxy(x, 25);
             cout << "╚════════════════════════════════════════════════╝";
             color(112);
-            system("pause");
+            getch();
             return;
     }
 
@@ -342,7 +342,7 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
     gotoxy(x, 26);
     cout << "╚══════════════════════════════════════════╝";
     color(112);
-    system("pause");
+    getch();
 }
 
 
@@ -351,7 +351,9 @@ inline void atenderSolicitud(ColaSolicitudes*& cola) {
 inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     system("cls");
     int anchoConsola = obtenerAnchoConsola();
+    int altoConsola = obtenerAltoConsola();
     int x = anchoConsola / 2 - 30;
+    int y = altoConsola / 2;
 
     // Título con borde
     color(113); // Azul para el título
@@ -364,13 +366,13 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     color(112); // Texto negro sobre fondo gris claro
 
     if (cola == nullptr || cola->cabeza == nullptr) {
-        gotoxy(x, 6);
+        gotoxy(x, y-10);
         cout << "╔════════════════════════════════════════════════════════════════════════════╗";
-        gotoxy(x, 7);
+        gotoxy(x, y-9);
         cout << "║ No hay solicitudes en la cola para eliminar.                               ║";
-        gotoxy(x, 8);
+        gotoxy(x, y-8);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
-        system("pause");
+        getch();
         return;
     }
 
@@ -451,7 +453,7 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
         gotoxy(x, 29);
         cout << "╚═════════════════════════════════════════════════════╝";
         color(112);
-        system("pause");
+        getch();
         return;
     }
 
@@ -484,6 +486,6 @@ inline void eliminarSolicitud(ColaSolicitudes*& cola, int idEmpleado) {
     gotoxy(x, 29);
     cout << "╚════════════════════════════════════════════════════╝";
     color(112);
-    system("pause");
+    getch();
 }
 
