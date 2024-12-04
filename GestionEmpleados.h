@@ -298,7 +298,6 @@ void mostrarEmpleados(Empleado* head, Empleado* tail) {
         gotoxy(x, y);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
-    getch();
 }
 
 
@@ -430,7 +429,7 @@ void actualizarEmpleado(Empleado* head, Empleado* tail, int id) {
             cout << "╚════════════════════════════════════════════════╝";
             color(112); // Regresa al color estándar
 
-            system("pause");
+            getch();
             return;
         }
         temp = temp->siguiente;
@@ -495,7 +494,7 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
         delete temp;
         gotoxy(x, 2);
         cout << "Empleado eliminado con éxito.\n";
-        system("pause");
+        getch();
         return;
     }
 
@@ -552,94 +551,7 @@ void eliminarEmpleado(Empleado*& head, Empleado*& tail, int id) {
     system("pause");
 }
 
-/*
-int mostrarMenuGestionEmpleados(Empleado*& head, Empleado*& tail) {
-    system("cls");
-    int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 30; 
-    int opcion;
 
-    gotoxy(x, 2);
-    cout << "--- Menú de Gestión de Empleados ---\n";
-    gotoxy(x, 4);
-    cout << "1. Agregar empleado\n";
-    gotoxy(x, 5);
-    cout << "2. Mostrar empleados\n";
-    gotoxy(x, 6);
-    cout << "3. Actualizar empleado\n";
-    gotoxy(x, 7);
-    cout << "4. Eliminar empleado\n";
-    gotoxy(x, 8);
-    cout << "5. Volver al menú principal\n";
-
-    bool entradaValida = false;
-    do {
-        gotoxy(x, 10);
-        cout << "Ingrese una opción: ";
-        entradaValida = obtenerEntero(opcion);
-        if (!entradaValida || opcion < 1 || opcion > 5) {
-            gotoxy(x, 11);
-            cout << "Entrada no aceptada. Por favor, ingrese una opción válida.";
-            gotoxy(x, 10);
-            cout << string(50, ' '); 
-        }
-    } while (!entradaValida || opcion < 1 || opcion > 5);
-
-    switch (opcion) {
-        case 1: {
-            crearYAgregarEmpleado(head,tail);
-            mostrarUsuarios(ListaUsers);
-            system("pause");
-            break;
-        }
-        case 2:
-            mostrarEmpleados(head, tail);
-            break;
-        case 3: {
-            int id;
-            bool entradaValida = false;
-            do {
-                gotoxy(x, 12);
-                cout << "Ingrese el ID del empleado a actualizar: ";
-                entradaValida = obtenerEntero(id);
-                if (!entradaValida) {
-                    gotoxy(x, 13);
-                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                    gotoxy(x, 12);
-                    cout << string(50, ' '); 
-                }
-            } while (!entradaValida);
-            actualizarEmpleado(head,tail, id);
-            break;
-        }
-        case 4: {
-            int id;
-            bool entradaValida = false;
-            do {
-                gotoxy(x, 12);
-                cout << "Ingrese el ID del empleado a eliminar: ";
-                entradaValida = obtenerEntero(id);
-                if (!entradaValida) {
-                    gotoxy(x, 13);
-                    cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                    gotoxy(x, 12);
-                    cout << string(50, ' '); 
-                }
-            } while (!entradaValida);
-            eliminarEmpleado(head, tail, id);
-            break;
-        }
-        case 5:
-            return 0; 
-        default:
-            gotoxy(x, 12);
-            cout << "Opción inválida. Intente de nuevo.\n";
-            system("pause");
-            break;
-    }
-    return 1; 
-}
-*/
 Empleado* buscarEmpleado(Empleado* head, int id) {
     Empleado* temp = head;
     while (temp != nullptr) {

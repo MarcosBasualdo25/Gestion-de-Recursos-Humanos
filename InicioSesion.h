@@ -45,25 +45,28 @@ int menuInicioSesion(string titulo, string opciones[], int n){
         |___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  
 
         */
-        gotoxy(x-30, 1);
+        gotoxy(x-31, 1);
         cout<<" ______  ______      _______  _______      ______  _______  _______  _______  _______  ______  _______ "<<endl;
-        gotoxy(x-30, 2);
+        gotoxy(x-31, 2);
         cout<<"|   __ \\|   __ \\    |   |   ||   |   |    |      ||       ||    |  ||    |  ||    ___||      ||_     _|"<<endl;
-        gotoxy(x-30, 3);
+        gotoxy(x-31, 3);
         cout<<"|      <|      < __ |       ||       |    |   ---||   -   ||       ||       ||    ___||   ---|  |   |  "<<endl;  
-        gotoxy(x-30, 4);
+        gotoxy(x-31, 4);
         cout<<"|___|__||___|__||__||___|___||___|___|    |______||_______||__|____||__|____||_______||______|  |___|  "<<endl;
+        gotoxy(x-31, 5);
+        cout<<"======================================================================================================";
 
-        gotoxy(x-5, 6);
-        cout<<"╔════════════════════════════════════╗";
+        color(113);
         gotoxy(x-5, 7);
-        cout<<"║          Inicio de Sesion          ║";
+        cout<<"╔════════════════════════════════════╗";
         gotoxy(x-5, 8);
+        cout<<"║          Inicio de Sesion          ║";
+        gotoxy(x-5, 9);
         cout<<"╚════════════════════════════════════╝"; 
-        
-        gotoxy(x-5,8+opcion); cout<<"➤";
+        color(112);
+        gotoxy(x-5,9+opcion); cout<<"➤";
         for(int i=0;i<n;i++){
-            gotoxy(x,9+i); cout<<opciones[i];
+            gotoxy(x,10+i); cout<<opciones[i];
         }
         do{
             tecla = getch();
@@ -170,14 +173,14 @@ string pantallaInicioSesion(Nodo *&ListaUsers) {
         opcionRol = menuInicioSesion(" ", opciones, 2);
         
         mostrarCursor();
-        gotoxy(x, 12);
+        gotoxy(x, 13);
         cout << "Ingrese su nombre de usuario: ";
-        gotoxy(x, 14);
+        gotoxy(x, 15);
         cin >> usuario;
 
-        gotoxy(x, 16);
+        gotoxy(x, 17);
         cout << "Ingrese su clave: ";
-        gotoxy(x, 18);
+        gotoxy(x, 19);
         cin >> clave;
 
         if (opcionRol == 1) {
@@ -198,21 +201,21 @@ string pantallaInicioSesion(Nodo *&ListaUsers) {
         ocultarCursor();
         if (LoginUser) {
             color(114);
-            gotoxy(x-2, 20);
-            cout << "╔═══════════════════════════════╗";
             gotoxy(x-2, 21);
-            cout << "║ Ingreso al sistema con éxito! ║";
+            cout << "╔═══════════════════════════════╗";
             gotoxy(x-2, 22);
+            cout << "║ Ingreso al sistema con éxito! ║";
+            gotoxy(x-2, 23);
             cout << "╚═══════════════════════════════╝";
             color(7);
             return rol;
         } else {
             color(116);
-            gotoxy(x+4, 20);
-            cout<<"╔═══════════════════╗";
             gotoxy(x+4, 21);
-            cout<<"║ Ingreso denegado! ║";
+            cout<<"╔═══════════════════╗";
             gotoxy(x+4, 22);
+            cout<<"║ Ingreso denegado! ║";
+            gotoxy(x+4, 23);
             cout<<"╚═══════════════════╝";
             color(7);
         }

@@ -55,13 +55,14 @@ void imprimirRegistros(PilaAsistencias* pila) {
     int x = anchoConsola / 2 - 40;  // Centrar tabla
 
     // Cuadro para el título
+    color(113);
     gotoxy(x, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
     gotoxy(x, 3);
     cout << "║                           REGISTRO DE ASISTENCIAS                          ║";
     gotoxy(x, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
-
+    color(112);
     // Espaciado entre el título y la tabla
     gotoxy(x, 6);
 
@@ -103,5 +104,4 @@ void imprimirRegistros(PilaAsistencias* pila) {
         gotoxy(x, y);
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
     }
-    getch();
 }
