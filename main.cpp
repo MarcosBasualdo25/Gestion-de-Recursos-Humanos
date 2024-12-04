@@ -6,6 +6,7 @@
 #include "InicioSesion.h"
 #include "gotoxy.h"
 #include "Solicitudes.h"
+#include "Proyectos.h"
 #include <windows.h>
 #include <fstream>
 #include <sstream>
@@ -41,6 +42,12 @@ int main() {
     Empleado* headEmpleados = nullptr;
     Empleado* tailEmpleados = nullptr;
     ColaSolicitudes*  colaSolicitudes = nullptr;
+    NodoLista* listaProyectos = nullptr;
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Isabel", "Morales", "1234", "director de proyecto");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Carlos", "Hernández", "1234", "gerente de desarrollo");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Lucía", "Martínez", "1234", "gerente de calidad");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Juan", "Pérez", "1234", "lider de equipo de QA");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Miguel", "Torres", "1234", "gerente de desarrollo");
 
     int opc;
     int anchoConsola = obtenerAnchoConsola();
@@ -183,7 +190,28 @@ while (true) {
                     break;
                 }
                 case 4: {
-                    //Por hacer
+                    string tituloProy = "Proyectos";
+                    string opcionesProy[] = {"1. Crear nuevo proyecto", "2. Agregar empleado", "3. ver empleados por proyecto","4. Eliminar Proyecto","5. Salir"};
+                    int opcProy = 5;
+                    do {
+                        mostrarCursor();
+                        opcProy = menu(tituloProy, opcionesProy, 5);
+                        switch (opcProy) {
+                            case 1:
+                                listaProyectos = crearProyecto(listaProyectos);
+                                break;
+                            case 2:
+                                empleadoAProyecto(headEmpleados,listaProyectos);
+                                break;
+                            case 3:
+                                mostrarArbolProyecto(listaProyectos);
+                                break;
+                            case 4:
+                                break;
+                            case 5:
+                                break;
+                        }
+                    } while (opcProy != 5);
                     break;
                 }
                 case 5: {
