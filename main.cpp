@@ -212,6 +212,8 @@ while (true) {
                             case 5:
                                 mostrarProyectos(listaProyectos);
                                 break;
+                            case 6:
+                                break;
                         }
                     } while (opcProy != 6);
                     break;
