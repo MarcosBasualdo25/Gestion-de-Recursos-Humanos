@@ -34,7 +34,7 @@ Empleado* buscarEmpleado(int id, Empleado* headEmpleados) {
 NodoLista* crearProyecto(NodoLista* lista) {
     NodoLista* nuevoNodo = new NodoLista();
     nuevoNodo->raiz = nullptr;
-    cout<<"Nombre del proyecto: "; cin>>nuevoNodo->nombreProy;
+    cout << "Nombre del proyecto: "; cin >> nuevoNodo->nombreProy;
     nuevoNodo->siguiente = lista;
     cout << "Nuevo proyecto creado.\n";
     return nuevoNodo;
@@ -92,57 +92,168 @@ void agregarEmpleado(ArbolEmpleado*& raiz, Empleado* empleado) {
     }
     system("pause");
 }
-void mostrarArbol(ArbolEmpleado *arbol, int cont){
-    if(arbol != NULL){
-        mostrarArbol(arbol->der,cont+1);
-        for(int i=0;i<cont;i++){
-            cout<<"\t";
-        }
-        cout<<arbol->empleado->nombre<<" "<<arbol->empleado->apellido<<endl;
-        mostrarArbol(arbol->izq, cont+1);
+
+// Función para borrar un árbol
+void borrarArbol(ArbolEmpleado*& raiz) {
+    if (raiz != nullptr) {
+        borrarArbol(raiz->izq); // Borrar subárbol izquierdo
+        borrarArbol(raiz->der); // Borrar subárbol derecho
+        delete raiz; // Borrar nodo actual
+        raiz = nullptr; // Establecer el puntero a nullptr
     }
-    return;
 }
-void mostrarArbolProyecto(NodoLista* listaProyectos){
+
+// Función para borrar el árbol de un proyecto
+void borrarArbolProyecto(NodoLista* listaProyectos) {
     string nameProy;
     system("cls");
-    cout<<"Nombre de proyecto: ";cin>>nameProy;
-    while(listaProyectos != NULL && nameProy != listaProyectos->nombreProy){
+    cout << "Nombre de proyecto: ";
+    cin.ignore();
+    getline(cin, nameProy);
+    while (listaProyectos != nullptr && nameProy != listaProyectos->nombreProy) {
         listaProyectos = listaProyectos->siguiente;
     }
-    if(listaProyectos == NULL){
-        cout<<"No existe el proyecto ingresado"<<endl;
-    }else{
-        mostrarArbol(listaProyectos->raiz,0);
+    if (listaProyectos == nullptr) {
+        cout << "No existe el proyecto ingresado" << endl;
+    } else {
+        borrarArbol(listaProyectos->raiz);
+        cout << "El árbol del proyecto ha sido borrado." << endl;
     }
     system("pause");
 }
-void empleadoAProyecto(Empleado* headEmpleados, NodoLista* listaProyectos){
+
+void mostrarArbol(ArbolEmpleado* arbol, int cont) {
+    if (arbol != nullptr) {
+        mostrarArbol(arbol->der, cont + 1);
+        for (int i = 0; i < cont; i++) {
+            cout << "\t";
+        }
+        cout << arbol->empleado->nombre << " " << arbol->empleado->apellido << endl;
+        mostrarArbol(arbol->izq, cont + 1);
+    }
+    return;
+}
+
+void mostrarArbolProyecto(NodoLista* listaProyectos) {
     string nameProy;
     system("cls");
-    cout<<"Nombre de proyecto: ";cin>>nameProy;
-    while(listaProyectos != NULL && nameProy != listaProyectos->nombreProy){
+    cout << "Nombre de proyecto: "; cin >> nameProy;
+    while (listaProyectos != nullptr && nameProy != listaProyectos->nombreProy) {
         listaProyectos = listaProyectos->siguiente;
     }
-    if(listaProyectos == NULL){
-        cout<<"No existe el proyecto ingresado"<<endl;
-    }else{
-        int opcion, id;
-        if (listaProyectos == nullptr) {
-            cout << "Primero cree un proyecto.\n";
-        }
+    if (listaProyectos == nullptr) {
+        cout << "No existe el proyecto ingresado" << endl;
+    } else {
+        mostrarArbol(listaProyectos->raiz, 0);
+    }
+    system("pause");
+}
+
+void empleadoAProyecto(Empleado* headEmpleados, NodoLista* listaProyectos) {
+    string nameProy;
+    system("cls");
+    cout << "Nombre de proyecto: "; cin >> nameProy;
+    while (listaProyectos != nullptr && nameProy != listaProyectos->nombreProy) {
+        listaProyectos = listaProyectos->siguiente;
+    }
+    if (listaProyectos == nullptr) {
+        cout << "No existe el proyecto ingresado" << endl;
+    } else {
+        int id;
         cout << "Ingrese el ID del empleado: ";
         cin >> id;
         Empleado* empleado = buscarEmpleado(id, headEmpleados);
         if (empleado) {
-            agregarEmpleado(listaProyectos->raiz, empleado);
+            int rol;
+            cout << "Seleccione el rol del empleado:\n";
+            cout << "1. Director de proyecto\n";
+            cout << "2. Gerente\n";
+            cout << "3. Líder de equipo\n";
+            cout << "Ingrese el número del rol: ";
+            cin >> rol;
+
+            switch (rol) {
+                case 1:
+                    if (listaProyectos->raiz == nullptr) {
+                        empleado->puesto = "director de proyecto";
+                        agregarEmpleado(listaProyectos->raiz, empleado);
+                    } else {
+                        cout << "Ya existe un director de proyecto en este proyecto.\n";
+                    }
+                    break;
+                case 2:
+                    cout << "Seleccione el tipo de gerente:\n";
+                    cout << "1. Gerente de desarrollo\n";
+                    cout << "2. Gerente de calidad\n";
+                    cout << "Ingrese el número del tipo de gerente: ";
+                    cin >> rol;
+                    if (rol == 1) {
+                        if (listaProyectos->raiz != nullptr && listaProyectos->raiz->der == nullptr) {
+                            empleado->puesto = "gerente de desarrollo";
+                            agregarEmpleado(listaProyectos->raiz, empleado);
+                        } else {
+                            cout << "No se pudo agregar ese gerente de desarrollo en este proyecto.\n";
+                        }
+                    } else if (rol == 2) {
+                        if (listaProyectos->raiz != nullptr && listaProyectos->raiz->izq == nullptr) {
+                            empleado->puesto = "gerente de calidad";
+                            agregarEmpleado(listaProyectos->raiz, empleado);
+                        } else {
+                            cout << "No se pudo agregar ese gerente de calidad en este proyecto.\n";
+                        }
+                    } else {
+                        cout << "Opción no válida.\n";
+                    }
+                    break;
+                case 3:
+                    cout << "Seleccione el tipo de líder de equipo:\n";
+                    cout << "1. Líder de equipo de QA\n";
+                    cout << "2. Líder de equipo de desarrollo\n";
+                    cout << "Ingrese el número del tipo de líder de equipo: ";
+                    cin >> rol;
+                    if (rol == 1) {
+                        if (listaProyectos->raiz != nullptr && listaProyectos->raiz->izq != nullptr && listaProyectos->raiz->izq->izq == nullptr) {
+                            empleado->puesto = "lider de equipo de QA";
+                            agregarEmpleado(listaProyectos->raiz, empleado);
+                        } else {
+                            cout << "No se puedo agregar ese lider de equipo de QA en este proyecto.\n";
+                        }
+                    } else if (rol == 2) {
+                        if (listaProyectos->raiz != nullptr && listaProyectos->raiz->der != nullptr && listaProyectos->raiz->der->izq == nullptr) {
+                            empleado->puesto = "lider de equipo de desarrollo";
+                            agregarEmpleado(listaProyectos->raiz, empleado);
+                        } else {
+                            cout << "No se puedo agregar ese lider de equipo de desarrollo en este proyecto.\n";
+                        }
+                    } else {
+                        cout << "Opción no válida.\n";
+                    }
+                    break;
+                default:
+                    cout << "Opción no válida.\n";
+            }
         } else {
             cout << "Empleado no encontrado.\n";
+        }
     }
-    }
-    
     system("pause");
 }
+
+// Función para mostrar todos los proyectos creados
+void mostrarProyectos(NodoLista* listaProyectos) {
+    system("cls");
+    if (listaProyectos == nullptr) {
+        cout << "No hay proyectos creados." << endl;
+    } else {
+        cout << "Proyectos creados:" << endl;
+        while (listaProyectos != nullptr) {
+            cout << "- " << listaProyectos->nombreProy << endl;
+            listaProyectos = listaProyectos->siguiente;
+        }
+    }
+    system("pause");
+}
+
 Empleado* crearYAgregarEmpleado(Empleado*& head, Empleado*& tail, string nombre, string apellido, string contrasena, string puesto) {
     Empleado* nuevoEmpleado = new Empleado();
     // Asignar valores al nuevo empleado
