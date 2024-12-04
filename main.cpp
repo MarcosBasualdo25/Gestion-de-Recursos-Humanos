@@ -191,11 +191,11 @@ while (true) {
                 }
                 case 4: {
                     string tituloProy = "Proyectos";
-                    string opcionesProy[] = {"1. Crear nuevo proyecto", "2. Agregar empleado", "3. ver empleados por proyecto","4. Eliminar Proyecto","5. Salir"};
-                    int opcProy = 5;
+                    string opcionesProy[] = {"1. Crear nuevo proyecto", "2. Agregar empleado", "3. ver empleados por proyecto","4. Eliminar Proyecto","5. Mostrar lista de proyectos", "6. Salir"};
+                    int opcProy = 6;
                     do {
                         mostrarCursor();
-                        opcProy = menu(tituloProy, opcionesProy, 5);
+                        opcProy = menu(tituloProy, opcionesProy, 6);
                         switch (opcProy) {
                             case 1:
                                 listaProyectos = crearProyecto(listaProyectos);
@@ -207,11 +207,13 @@ while (true) {
                                 mostrarArbolProyecto(listaProyectos);
                                 break;
                             case 4:
+                                borrarArbolProyecto(listaProyectos);
                                 break;
                             case 5:
+                                mostrarProyectos(listaProyectos);
                                 break;
                         }
-                    } while (opcProy != 5);
+                    } while (opcProy != 6);
                     break;
                 }
                 case 5: {
