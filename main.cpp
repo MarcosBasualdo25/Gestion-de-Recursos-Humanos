@@ -23,6 +23,7 @@ int obtenerAltoConsola();
 bool obtenerEntero(int& numero);
 int menu(string titulo, string opciones[], int n);
 int menuAdministrador(string titulo, string opciones[], int n);
+void fondoRRHH();
 
 string rol = "";
 
@@ -50,7 +51,9 @@ int main() {
 
     int opc;
     int anchoConsola = obtenerAnchoConsola();
+    int altoConsola = obtenerAltoConsola();
     int x = anchoConsola / 2 - 20; 
+    int y = altoConsola / 2;
     
 while (true) {
         ocultarCursor();
@@ -124,31 +127,33 @@ while (true) {
                 }
                 case 2: {
                     if (headEmpleados == nullptr) {
-                        gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menú y agregue empleados primero.\n";
-                        system("pause");
+                        color(116);
+                        gotoxy(x, y+6);
+                        cout << "No hay empleados registrados.";
+                        color(112);
+                        getch();
                         break;
                     }
                     int id;
                     bool entradaValida = false;
                     do {
                         mostrarCursor();
-                        gotoxy(x, 19);
+                        gotoxy(x, 21);
                         cout << "Ingrese el ID del empleado para evaluar: ";
                         entradaValida = obtenerEntero(id);
                         if (!entradaValida) {
-                            gotoxy(x, 20);
+                            gotoxy(x, 23);
                             cout << "Entrada no aceptada. Por favor, ingrese un número entero.";
-                            gotoxy(x, 19);
+                            gotoxy(x, 21);
                             cout << string(50, ' ');
                         }
                     } while (!entradaValida);
 
                     empleado = buscarEmpleado(headEmpleados, id);
                     if (empleado == nullptr) {
-                        gotoxy(x, 12);
+                        gotoxy(x, 23);
                         cout << "Empleado con ID " << id << " no encontrado.\n";
-                        system("pause");
+                        getch();
                         break;
                     }
                     string tituloEva = "Evaluaciones de " + empleado->nombre + " " + empleado->apellido;
@@ -172,9 +177,11 @@ while (true) {
                 }
                 case 3: {
                     if (headEmpleados == nullptr) {
-                        gotoxy(x, 14);
-                        cout << "No hay empleados registrados. Regrese al menÃº y agregue empleados primero.\n";
-                        system("pause");
+                        color(116);
+                        gotoxy(x, y+6);
+                        cout << "No hay empleados registrados.";
+                        color(112);
+                        getch();
                         break;
                     }
                     ocultarCursor();
@@ -213,9 +220,9 @@ while (true) {
                     break;
                 }
                 case 6: {
-                    gotoxy(x, 12);
+                    gotoxy(x, y+6);
                     cout << "Saliendo del programa...\n";
-                    system("pause");
+                    getch();
                     return 0;
                 }
             }
@@ -344,40 +351,41 @@ int menu(string titulo, string opciones[], int n) {
 
     do {
         system("cls");
-
+        
         // Dimensiones de la consola
         int ancho = obtenerAnchoConsola();
         int alto = obtenerAltoConsola();
 
         // Calcular posición del marco y contenido
         int x = (ancho - 40) / 2; // Centrar el marco horizontalmente
-        int y = (alto)/10; // Centrar el marco verticalmente
+        int y = (alto)/10 ; // Centrar el marco verticalmente
 
+        // Fondo (estetica)
+        fondoRRHH();
         // Dibujar marco superior
-        gotoxy(x, y);     cout << "╔══════════════════════════════════════════╗";
-
+        gotoxy(x-3, y);     cout << "╔══════════════════════════════════════════╗";
         // Ajuste del título dentro del marco
         int espaciosTotales = 42 - (titulo.length());
         int espacioIzq = espaciosTotales / 2;
         int espacioDer = espaciosTotales - espacioIzq;
 
-        gotoxy(x, y + 1);
+        gotoxy(x-3, y + 1);
         cout << "║" << string(espacioIzq, ' ') <<titulo << string(espacioDer, ' ') << "║";
-
-        gotoxy(x, y + 2); cout << "╠══════════════════════════════════════════╣";
+        
+        gotoxy(x-3, y + 2); cout << "╠══════════════════════════════════════════╣";
 
         // Espacios interiores para las opciones
         for (int i = 0; i < n * 2; i++) {
-            gotoxy(x, y + 3 + i);
+            gotoxy(x-3, y + 3 + i);
             cout << "║" << string(38, ' ') << "    ║";
         }
 
         // Marco inferior
-        gotoxy(x, y + 3 + n * 2); cout << "╚══════════════════════════════════════════╝";
-
+        gotoxy(x-3, y + 3 + n * 2); cout << "╚══════════════════════════════════════════╝";
+        
         // Mostrar opciones y flecha
         for (int i = 0; i < n; i++) {
-            gotoxy(x + 3, y + 3 + i * 2);
+            gotoxy(x, y + 3 + i * 2);
             if (i + 1 == opcion) {
                 color(113); //Le da color a la opcion seleccionada
                 cout << "➤   " << opciones[i];
@@ -411,63 +419,58 @@ int menu(string titulo, string opciones[], int n) {
     return opcion;
 }
 
-//Menu personalizado para administrador (PRUEBA)
-int menuAdministrador(string titulo, string opciones[], int n){
-    system("color 70");
+void fondoRRHH(){
+    int ancho = obtenerAnchoConsola();
+    int alto = obtenerAltoConsola();
 
-    int opcion = 1;
-    int tecla;
-    bool repite = true;
-    int longitud = titulo.length();
-    int anchoConsola = obtenerAnchoConsola();
-    int x = anchoConsola / 2 - 20; 
-    do{
-        system("cls");
-        
-        gotoxy(x, 1);
-        cout<<"╔══════════════════════════════════════╗";
-        gotoxy(x,2);
-        cout<<"║    MENÚ PRINCIPAL - ADMINISTRADOR    ║";
-        gotoxy(x,3);
-        cout<<"╠══════════════════════════════════════╣";  
-        for(int i=0; i<=12; i++){
-            gotoxy(x, 4 + i);
-            cout<<"║                                      ║";
-            if(i == 12){
-                gotoxy(x, 4 + (i+1));
-                cout<<"╚══════════════════════════════════════╝";
-            }
-        }     
+    int x = ancho/8;
+    int y = alto/5;
+    
+    //Cabecera
+    /*
+                ██████╗ ██████╗     ██╗  ██╗██╗  ██╗    
+                ██╔══██╗██╔══██╗    ██║  ██║██║  ██║    
+                ██████╔╝██████╔╝    ███████║███████║    
+                ██╔══██╗██╔══██╗    ██╔══██║██╔══██║    
+                ██║  ██║██║  ██║    ██║  ██║██║  ██║    
+                ╚═╝  ╚═╝╚═╝  ╚═╝    ╚═╝  ╚═╝╚═╝  ╚═╝      
+    
+    */
+   for(int i=0; i<2; i++){
+    int a = 5;
+    gotoxy(x,y);    cout<<"██████╗";
+    gotoxy(x, y+1); cout<<"██╔══██╗";
+    gotoxy(x, y+2); cout<<"██████╔╝";
+    gotoxy(x, y+3); cout<<"██╔══██╗";
+    gotoxy(x, y+4); cout<<"██║  ██║";
+    gotoxy(x, y+5); cout<<"╚═╝  ╚═╝";
+    x+=10;
+    y+=4;
+   }
 
-        gotoxy(x+2,5+(opcion - 1) * 2); cout<<"➤";
-        for(int i=0;i<n;i++){
-            gotoxy(x + 6,5+2*i); cout<<opciones[i];
-        }
-        do{
-            tecla = getch();
-        }while(tecla != up && tecla!= down && tecla != enter);
+    x = 7*ancho/10;
+    y = alto/5;
 
-        switch(tecla){
-            case up:{
-                opcion--;
-                if(opcion < 1){
-                    opcion = n;
-                }
-                break;
-            }
-            case down:{
-                opcion++;
-                if(opcion > n){
-                    opcion = 1;
-                }
-                break;
-            }
-            case enter:{
-                repite=false;
-                break;
-            }
-        }
+   for(int i=0; i<2; i++){
+    int a = 5;
+    gotoxy(x,y);    cout<<"██╗  ██╗";
+    gotoxy(x, y+1); cout<<"██║  ██║";
+    gotoxy(x, y+2); cout<<"███████║";
+    gotoxy(x, y+3); cout<<"██╔══██║";
+    gotoxy(x, y+4); cout<<"██║  ██║";
+    gotoxy(x, y+5); cout<<"╚═╝  ╚═╝";
+    x+=10;
+    y+=4;
+   }
+   
+    x = ancho/8;
+    y = alto/8 - 1;
+    for(int i=0; i<44; i++){
+        color(120);
+        gotoxy(x + 2*i, y);
+        cout<<"❒";
+        color(112);
+    }
+    
 
-    }while(repite);
-    return opcion;
 }
