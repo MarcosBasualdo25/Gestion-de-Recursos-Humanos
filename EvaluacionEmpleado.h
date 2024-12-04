@@ -6,6 +6,7 @@
 #include "GestionEmpleados.h"
 #include "gotoxy.h"
 #include <limits> 
+#include <iomanip>
 
 using namespace std;
 
@@ -113,14 +114,28 @@ void mostrarEvaluacionesEmpleado(PilaEvaluaciones* pila) {
     int anchoConsola = obtenerAnchoConsola();
     int x = anchoConsola / 2 - 40;  // Centrar tabla
     
+    double suma = 0;
+    int contador = 0;
+    if (pila != nullptr) {
+        Evaluacion* actual = pila->cima;
+        while (actual != nullptr) {
+            suma += actual->calificacion;
+            contador++;
+            actual = actual->siguiente;
+        }
+    }
+    double promedio = (contador > 0) ? suma / contador : 0;
+
     color(113);
     // Cuadro para el título
     gotoxy(x, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
     gotoxy(x, 3);
-    cout << "║                         EVALUACIONES DEL EMPLEADO                          ║";
+    cout << "║                     EVALUACIONES DEL EMPLEADO -                            ║";
     gotoxy(x, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    gotoxy(x+52,3);
+    cout << promedio;
     color(112);
     // Espaciado entre el título y la tabla
     gotoxy(x, 6);

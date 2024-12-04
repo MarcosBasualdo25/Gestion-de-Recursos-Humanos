@@ -251,52 +251,54 @@ void mostrarEmpleados(Empleado* head, Empleado* tail) {
     int x = anchoConsola / 2 - 40;  // Centrar tabla
 
     // Cuadro para el título
+    color(113);
     gotoxy(x, 2);
     cout << "╔════════════════════════════════════════════════════════════════════════════╗";
     gotoxy(x, 3);
     cout << "║                             LISTA DE EMPLEADOS                             ║";
     gotoxy(x, 4);
     cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+    color(112);
 
     // Espaciado entre el título y la tabla
-    gotoxy(x, 6);
+    gotoxy(x-7, 6);
 
     // Cuadro para la tabla
-    cout << "╔═══════╦══════════════════════════════╦═══════════════════╦═════════════════╗";
-    gotoxy(x, 7);
-    cout << "║  ID   ║       Nombre Completo        ║      Puesto       ║   Contraseña    ║";
-    gotoxy(x, 8);
-    cout << "╠═══════╬══════════════════════════════╬═══════════════════╬═════════════════╣";
+    cout << "╔═══════╦══════════════════════════════╦══════════════════════════════════╦═════════════════╗";
+    gotoxy(x-7, 7);
+    cout << "║  ID   ║       Nombre Completo        ║              Puesto              ║   Contraseña    ║";
+    gotoxy(x-7, 8);
+    cout << "╠═══════╬══════════════════════════════╬══════════════════════════════════╬═════════════════╣";
 
     if (head == nullptr) {
-        gotoxy(x, 9);
-        cout << "║                          No hay empleados registrados                      ║";
-        gotoxy(x, 10);
-        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x-7, 9);
+        cout << "║                                 No hay empleados registrados                            ║";
+        gotoxy(x-7, 10);
+        cout << "╚══════════════════════════════════════════════════════════════════════════════════════════╝";
     } else {
         Empleado* temp = head;
         int y = 9;
 
         // Iterar sobre la lista de empleados
         while (temp != nullptr) {
-            gotoxy(x, y++);
+            gotoxy(x-7, y++);
             cout << "║ " << setw(5) << left << temp->idEmpleado
                  << " ║ " << setw(28) << centerText(temp->nombre + " " + temp->apellido, 28)
-                 << " ║ " << setw(17) << centerText(temp->puesto, 17)
+                 << " ║ " << setw(32) << centerText(temp->puesto, 32)
                  << " ║ " << setw(15) << centerText(temp->contrasena, 15) << " ║";
 
             temp = temp->siguiente;
 
             // Si hay más empleados, dibujar separador
             if (temp != nullptr) {
-                gotoxy(x, y++);
-                cout << "╠═══════╬══════════════════════════════╬═══════════════════╬═════════════════╣";
+                gotoxy(x-7, y++);
+                cout << "╠═══════╬══════════════════════════════╬══════════════════════════════════╬═════════════════╣";
             }
         }
 
         // Dibujar el pie de la tabla
-        gotoxy(x, y);
-        cout << "╚════════════════════════════════════════════════════════════════════════════╝";
+        gotoxy(x-7, y);
+        cout << "╚═══════════════════════════════════════════════════════════════════════════════════════════╝";
     }
 }
 

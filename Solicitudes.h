@@ -176,41 +176,45 @@ inline void mostrarSolicitudesEmpleado(ColaSolicitudes* cola, int idEmpleado) {
         cout << "╚════════════════════════════════════════════════════════════════════════════╝";
         system("pause");
         return;
-    } else {
-        Solicitud* actual = cola->cabeza;
-        int numeroSolicitud = 1;
-        int y = 6;
+    } 
 
-        while (actual != nullptr) {
-            if (actual->idEmpleado == idEmpleado) {
-                gotoxy(x, y++);
-                cout << "╔══════════════════════╗";
-                gotoxy(x, y++);
-                cout << "║ Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << ") ║";
-                gotoxy(x, y++);
-                cout << "╚══════════════════════╝";
-                gotoxy(x, y++);
-                cout << "╔════════════════════════════════════════════════════╗";
-                gotoxy(x, y++);
-                cout << "║ Razón: " << actual->Razon;
-                gotoxy(x, y++);
-                cout << "║ Descripción: " << actual->Descripcion;
-                gotoxy(x, y++);
-                cout << "║ Estado: " << actual->Estado;
-                gotoxy(x, y++);
-                cout << "║ Fecha de Solicitud: " << actual->FechaSolicitud;
-                gotoxy(x, y++);
-                cout << "║ Fecha de Resolución: " << actual->FechaResolucion;
-                gotoxy(x, y++);
-                cout << "║ Comentario del Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin);
-                gotoxy(x, y++);
-                cout << "╚════════════════════════════════════════════════════╝";
-                numeroSolicitud++;
-                y += 2;  // Espacio entre solicitudes
-            }
-            actual = actual->siguiente;
+    Solicitud* actual = cola->cabeza;
+    int numeroSolicitud = 1;
+    int y = 6; // Coordenada Y para las filas
+
+    while (actual != nullptr) {
+        // Mostrar dos solicitudes por fila
+        for (int i = 0; i < 2 && actual != nullptr; ++i) {
+            int xOffset = x -20 + (i * 50); // Espacio horizontal entre las columnas
+            gotoxy(xOffset, y);
+            cout << "╔══════════════════════╗";
+            gotoxy(xOffset, y + 1);
+            cout << "║ Solicitud #" << numeroSolicitud << " (ID: " << actual->IDsolicitud << ") ║";
+            gotoxy(xOffset, y + 2);
+            cout << "╚══════════════════════╝";
+            gotoxy(xOffset, y + 3);
+            cout << "╔═════════════════════════════════════════════════╗";
+            gotoxy(xOffset, y + 4);
+            cout << "║ Razón: " << actual->Razon.substr(0, 30); // Recorte si es largo
+            gotoxy(xOffset, y + 5);
+            cout << "║ Descripción: " << actual->Descripcion.substr(0, 30); // Recorte si es largo
+            gotoxy(xOffset, y + 6);
+            cout << "║ Estado: " << actual->Estado;
+            gotoxy(xOffset, y + 7);
+            cout << "║ Fecha de Solicitud: " << actual->FechaSolicitud;
+            gotoxy(xOffset, y + 8);
+            cout << "║ Fecha de Resolución: " << (actual->FechaResolucion.empty() ? "Pendiente" : actual->FechaResolucion);
+            gotoxy(xOffset, y + 9);
+            cout << "║ Com. Administrador: " << (actual->ComentarioAdmin.empty() ? "N/A" : actual->ComentarioAdmin.substr(0, 30)); // Recorte
+            gotoxy(xOffset, y + 10);
+            cout << "╚═════════════════════════════════════════════════╝";
+
+            actual = actual->siguiente; // Pasar al siguiente nodo
+            numeroSolicitud++;
         }
+        y += 12; // Espacio para la siguiente fila de dos solicitudes
     }
+
     getch();
 }
 

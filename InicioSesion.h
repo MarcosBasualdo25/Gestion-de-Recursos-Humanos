@@ -64,7 +64,7 @@ int menuInicioSesion(string titulo, string opciones[], int n){
         gotoxy(x-5, 9);
         cout<<"╚════════════════════════════════════╝"; 
         color(112);
-        gotoxy(x-5,9+opcion); cout<<"➤";
+        gotoxy(x-5,9+opcion); cout<<"->";
         for(int i=0;i<n;i++){
             gotoxy(x,10+i); cout<<opciones[i];
         }

@@ -43,11 +43,8 @@ int main() {
     Empleado* tailEmpleados = nullptr;
     ColaSolicitudes*  colaSolicitudes = nullptr;
     NodoLista* listaProyectos = nullptr;
-    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Isabel", "Morales", "1234", "director de proyecto");
-    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Carlos", "Hernández", "1234", "gerente de desarrollo");
-    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Lucía", "Martínez", "1234", "gerente de calidad");
-    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Juan", "Pérez", "1234", "lider de equipo de QA");
-    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Miguel", "Torres", "1234", "gerente de desarrollo");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Isabel", "Morales", "123456", "Desarollador");
+    crearYAgregarEmpleado(headEmpleados, tailEmpleados, "Miguel", "Torres", "1234", "Senior");
 
     int opc;
     int anchoConsola = obtenerAnchoConsola();
@@ -388,7 +385,7 @@ int menu(string titulo, string opciones[], int n) {
             gotoxy(x, y + 3 + i * 2);
             if (i + 1 == opcion) {
                 color(113); //Le da color a la opcion seleccionada
-                cout << "➤   " << opciones[i];
+                cout << "->   " << opciones[i];
                 color(112);
             } else {
                 cout << "     " << opciones[i];
